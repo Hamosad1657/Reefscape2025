@@ -45,6 +45,10 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	// --- Functions ---
 
+	fun setAngleMotorVoltage(voltage: Volts) {
+		angleMotor.setVoltage(voltage)
+	}
+
 	private fun calculateIntakeFF(): Volts {
 		return currentAngle.cos * Constants.ANGLE_KG
 	}
@@ -75,7 +79,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		setIntakeAngle(Constants.RETRACTED_ANGLE)
 	}
 
-	private fun setWheelMotorVoltage(voltage: Volts) {
+	fun setWheelMotorVoltage(voltage: Volts) {
 		wheelMotor.setVoltage(voltage)
 	}
 
@@ -84,13 +88,19 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	}
 
 	/** Runs the intaking motor so that it will intake a coral and/or drive it towards the elevator. */
-	private fun runMotor() {
+	fun runMotor() {
 		setWheelMotorVoltage(Constants.INTAKING_VOLTAGE)
 	}
 
 	/** Runs the intaking motor in reverse so that it will move a coral in it away from the elevator. */
-	private fun runMotorReverse() {
+	fun runMotorReverse() {
 		setWheelMotorVoltage(-Constants.INTAKING_VOLTAGE)
+	}
+
+	// --- Periodic ---
+
+	override fun periodic() {
+		updateAngleControl()
 	}
 
 	// --- Telemetry ---
