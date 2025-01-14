@@ -33,4 +33,12 @@ object RobotMap {
 			const val CAN_CODER_ID = 12
 		}
 	}
+
+	object Grabber {
+		const val ANGLE_MOTOR_ID = 0
+		const val WHEELS_MOTOR_ID = 0
+		const val ANGLE_ENCODER_ID = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 0
+		const val MIN_ANGLE_LIMIT_CHANNEL = 0
+	}
 }
