@@ -99,6 +99,5 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		 if (Robot.isTesting) {
 			 builder.addDoubleProperty("Motor current Amps", { wheelMotor.outputCurrent }, null)
 		 }
-
 	}
 }
