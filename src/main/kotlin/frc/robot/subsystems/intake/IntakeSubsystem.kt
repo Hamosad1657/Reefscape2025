@@ -9,6 +9,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
+import edu.wpi.first.wpilibj.Alert
+import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -44,15 +46,21 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Functions ---
 
 	private fun calculateIntakeFF(): Volts {
-		val angle = currentAngle
-		return angle.cos * Constants.ANGLE_KG
+		return currentAngle.cos * Constants.ANGLE_KG
 	}
 
 	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
-		val output = anglePIDController.calculate(currentAngle.rotations, newSetpoint.rotations)
-		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) || (isAtMaxAngleLimit && output <= 0.0) || (isAtMinAngleLimit && output >= 0.0)) {
+		if (newSetpoint.rotations <= Constants.MIN_ANGLE.rotations && newSetpoint.rotations >= Constants.MAX_ANGLE.rotations) {
+			Alert("New intake angle setpoint not in range. Value not updated", kWarning).set(true)
+		} else angleSetpoint = newSetpoint
+		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
+		if (
+			(!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
+			(isAtMaxAngleLimit && output <= 0.0) ||
+			(isAtMinAngleLimit && output >= 0.0)
+			) {
 			angleMotor.setVoltage(output + calculateIntakeFF())
-		}
+		} else angleMotor.setVoltage(calculateIntakeFF())
 	}
 
 	fun setIntakeAngle(angle: Rotation2d) {
