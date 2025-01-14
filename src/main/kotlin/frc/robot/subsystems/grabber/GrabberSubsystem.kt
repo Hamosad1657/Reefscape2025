@@ -86,4 +86,15 @@ object GrabberSubsystem: SubsystemBase() {
 	fun stopWheelsMotor() {
 		wheelsMotor.stopMotor()
 	}
+
+	//--- Telemetry ---
+
+	override fun initSendable(builder: SendableBuilder) {
+		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+		builder.addDoubleProperty("Angle setpoint", { angleSetpoint.degrees }, null)
+		builder.addBooleanProperty("Angle error", { angleError }, null)
+		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
+		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
+
+	}
 }
