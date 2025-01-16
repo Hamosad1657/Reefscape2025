@@ -1,8 +1,7 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.PercentOutput
-import com.hamosad1657.lib.units.Rotations
+import com.hamosad1657.lib.units.Volts
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
@@ -10,12 +9,12 @@ import frc.robot.subsystems.grabber.GrabberConstants as Constants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
 object GrabberCommands {
-	fun GrabberSubsystem.setWheelsSpeedCommand(output: PercentOutput): Command = withName("set wheels speed") {
-		run { setWheelsSpeed(output) }
+	fun GrabberSubsystem.setWheelsVoltageCommand(voltage: Volts): Command = withName("set wheels voltage") {
+		run { setWheelsVoltage(voltage) }
 	}
 
-	fun GrabberSubsystem.setAngleMotorSpeedCommand(output: PercentOutput): Command = withName("set angle motor speed") {
-		run { setAngleSpeed(output) }
+	fun GrabberSubsystem.setAngleMotorVoltageCommand(voltage: Volts): Command = withName("set angle motor voltage") {
+		run { setAngleVoltage(voltage) }
 	}
 
 	fun GrabberSubsystem.grabCommand(): Command = withName("grab") {

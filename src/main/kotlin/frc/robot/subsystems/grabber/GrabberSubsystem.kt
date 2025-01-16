@@ -44,41 +44,30 @@ object GrabberSubsystem: SubsystemBase() {
 	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
 	val isAtMinAngleLimit get() = !minAngleLimit.get()
 
-	val isWheelsMotorCurrentAboveThreshold: Boolean get() =
-		wheelsMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
-
 	// --- FUNCTIONS---
-	
-	fun setAngleSpeed(output: PercentOutput) {
-		angleMotor.setVoltage(output)
-	}
-
-	fun setWheelsSpeed(output: PercentOutput) {
-		wheelsMotor.setVoltage(output)
-	}
 
 	fun calculateFF(): Volts {
 		return currentAngle.cos * Constants.ANGLE_KG
+	}
+
+	fun setAngleVoltage(voltage: Volts) {
+		angleMotor.setVoltage(voltage)
 	}
 
 	fun setWheelsVoltage(voltage: Volts) {
 		wheelsMotor.setVoltage(voltage)
 	}
 
-	fun getToAngleNoLimits(setpoint: Rotation2d) {
+	fun getToAngleWithLimits(setpoint: Rotation2d) {
 		if (setpoint.rotations <= Constants.MIN_ANGLE.rotations || setpoint.rotations <= Constants.MAX_ANGLE.rotations) {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 		}
 		angleSetpoint = setpoint
 		val output = anglePIDController.calculate(angleSetpoint.degrees)
-		angleMotor.setVoltage(output + calculateFF())
-	}
-
-	fun getToAngleWithLimits(setpoint: Rotation2d) {
 		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
 			(isAtMaxAngleLimit && currentAngle.rotations <= 0.0) ||
 			(isAtMinAngleLimit && currentAngle.rotations >= 0.0)) {
-			getToAngleNoLimits(setpoint)
+			angleMotor.setVoltage(output + calculateFF())
 		} else {
 			angleMotor.setVoltage(calculateFF())
 		}
