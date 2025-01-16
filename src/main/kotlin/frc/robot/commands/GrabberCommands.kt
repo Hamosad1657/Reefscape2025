@@ -35,7 +35,7 @@ object GrabberCommands {
 		}
 	}
 
-	fun GrabberSubsystem.getReadyToPlaceCommand(angle: Rotation2d): Command = withName("get ready to place command") {
+	fun GrabberSubsystem.getReadyToPlaceCommand(angle: Rotation2d): Command = withName("get ready to place") {
 		SequentialCommandGroup(
 			intakeCommand(),
 			getToAngleCommand(angle) until { isAngleWithinTolerance }
