@@ -1,5 +1,8 @@
 package frc.robot.autonomous
 
+import com.pathplanner.lib.path.GoalEndState
+import com.pathplanner.lib.path.PathConstraints
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kError
@@ -53,4 +56,34 @@ fun findPosesBetweenReefSides(startSide: Int, endSide: Int, far: Boolean, useQui
 		}
 	}
 	return poses
+}
+
+/**
+ * Creates a path around the reef
+ *
+ * @param startSide - The side of the reef the list should start from. 0 is AB and the numbers go counter clockwise.
+ * (1 is CD, 2 is EF, and so on until 5 which is KL).
+ * @param endSide - The side of the reef the list should end on, in the same format.
+ * @param startClose - Whether the path should start close to the reef or not.
+ * @param endClose - whether the path should end close to the reef or not.
+ * @param far - Whether the path should go around close to the reef or far from it.
+ * @param useQuickest - Whether to choose if to go clockwise or counterclockwise automatically or not. If set to false a
+ * value for [clockwise] must be given.
+ * @param clockwise - If not choosing path automatically, this decides in what direction around the reef the path would go.
+ */
+fun createPathAroundReef(
+	startSide: Int,
+	endSide: Int,
+	startClose: Boolean,
+	endClose: Boolean,
+	far: Boolean,
+	useQuickest: Boolean,
+	clockwise: Boolean = false,
+): PathPlannerPath {
+	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, clockwise).toMutableList()
+	if (startClose) poses.add(0, FieldConstants.Poses.CLOSE_POSES[startSide * 2])
+	if (endClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide * 2])
+	val waypoints = PathPlannerPath.waypointsFromPoses(poses)
+	val constraints = PathConstraints.unlimitedConstraints(1.0) // TODO
+	return PathPlannerPath(waypoints, constraints, null, GoalEndState(0.0, poses.last().rotation))
 }
