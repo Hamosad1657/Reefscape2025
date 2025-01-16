@@ -36,18 +36,17 @@ object GrabberCommands {
 		}
 	}
 
-	fun GrabberSubsystem.intakeCommand(angle: Rotation2d): Command = withName("intake")	{
-	SequentialCommandGroup(
-		getToAngleCommand(Constants.GRABBING_ANGLE) until { isAngleWithinTolerance } alongWith grabCommand(),
-		wait(Constants.GRAB_DURATION_SEC),
-		)
+	fun GrabberSubsystem.intakeCommand(): Command = withName("intake")	{
+		getToAngleCommand(Constants.GRABBING_ANGLE) until { isAngleWithinTolerance } alongWith grabCommand() until {
+			isCoralDetected
+		}
 	}
 
 	fun GrabberSubsystem.placeCoralCommand(angle: Rotation2d): Command = withName("place coral") {
 		SequentialCommandGroup(
-			intakeCommand(angle),
+			intakeCommand(),
 			getToAngleCommand(angle) until { isAngleWithinTolerance },
-			ejectCommand(),
+			ejectCommand() until { !isCoralDetected },
 		) finallyDo {
 			stopAngleMotor()
 			stopWheelsMotor()
