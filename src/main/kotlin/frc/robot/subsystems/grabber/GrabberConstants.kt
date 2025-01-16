@@ -5,16 +5,20 @@ import com.hamosad1657.lib.units.Amps
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.meters
 import com.hamosad1657.lib.units.rotations
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
 
 object GrabberConstants {
 	const val ANGLE_ENCODER_OFFS = 0.0
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
+		idleMode(kBrake)
 		inverted(false)
 	}
 
 	val ANGLE_MOTOR_CONFIGS = SparkFlexConfig().apply {
+		idleMode(kCoast)
 		inverted(false)
 	}
 
