@@ -29,8 +29,6 @@ object GrabberConstants {
 	const val WHEELS_EJECT_VOLTAGE: Volts = 0.0
 	val GRABBING_ANGLE: Rotation2d = 0.0.rotations
 
-	const val CORAL_DETECTED_THRESHOLD: Volts = 0.0
-
 	val MIN_ANGLE: Rotation2d = 0.0.rotations
 	val MAX_ANGLE: Rotation2d = 0.0.rotations
 

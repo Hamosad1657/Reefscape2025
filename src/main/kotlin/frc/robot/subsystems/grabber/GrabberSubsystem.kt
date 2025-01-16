@@ -33,16 +33,18 @@ object GrabberSubsystem: SubsystemBase() {
 	private val maxAngleLimit = DigitalInput(Map.Grabber.MAX_ANGLE_LIMIT_CHANNEL)
 	private val minAngleLimit = DigitalInput(Map.Grabber.MIN_ANGLE_LIMIT_CHANNEL)
 
-	private val beamBreak = AnalogInput(Map.Grabber.BEAM_BREAK_CHANNEL)
+	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
 
-	val isCoralDetected:Boolean get() = beamBreak.voltage < Constants.CORAL_DETECTED_THRESHOLD
+	//TODO: check if naturally true or false
+	val isCoralDetected:Boolean = beamBreak.get()
+	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
+	val isAtMinAngleLimit get() = !minAngleLimit.get()
+
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
 		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
 	var angleSetpoint = Rotation2d(0.0)
 	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees)
 	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE
-	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
-	val isAtMinAngleLimit get() = !minAngleLimit.get()
 
 	// --- FUNCTIONS---
 
