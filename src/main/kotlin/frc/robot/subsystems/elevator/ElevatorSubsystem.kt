@@ -60,6 +60,8 @@ object ElevatorSubsystem: SubsystemBase() {
 		mainMotor.setControl(mainMotorControlRequest)
 	}
 
+	// --- Telemetry ---
+
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addBooleanProperty("Is at max height", { isAtMaxHeight }, null)
 		builder.addBooleanProperty("Is at min height", { isAtMinHeight }, null)

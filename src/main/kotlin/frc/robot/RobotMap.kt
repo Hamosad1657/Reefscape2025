@@ -33,4 +33,17 @@ object RobotMap {
 			const val CAN_CODER_ID = 12
 		}
 	}
+
+	object Elevator {
+		const val MAIN_MOTOR_ID = 0
+		const val SECONDARY_MOTOR_ID = 0
+		const val MAX_HEIGHT_LIMIT_SWITCH_ID = 0
+		const val MIN_HEIGHT_LIMIT_SWITCH_ID = 0
+		const val CANCODER_ID = 0
+	}
+
+	object Climbing {
+		const val CLIMBING_MOTOR_ID = 0
+		const val LIMIT_SWITCH_ID = 0
+	}
 }

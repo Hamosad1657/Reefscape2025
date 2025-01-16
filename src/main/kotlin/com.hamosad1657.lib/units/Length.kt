@@ -13,7 +13,7 @@ import java.util.Objects
  * - Inches
  */
 class Length private constructor(length: Number, lengthUnit: Unit) : Comparable<Length> {
-	private var meters = 0.0
+	var meters = 0.0
 		set(value) {
 			field = if (value.isNaN()) {
 				robotPrintError("Length cannot be NaN. Falling back to zero.", true)
