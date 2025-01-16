@@ -37,7 +37,7 @@ object GrabberCommands {
 		SequentialCommandGroup(
 			getToAngleCommand(angle) until { isAngleWithinTolerance },
 			ejectCommand() until { !isCoralDetected },
-			run{ isCoralDetected = false },
+			runOnce{ isCoralDetected = false },
 		) finallyDo {
 			stopAngleMotor()
 			stopWheelsMotor()
