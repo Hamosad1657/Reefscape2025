@@ -59,7 +59,7 @@ object GrabberSubsystem: SubsystemBase() {
 		wheelsMotor.setVoltage(voltage)
 	}
 
-	fun getToAngleWithLimits(setpoint: Rotation2d) {
+	fun getToAngleWithLimits(setpoint: Rotation2d = angleSetpoint) {
 		if (setpoint.rotations <= Constants.MIN_ANGLE.rotations || setpoint.rotations <= Constants.MAX_ANGLE.rotations) {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 		}
@@ -85,6 +85,7 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Periodic ---
 
 	override fun periodic() {
+		getToAngleWithLimits()
 		if (beamBreak.get()) {
 			isCoralAfterBeamBreak = true
 		}

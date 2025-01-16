@@ -16,7 +16,9 @@ object GrabberCommands {
 	}
 
 	fun GrabberSubsystem.ejectCommand(): Command = withName("eject") {
-		run { setWheelsVoltage(Constants.WHEELS_EJECT_VOLTAGE) } finallyDo {
+		run { setWheelsVoltage(Constants.WHEELS_EJECT_VOLTAGE) } andThen {
+			runOnce{ isCoralDetected = false }
+		} finallyDo {
 			stopWheelsMotor()
 		}
 	}
@@ -46,14 +48,13 @@ object GrabberCommands {
 	fun GrabberSubsystem.placeCoralCommand(angle: Rotation2d): Command = withName("place coral") {
 		SequentialCommandGroup(
 			ejectCommand() until { !isCoralDetected },
-			runOnce{ isCoralDetected = false },
 		) finallyDo {
 			stopAngleMotor()
 			stopWheelsMotor()
 		}
 	}
 
-	//--- Tests commands ---
+	//--- Test commands ---
 
 	fun GrabberSubsystem.setWheelsVoltageCommand(voltage: Volts): Command = withName("set wheels voltage") {
 		run { setWheelsVoltage(voltage) }
