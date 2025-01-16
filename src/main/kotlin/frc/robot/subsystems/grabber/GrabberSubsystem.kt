@@ -17,6 +17,9 @@ import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
 
 object GrabberSubsystem: SubsystemBase() {
+
+	//--- Components ---
+
 	private val angleMotor = HaSparkFlex(Map.Grabber.ANGLE_MOTOR_ID).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 		angleEncoder
@@ -31,8 +34,9 @@ object GrabberSubsystem: SubsystemBase() {
 
 	private val maxAngleLimit = DigitalInput(Map.Grabber.MAX_ANGLE_LIMIT_CHANNEL)
 	private val minAngleLimit = DigitalInput(Map.Grabber.MIN_ANGLE_LIMIT_CHANNEL)
-
 	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
+
+	//--- State getters ---
 
 	var isCoralAfterBeamBreak = false
 	var isCoralDetected:Boolean = !beamBreak.get() && isCoralAfterBeamBreak//TODO: check if naturally true or false
