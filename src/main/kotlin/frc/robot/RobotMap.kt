@@ -45,5 +45,14 @@ object RobotMap {
 	object Climbing {
 		const val CLIMBING_MOTOR_ID = 0
 		const val LIMIT_SWITCH_ID = 0
+
+	object Intake {
+		const val ANGLE_MOTOR_ID = 0
+		const val WHEEL_MOTOR_ID = 0
+
+		const val ENCODER_ID = 0
+
+		const val MIN_ANGLE_LIMIT_CHANNEL = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 0
 	}
 }
