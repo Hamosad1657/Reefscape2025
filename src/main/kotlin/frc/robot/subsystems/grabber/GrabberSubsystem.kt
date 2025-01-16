@@ -36,7 +36,8 @@ object GrabberSubsystem: SubsystemBase() {
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
 		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
 	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees) <= Constants.ANGLE_TOLERANCE
+	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees)
+	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE
 	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
 	val isAtMinAngleLimit get() = !minAngleLimit.get()
 
@@ -44,6 +45,7 @@ object GrabberSubsystem: SubsystemBase() {
 		wheelsMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
 
 	// --- FUNCTIONS---
+	
 	fun setAngleSpeed(output: PercentOutput) {
 		angleMotor.setVoltage(output)
 	}
@@ -92,7 +94,8 @@ object GrabberSubsystem: SubsystemBase() {
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
 		builder.addDoubleProperty("Angle setpoint", { angleSetpoint.degrees }, null)
-		builder.addBooleanProperty("Angle error", { angleError }, null)
+		builder.addDoubleProperty("Angle error", { angleError }, null)
+		builder.addBooleanProperty("Is angle within tolerance", { isAngleWithinTolerance }, null)
 		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
 
