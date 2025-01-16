@@ -3,6 +3,7 @@ package frc.robot.subsystems.grabber
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Amps
 import com.hamosad1657.lib.units.Volts
+import com.hamosad1657.lib.units.meters
 import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
@@ -36,10 +37,10 @@ object GrabberConstants {
 
 	data class GrabberAngles(var angle: Rotation2d) {
 		companion object {
-			val L1 = 0.0
-			val L2 = 0.0
-			val L3 = 0.0
-			val L4 = 0.0
+			val L1 = Rotation2d(0.0)
+			val L2 = Rotation2d(0.0)
+			val L3 = Rotation2d(0.0)
+			val L4 = Rotation2d(0.0)
 		}
 	}
 }

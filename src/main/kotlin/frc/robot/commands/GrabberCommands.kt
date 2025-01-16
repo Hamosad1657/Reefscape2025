@@ -33,9 +33,18 @@ object GrabberCommands {
 		}
 	}
 
+	fun GrabberSubsystem.getReadyToPlaceCommand(angle: Rotation2d): Command = withName("get ready to place command") {
+		SequentialCommandGroup(
+			intakeCommand(),
+			getToAngleCommand(angle) until { isAngleWithinTolerance }
+		) finallyDo {
+			stopAngleMotor()
+			stopWheelsMotor()
+		}
+	}
+
 	fun GrabberSubsystem.placeCoralCommand(angle: Rotation2d): Command = withName("place coral") {
 		SequentialCommandGroup(
-			getToAngleCommand(angle) until { isAngleWithinTolerance },
 			ejectCommand() until { !isCoralDetected },
 			runOnce{ isCoralDetected = false },
 		) finallyDo {
