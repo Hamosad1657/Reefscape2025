@@ -9,14 +9,6 @@ import frc.robot.subsystems.grabber.GrabberConstants as Constants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
 object GrabberCommands {
-	fun GrabberSubsystem.setWheelsVoltageCommand(voltage: Volts): Command = withName("set wheels voltage") {
-		run { setWheelsVoltage(voltage) }
-	}
-
-	fun GrabberSubsystem.setAngleMotorVoltageCommand(voltage: Volts): Command = withName("set angle motor voltage") {
-		run { setAngleVoltage(voltage) }
-	}
-
 	fun GrabberSubsystem.grabCommand(): Command = withName("grab") {
 		run { setWheelsVoltage(Constants.WHEELS_GRAB_VOLTAGE) } finallyDo {
 			stopWheelsMotor()
@@ -43,12 +35,22 @@ object GrabberCommands {
 
 	fun GrabberSubsystem.placeCoralCommand(angle: Rotation2d): Command = withName("place coral") {
 		SequentialCommandGroup(
-			intakeCommand(),
 			getToAngleCommand(angle) until { isAngleWithinTolerance },
 			ejectCommand() until { !isCoralDetected },
+			run{ isCoralDetected = false },
 		) finallyDo {
 			stopAngleMotor()
 			stopWheelsMotor()
 		}
+	}
+
+	//--- Tests commands ---
+
+	fun GrabberSubsystem.setWheelsVoltageCommand(voltage: Volts): Command = withName("set wheels voltage") {
+		run { setWheelsVoltage(voltage) }
+	}
+
+	fun GrabberSubsystem.setAngleMotorVoltageCommand(voltage: Volts): Command = withName("set angle motor voltage") {
+		run { setAngleVoltage(voltage) }
 	}
 }

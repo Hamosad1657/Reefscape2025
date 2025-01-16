@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
-import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -35,10 +34,10 @@ object GrabberSubsystem: SubsystemBase() {
 
 	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
 
-	//TODO: check if naturally true or false
-	val isCoralDetected:Boolean = beamBreak.get()
-	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
-	val isAtMinAngleLimit get() = !minAngleLimit.get()
+	var isCoralAfterBeamBreak = false
+	var isCoralDetected:Boolean = !beamBreak.get() && isCoralAfterBeamBreak//TODO: check if naturally true or false
+	val isAtMaxAngleLimit get() = !maxAngleLimit.get()//TODO: check if naturally true or false
+	val isAtMinAngleLimit get() = !minAngleLimit.get()//TODO: check if naturally true or false
 
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
 		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
@@ -46,7 +45,7 @@ object GrabberSubsystem: SubsystemBase() {
 	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees)
 	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE
 
-	// --- FUNCTIONS---
+	// --- Functions ---
 
 	fun calculateFF(): Volts {
 		return currentAngle.cos * Constants.ANGLE_KG
@@ -81,6 +80,14 @@ object GrabberSubsystem: SubsystemBase() {
 
 	fun stopWheelsMotor() {
 		wheelsMotor.stopMotor()
+	}
+
+	// --- Periodic ---
+
+	override fun periodic() {
+		if (beamBreak.get()) {
+			isCoralAfterBeamBreak = true
+		}
 	}
 
 	//--- Telemetry ---
