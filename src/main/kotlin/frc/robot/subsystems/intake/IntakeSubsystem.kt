@@ -6,7 +6,6 @@ import com.hamosad1657.lib.units.Volts
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
@@ -16,6 +15,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap
+import kotlin.math.absoluteValue
 
 object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Components ---
@@ -40,6 +40,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	private val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts */
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get() + Constants.ENCODER_OFFSET)
+	val isWithinAngleTolerance: Boolean get() = currentAngle.rotations.absoluteValue <= Constants.ANGLE_TOLERANCE.rotations
 
 	val isMotorCurrentAboveThreshold: Boolean get() = wheelMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
 
@@ -111,6 +112,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 		builder.addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
 		builder.addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+		builder.addBooleanProperty("Angle withing tolerance", { isWithinAngleTolerance }, null)
 
 		builder.addBooleanProperty("Current above threshold", { isMotorCurrentAboveThreshold }, null)
 
