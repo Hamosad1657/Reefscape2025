@@ -39,6 +39,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
 	val isAtMaxAngleLimit: Boolean get() =  maxAngleLimitSwitch.get()
+
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts */
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get()) + Constants.ENCODER_OFFSET
 	// TODO: Add absoluteValue extension to Rotation2d
