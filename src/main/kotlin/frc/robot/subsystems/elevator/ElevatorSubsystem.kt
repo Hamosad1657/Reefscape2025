@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.RobotMap
+import javax.swing.text.Position
 import kotlin.math.absoluteValue
 import frc.robot.subsystems.elevator.ElevatorConstants as Constants
 
@@ -61,7 +62,11 @@ object ElevatorSubsystem: SubsystemBase() {
 			Alert("New elevator setpoint not in motion range!", kError).set(true)
 		}
 		with(elevatorControlRequest) {
-			Position = newSetpoint.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
+			if ((isAtMaxHeight && (currentHeight.asMeters < newSetpoint.asMeters)) || (isAtMinHeight && (newSetpoint.asMeters < currentHeight.meters))) {
+				Position = currentHeight.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
+			} else {
+				Position = newSetpoint.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
+			}
 			Slot = 0
 		}
 
