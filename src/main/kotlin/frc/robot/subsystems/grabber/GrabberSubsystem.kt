@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
 
@@ -45,10 +46,10 @@ object GrabberSubsystem: SubsystemBase() {
 	val isAtMinAngleLimit get() = !minAngleLimit.get() // TODO: check if naturally true or false
 
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
-		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
+		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS.degrees)
 	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees) // Why not use .absoluteValue? Also it shouldn't be absolute, I want to know in which direction the error is
-	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE // Put the absolute value here instead
+	val angleError get() = angleSetpoint.degrees - currentAngle.degrees
+	val isAngleWithinTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE.degrees
 
 	// --- Functions ---
 
@@ -69,10 +70,10 @@ object GrabberSubsystem: SubsystemBase() {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 		}
 		angleSetpoint = setpoint
-		val output = anglePIDController.calculate(angleSetpoint.degrees) // This is not how it works, that's not how you pass things to the calculate method
+		val output = anglePIDController.calculate(currentAngle.degrees, angleSetpoint.degrees)
 		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
-			(isAtMaxAngleLimit && currentAngle.rotations <= 0.0) || // ?? You need to check if the output is positive or not, not the current angle...
-			(isAtMinAngleLimit && currentAngle.rotations >= 0.0)) {
+			(isAtMaxAngleLimit && output <= 0.0) ||
+			(isAtMinAngleLimit && output >= 0.0)) {
 			angleMotor.setVoltage(output + calculateFF())
 		} else {
 			angleMotor.setVoltage(calculateFF())
@@ -106,6 +107,7 @@ object GrabberSubsystem: SubsystemBase() {
 		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
 		builder.addBooleanProperty("Is coral detected", { isCoralDetected }, null)
-		// I also want the current of the wheel motors, and the current status of the beam break
+		builder.addDoubleProperty("Wheels motor current", { wheelsMotor.outputCurrent }, null)
+		builder.addBooleanProperty("Beam break current status", { beamBreak.get()}, null)
 	}
 }
