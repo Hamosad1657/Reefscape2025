@@ -39,16 +39,16 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- State getters ---
 
 	var isCoralAfterBeamBreak = false
-	var isCoralDetected:Boolean = !beamBreak.get() && isCoralAfterBeamBreak//TODO: check if naturally true or false
+	var isCoralDetected: Boolean = !beamBreak.get() && isCoralAfterBeamBreak // TODO: check if naturally true or false
 
-	val isAtMaxAngleLimit get() = !maxAngleLimit.get()//TODO: check if naturally true or false
-	val isAtMinAngleLimit get() = !minAngleLimit.get()//TODO: check if naturally true or false
+	val isAtMaxAngleLimit get() = !maxAngleLimit.get() // TODO: check if naturally true or false
+	val isAtMinAngleLimit get() = !minAngleLimit.get() // TODO: check if naturally true or false
 
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
 		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
 	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees)
-	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE
+	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees) // Why not use .absoluteValue? Also it shouldn't be absolute, I want to know in which direction the error is
+	val isAngleWithinTolerance get() = angleError <= Constants.ANGLE_TOLERANCE // Put the absolute value here instead
 
 	// --- Functions ---
 
@@ -69,9 +69,9 @@ object GrabberSubsystem: SubsystemBase() {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 		}
 		angleSetpoint = setpoint
-		val output = anglePIDController.calculate(angleSetpoint.degrees)
+		val output = anglePIDController.calculate(angleSetpoint.degrees) // This is not how it works, that's not how you pass things to the calculate method
 		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
-			(isAtMaxAngleLimit && currentAngle.rotations <= 0.0) ||
+			(isAtMaxAngleLimit && currentAngle.rotations <= 0.0) || // ?? You need to check if the output is positive or not, not the current angle...
 			(isAtMinAngleLimit && currentAngle.rotations >= 0.0)) {
 			angleMotor.setVoltage(output + calculateFF())
 		} else {
@@ -106,6 +106,6 @@ object GrabberSubsystem: SubsystemBase() {
 		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
 		builder.addBooleanProperty("Is coral detected", { isCoralDetected }, null)
-
+		// I also want the current of the wheel motors, and the current status of the beam break
 	}
 }
