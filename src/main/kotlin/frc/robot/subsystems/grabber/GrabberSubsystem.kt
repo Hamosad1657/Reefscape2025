@@ -4,7 +4,6 @@ import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.motors.HaSparkMax
 import com.hamosad1657.lib.units.PercentOutput
 import com.hamosad1657.lib.units.Volts
-import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import edu.wpi.first.math.geometry.Rotation2d
@@ -36,7 +35,7 @@ object GrabberSubsystem: SubsystemBase() {
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
 		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS)
 	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = abs(angleSetpoint.degrees - currentAngle.degrees) <= Constants.ANGLE_TOLERANCE
+	val isWithinTolerance get() = abs(angleSetpoint.degrees - currentAngle.degrees) <= Constants.ANGLE_TOLERANCE
 	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
 	val isAtMinAngleLimit get() = !minAngleLimit.get()
 
@@ -92,7 +91,7 @@ object GrabberSubsystem: SubsystemBase() {
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
 		builder.addDoubleProperty("Angle setpoint", { angleSetpoint.degrees }, null)
-		builder.addBooleanProperty("Angle error", { angleError }, null)
+		builder.addBooleanProperty("is Within Tolerance", { isWithinTolerance }, null)
 		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
 

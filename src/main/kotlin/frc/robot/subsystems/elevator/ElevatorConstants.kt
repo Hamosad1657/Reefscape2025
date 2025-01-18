@@ -21,6 +21,7 @@ object ElevatorConstants {
 	val HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
 	const val HEIGHT_KG = 0.0
 	val HEIGHT_TOLERANCE: Length = 0.0.meters
+	val MAX_HEIGHT: Length = 0.0.meters
 
 	/** For every 1 rotation of the motor there are 0.0 meters of height are added to the elevator */
 	const val ROTATIONS_TO_METERS = 0.0

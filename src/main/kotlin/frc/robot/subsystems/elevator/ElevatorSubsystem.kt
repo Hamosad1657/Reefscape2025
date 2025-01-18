@@ -42,7 +42,7 @@ object ElevatorSubsystem: SubsystemBase() {
 	private val isAtMinHeight get() = minHeightLimitSwitch.get()
 
 	val currentHeight: Length get() = (heightEncoder.position.valueAsDouble * Constants.ROTATIONS_TO_METERS).meters
-	val isInTolerance get() = (currentSetpoint.meters - currentHeight.meters).absoluteValue < Constants.HEIGHT_TOLERANCE.meters
+	val isWithinTolerance get() = (currentSetpoint.meters - currentHeight.meters).absoluteValue < Constants.HEIGHT_TOLERANCE.meters
 
 
 	// --- Functions ---
@@ -65,7 +65,7 @@ object ElevatorSubsystem: SubsystemBase() {
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addBooleanProperty("Is at max height", { isAtMaxHeight }, null)
 		builder.addBooleanProperty("Is at min height", { isAtMinHeight }, null)
-		builder.addBooleanProperty("Is at tolerance", { isInTolerance }, null)
+		builder.addBooleanProperty("Is at tolerance", { isWithinTolerance }, null)
 		builder.addDoubleProperty("elevator height meters", { currentHeight.asMeters }, null)
 		builder.addDoubleProperty("elevator setpoint meters", { currentSetpoint.asMeters }, null)
 	}
