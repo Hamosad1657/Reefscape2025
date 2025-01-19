@@ -14,34 +14,20 @@ fun GrabberSubsystem.runInwardsCommand(): Command = withName("run inwards") {
 	}
 }
 
-// You have a command that never ends in a sequential command group. It will never get to the next thing in the sequence.
 fun GrabberSubsystem.runOutwardsCommand(): Command = withName("run outwards") {
-	run { setWheelsVoltage(GrabberConstants.WHEELS_EJECT_VOLTAGE) } andThen {
-		runOnce { isCoralDetected = false }
-	} finallyDo {
+	run { setWheelsVoltage(GrabberConstants.WHEELS_EJECT_VOLTAGE) } finallyDo {
 		stopWheelsMotor()
+		didCoralEnterBeamBreak = false
 	}
 }
 
-fun GrabberSubsystem.getToAngleCommand(angle: Rotation2d): Command = withName("get to angle")  {
+fun GrabberSubsystem.getToAngleCommand(angle: Rotation2d): Command = withName("get to angle") {
 	runOnce{ getToAngleWithLimits(angle) }
 }
 
-fun GrabberSubsystem.intakeCommand(): Command = withName("intake")	{
-		// This would not work, you can't run 2 commands from the same subsystem simultaneously and it's bad design.
-		// The commands need to not be in groups, unless a sequential group which is fine.
-	getToAngleCommand(GrabberConstants.GrabberAngle.INTAKING) until { isAngleWithinTolerance } alongWith runInwardsCommand() until {
-		isCoralDetected
-	}
-}
-
-// How is this different than ejectCommand?
-fun GrabberSubsystem.placeCoralCommand(): Command = withName("place coral") {
-	SequentialCommandGroup(
-		runOutwardsCommand() until { !isCoralDetected }, // The commands provide the logic for this, it will never become false.
-	) finallyDo {
-		stopAngleMotor()
-		stopWheelsMotor()
+fun GrabberSubsystem.getToAngleAndEndCommand(angle: Rotation2d): Command = withName("get to angle and end") {
+	getToAngleCommand(angle) until {
+		isAngleWithinTolerance
 	}
 }
 

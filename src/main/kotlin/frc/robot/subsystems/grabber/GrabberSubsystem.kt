@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import kotlin.math.abs
 import kotlin.math.absoluteValue
 import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
@@ -39,8 +38,8 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
-	var isCoralAfterBeamBreak = false
-	var isCoralDetected: Boolean = !beamBreak.get() && isCoralAfterBeamBreak // TODO: check if naturally true or false
+	var didCoralEnterBeamBreak = false
+	var isCoralDetected: Boolean = !beamBreak.get() && didCoralEnterBeamBreak // TODO: check if naturally true or false
 
 	val isAtMaxAngleLimit get() = !maxAngleLimit.get() // TODO: check if naturally true or false
 	val isAtMinAngleLimit get() = !minAngleLimit.get() // TODO: check if naturally true or false
@@ -93,7 +92,7 @@ object GrabberSubsystem: SubsystemBase() {
 	override fun periodic() {
 		getToAngleWithLimits()
 		if (beamBreak.get()) {
-			isCoralAfterBeamBreak = true
+			didCoralEnterBeamBreak = true
 		}
 	}
 
