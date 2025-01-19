@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.RobotMap
-import javax.swing.text.Position
 import kotlin.math.absoluteValue
 import frc.robot.subsystems.elevator.ElevatorConstants as Constants
 
@@ -43,7 +42,7 @@ object ElevatorSubsystem: SubsystemBase() {
 	val isAtMaxHeight get() = maxHeightLimitSwitch.get()
 
 	val currentHeight: Length get() = Length.fromMeters(heightEncoder.positionSinceBoot.valueAsDouble * Constants.ROTATION_METERS_RATIO.asMeters)
-	val isAtHeight get() = (currentSetpoint.meters - currentHeight.meters).absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
+	val isWithinHeightTolerance get() = (currentSetpoint.meters - currentHeight.meters).absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
 
 
 	// --- Functions ---
@@ -79,7 +78,7 @@ object ElevatorSubsystem: SubsystemBase() {
 		builder.addBooleanProperty("Is at min height", { isAtMinHeight }, null)
 		builder.addBooleanProperty("Is at max height", { isAtMaxHeight }, null)
 
-		builder.addBooleanProperty("Is in tolerance", { isAtHeight }, null)
+		builder.addBooleanProperty("Is in tolerance", { isWithinHeightTolerance }, null)
 
 		builder.addDoubleProperty("Elevator height Meters", { currentHeight.asMeters }, null)
 		builder.addDoubleProperty("Elevator setpoint Meters", { currentSetpoint.asMeters }, null)

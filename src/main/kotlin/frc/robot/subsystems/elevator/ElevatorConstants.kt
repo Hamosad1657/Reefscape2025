@@ -42,12 +42,11 @@ object ElevatorConstants {
 
 	val MAX_HEIGHT: Length = 0.0.meters
 
-	enum class ElevatorHeight(val heightFromGround: Length) {
-		L1(0.0.meters),
-		L2(0.0.meters),
-		L3(0.0.meters),
-		L4(0.0.meters),
-		INTAKE(0.0.meters),
-		CORAL_STATION(0.0.meters),
-	}
+	val L1_HEIGHT = 0.0.meters
+	val L2_HEIGHT = 0.0.meters
+	val L3_HEIGHT = 0.0.meters
+	val L4_HEIGHT = 0.0.meters
+
+	val INTAKE_HEIGHT = 0.0.meters
+	val CORAL_STATION_HEIGHT = 0.0.meters
 }
