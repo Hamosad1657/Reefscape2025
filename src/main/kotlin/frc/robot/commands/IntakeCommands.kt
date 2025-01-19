@@ -3,6 +3,7 @@ package frc.robot.commands
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
 import frc.robot.commands.IntakeState.*
+import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
@@ -39,7 +40,7 @@ enum class IntakeState(val shouldExitState: () -> Boolean) {
 		IntakeSubsystem.isMotorCurrentAboveThreshold
 	}),
 	Retracting(shouldExitState = {
-		false //GrabberSubsystem.hasNote
+		GrabberSubsystem.isCoralInBeamBreak
 	}),
 	Finished(shouldExitState = {
 		false

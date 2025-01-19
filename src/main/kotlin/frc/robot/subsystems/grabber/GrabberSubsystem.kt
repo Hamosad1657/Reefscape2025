@@ -32,7 +32,7 @@ object GrabberSubsystem: SubsystemBase() {
 		configure(Constants.WHEEL_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 
 	}
-	private val angleEncoder = DutyCycleEncoder(Map.Grabber.ANGLE_ENCODER_ID)
+	private val angleEncoder = DutyCycleEncoder(Map.Grabber.ANGLE_ENCODER_PWM_CHANNEL)
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 
 	private val maxAngleLimit = DigitalInput(Map.Grabber.MAX_ANGLE_LIMIT_CHANNEL)
