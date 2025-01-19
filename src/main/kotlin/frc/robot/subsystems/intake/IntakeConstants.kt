@@ -25,11 +25,11 @@ object IntakeConstants {
 
 	// --- Configs ---
 
-	const val ENCODER_OFFSET = 0.0
+	val ENCODER_OFFSET = Rotation2d()
 
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
 		inverted(false)
-
+		smartCurrentLimit(200)
 	}
 	val ANGLE_MOTOR_CONFIGS = SparkFlexConfig().apply {
 		inverted(false)

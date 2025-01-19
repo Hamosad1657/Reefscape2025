@@ -11,6 +11,7 @@ import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
@@ -36,10 +37,12 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	// --- State getters ---
 
-	private val isAtMaxAngleLimit: Boolean get() =  maxAngleLimitSwitch.get()
-	private val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
+	val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
+	val isAtMaxAngleLimit: Boolean get() =  maxAngleLimitSwitch.get()
+
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts */
-	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get() + Constants.ENCODER_OFFSET)
+	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get()) + Constants.ENCODER_OFFSET
+	// TODO: Add absoluteValue extension to Rotation2d
 	val isWithinAngleTolerance: Boolean get() = currentAngle.rotations.absoluteValue <= Constants.ANGLE_TOLERANCE.rotations
 
 	val isMotorCurrentAboveThreshold: Boolean get() = wheelMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
@@ -54,29 +57,34 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		return currentAngle.cos * Constants.ANGLE_KG
 	}
 
-	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
-		if (newSetpoint.rotations <= Constants.MIN_ANGLE.rotations && newSetpoint.rotations >= Constants.MAX_ANGLE.rotations) {
-			Alert("New intake angle setpoint not in range. Value not updated", kWarning).set(true)
-		} else angleSetpoint = newSetpoint
-		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
-		if (
-			(!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
+	private fun isMovingTowardsLimit(output: Volts): Boolean = !(
+		(!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
 			(isAtMaxAngleLimit && output <= 0.0) ||
 			(isAtMinAngleLimit && output >= 0.0)
-			) {
+	)
+
+	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
+		if (newSetpoint.rotations <= Constants.MIN_ANGLE.rotations && newSetpoint.rotations >= Constants.MAX_ANGLE.rotations) { // TODO: update hamosadlib
+			Alert("New intake angle setpoint not in range. Value not updated", kWarning).set(true)
+			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range", true)
+		} else angleSetpoint = newSetpoint
+		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
+		if (!isMovingTowardsLimit(output)) {
 			angleMotor.setVoltage(output + calculateIntakeFF())
-		} else angleMotor.setVoltage(calculateIntakeFF())
+		} else {
+			angleMotor.setVoltage(calculateIntakeFF())
+		}
 	}
 
 	fun setIntakeAngle(angle: Rotation2d) {
 		updateAngleControl(angle)
 	}
 
-	fun deployIntake() {
+	fun setAngleToDeploy() {
 		setIntakeAngle(Constants.DEPLOYED_ANGLE)
 	}
 
-	fun retractIntake() {
+	fun setAngleToRetract() {
 		setIntakeAngle(Constants.RETRACTED_ANGLE)
 	}
 
