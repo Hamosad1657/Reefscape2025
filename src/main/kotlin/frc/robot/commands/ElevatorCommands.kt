@@ -6,10 +6,15 @@ import com.hamosad1657.lib.units.Volts
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.elevator.ElevatorSubsystem
 
-fun ElevatorSubsystem.setHeightCommand(height: Length): Command = withName("set height") {
+/** Use only for testing */
+fun ElevatorSubsystem.setElevatorMotorsVoltageCommand(voltage: Volts): Command = withName("Set elevator motors voltage") {
+	run { setElevatorMotorsVoltage(voltage) }
+}
+
+fun ElevatorSubsystem.setHeightCommand(height: Length): Command = withName("Set height") {
 	run { setHeight(height) }
 }
 
-fun ElevatorSubsystem.setElevatorMotorsVoltageCommand(voltage: Volts): Command = withName("set elevator motors voltage") {
-	run { setElevatorMotorsVolts(voltage) }
+fun ElevatorSubsystem.setHeightUntilReachedCommand(height: Length): Command = withName("Set height until reached") {
+	setHeightCommand(height) until { isAtHeight }
 }

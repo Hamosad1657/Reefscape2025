@@ -1,9 +1,12 @@
 package frc.robot.subsystems.elevator
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue.Clockwise_Positive
+import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Length
+import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.meters
 
 object ElevatorConstants {
@@ -11,24 +14,40 @@ object ElevatorConstants {
 		with(MotorOutput) {
 			Inverted = Clockwise_Positive
 		}
+		with(CurrentLimits) {
+			SupplyCurrentLimit = 0.0
+			SupplyCurrentLimitEnable = true
+		}
 	}
 	val SECONDARY_MOTOR_CONFIGS = TalonFXConfiguration().apply {
 		with(MotorOutput) {
 			Inverted = Clockwise_Positive
 		}
+		with(CurrentLimits) {
+			SupplyCurrentLimit = 0.0
+			SupplyCurrentLimitEnable = true
+		}
+	}
+	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
+		MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive // TODO
 	}
 
 	val HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
-	const val HEIGHT_KG = 0.0
-	val HEIGHT_TOLERANCE: Length = 0.0.meters
+	const val HEIGHT_KG: Volts = 0.0
+
+	val HEIGHT_TOLERANCE: Length = 0.02.meters
+
+	/** For every 1 rotation of the motor the elevator moves [ROTATION_METERS_RATIO] meters. */
+	val ROTATION_METERS_RATIO: Length = 0.0.meters
+
 	val MAX_HEIGHT: Length = 0.0.meters
 
-	/** For every 1 rotation of the motor there are 0.0 meters of height are added to the elevator */
-	const val ROTATIONS_TO_METERS = 0.0
-
-	val L1_HEIGHT: Length = 0.0.meters
-	val L2_HEIGHT: Length = 0.0.meters
-	val L3_HEIGHT: Length = 0.0.meters
-	val L4_HEIGHT: Length = 0.0.meters
-	val CORAL_STATION_HEIGHT: Length = 0.0.meters
+	enum class ElevatorHeight(val heightFromGround: Length) {
+		L1(0.0.meters),
+		L2(0.0.meters),
+		L3(0.0.meters),
+		L4(0.0.meters),
+		INTAKE(0.0.meters),
+		CORAL_STATION(0.0.meters),
+	}
 }

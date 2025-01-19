@@ -37,9 +37,9 @@ object RobotMap {
 	object Elevator {
 		const val MAIN_MOTOR_ID = 0
 		const val SECONDARY_MOTOR_ID = 0
-		const val MAX_HEIGHT_LIMIT_SWITCH_ID = 0
-		const val MIN_HEIGHT_LIMIT_SWITCH_ID = 0
-		const val CANCODER_ID = 0
+		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
+		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
+		const val CAN_CODER_ID = 0
 	}
 
 	object Climbing {
