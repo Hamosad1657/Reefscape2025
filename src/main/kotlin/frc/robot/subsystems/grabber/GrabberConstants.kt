@@ -39,13 +39,11 @@ object GrabberConstants {
 
 	//--- POSITIONS ---
 
-	/** Represents an angle of the grabber */
-	enum class GrabberAngle(var angle: Rotation2d) {
-			INTAKING(Rotation2d(0.0)),
-			CORAL_STATION(Rotation2d(0.0)),
-			L1(Rotation2d(0.0)),
-			L2(Rotation2d(0.0)),
-			L3(Rotation2d(0.0)),
-			L4(Rotation2d(0.0)),
-	}
+	val L1_ANGLE = Rotation2d()
+	val L2_ANGLE = Rotation2d()
+	val L3_ANGLE = Rotation2d()
+	val L4_ANGLE = Rotation2d()
+
+	val INTAKING_ANGLE = Rotation2d()
+	val CORAL_STATION_ANGLE = Rotation2d()
 }

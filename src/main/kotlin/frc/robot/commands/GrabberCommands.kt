@@ -2,9 +2,9 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
+import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
-import frc.robot.subsystems.grabber.GrabberConstants.GrabberAngle
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
 /** Runs the grabber motor in a way that intakes a coral from it's back and ejects it from it's front. */
@@ -21,8 +21,8 @@ fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 	}
 }
 
-fun GrabberSubsystem.setAngleCommand(grabberAngle: GrabberAngle) = withName("Get to angle") {
-	runOnce{ angleSetpoint = grabberAngle.angle }
+fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("Get to angle") {
+	runOnce{ angleSetpoint = angle }
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
@@ -64,9 +64,7 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 }
 
 fun GrabberSubsystem.loadFromCoralStationCommand() {
-	run { angleSetpoint = GrabberAngle.CORAL_STATION.angle } until { isAngleWithinTolerance } andThen {
-		run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } until { isCoralInBeamBreak }
-	}
+	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } until { isCoralInBeamBreak }
 }
 
 //--- Test commands ---
