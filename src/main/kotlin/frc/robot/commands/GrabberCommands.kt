@@ -26,9 +26,6 @@ fun GrabberSubsystem.setAngleCommand(grabberAngle: GrabberAngle) = withName("Get
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
-	GettingToAngle(shouldExitState = {
-		GrabberSubsystem.isAngleWithinTolerance
-	}),
 	PreLoading(shouldExitState = {
 		GrabberSubsystem.isCoralInBeamBreak
 	}),
@@ -44,13 +41,9 @@ enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 }
 
 fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake command") {
-	var loadFromIntakeState = LoadFromIntakeState.GettingToAngle
+	var loadFromIntakeState = PreLoading
 	run {
 		when (loadFromIntakeState) {
-			GettingToAngle -> {
-				angleSetpoint = GrabberAngle.INTAKING.angle
-				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = PreLoading
-			}
 			PreLoading -> {
 				setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
