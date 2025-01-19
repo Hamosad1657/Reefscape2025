@@ -1,37 +1,87 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.PercentOutput
-import com.hamosad1657.lib.units.Rotations
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.subsystems.grabber.GrabberConstants as Constants
+import com.hamosad1657.lib.units.Volts
+import frc.robot.commands.LoadFromIntakeState.*
+import frc.robot.subsystems.grabber.GrabberConstants
+import frc.robot.subsystems.grabber.GrabberConstants.GrabberAngle
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-object GrabberCommands {
-	fun GrabberSubsystem.setWheelsSpeedCommand(output: PercentOutput): Command {
-		return run { setWheelsSpeed(output) }
+/** Runs the grabber motor in a way that intakes a coral from it's back and ejects it from it's front. */
+fun GrabberSubsystem.runForwardsCommand() = withName("Run inwards") {
+	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE) } finallyDo {
+		stopWheelsMotor()
 	}
+}
 
-	fun GrabberSubsystem.setAngleMotorSpeedCommand(output: PercentOutput): Command {
-		return run { setAngleSpeed(output) }
+/** Runs the grabber motor in a way that ejects a coral from it's back and intakes it from it's front. */
+fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
+	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } finallyDo {
+		stopWheelsMotor()
 	}
+}
 
-	fun GrabberSubsystem.grabCommand(): Command {
-		return run { setWheelsVoltage(Constants.WHEELS_GRAB_VOLTAGE) } finallyDo {
-			stopWheelsMotor()
+fun GrabberSubsystem.setAngleCommand(grabberAngle: GrabberAngle) = withName("Get to angle") {
+	runOnce{ angleSetpoint = grabberAngle.angle }
+}
+
+enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
+	GettingToAngle(shouldExitState = {
+		GrabberSubsystem.isAngleWithinTolerance
+	}),
+	PreLoading(shouldExitState = {
+		GrabberSubsystem.isCoralInBeamBreak
+	}),
+	Loading(shouldExitState = {
+		!GrabberSubsystem.isCoralInBeamBreak
+	}),
+	Hold(shouldExitState = {
+		GrabberSubsystem.isCoralInBeamBreak
+	}),
+	Finished(shouldExitState = {
+		false
+	})
+}
+
+fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake command") {
+	var loadFromIntakeState = LoadFromIntakeState.GettingToAngle
+	run {
+		when (loadFromIntakeState) {
+			GettingToAngle -> {
+				angleSetpoint = GrabberAngle.INTAKING.angle
+				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = PreLoading
+			}
+			PreLoading -> {
+				setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE)
+				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
+			}
+			Loading -> {
+				setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE)
+				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Hold
+			}
+			Hold -> {
+				setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE)
+				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Finished
+			}
+			Finished -> {
+				stopWheelsMotor()
+			}
 		}
-	}
+	} until { loadFromIntakeState == Finished }
+}
 
-	fun GrabberSubsystem.ejectCommand(): Command {
-		return run { setWheelsVoltage(Constants.WHEELS_EJECT_VOLTAGE) } finallyDo {
-			stopWheelsMotor()
-		}
+fun GrabberSubsystem.loadFromCoralStationCommand() {
+	run { angleSetpoint = GrabberAngle.CORAL_STATION.angle } until { isAngleWithinTolerance } andThen {
+		run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } until { isCoralInBeamBreak }
 	}
+}
 
-	fun GrabberSubsystem.getToAngleCommand(angle: Rotation2d): Command {
-		return run { getToAngleWithLimits(angle) } finallyDo {
-			stopAngleMotor()
-		}
-	}
+//--- Test commands ---
+
+fun GrabberSubsystem.test_setWheelsVoltageCommand(voltage: Volts) = withName("Set wheels voltage") {
+	run { setWheelsMotorVoltage(voltage) }
+}
+
+fun GrabberSubsystem.test_setAngleMotorVoltageCommand(voltage: Volts) = withName("Set angle motor voltage") {
+	run { setAngleMotorVoltage(voltage) }
 }
