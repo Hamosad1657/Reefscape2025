@@ -63,7 +63,7 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 	} until { loadFromIntakeState == Finished }
 }
 
-fun GrabberSubsystem.loadFromCoralStationCommand() {
+fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral station") {
 	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } until { isCoralInBeamBreak }
 }
 
