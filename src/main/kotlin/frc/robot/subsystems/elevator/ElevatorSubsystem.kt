@@ -11,6 +11,7 @@ import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.RobotMap
 import kotlin.math.absoluteValue
@@ -59,6 +60,7 @@ object ElevatorSubsystem: SubsystemBase() {
 			currentSetpoint = newSetpoint
 		} else {
 			Alert("New elevator setpoint not in motion range!", kError).set(true)
+			DriverStation.reportWarning("New elevator setpoint of ${newSetpoint.meters} meters is not in the elevator motion range.", true)
 		}
 		with(elevatorControlRequest) {
 			// TODO: Update hamosadlib to be able to compare
