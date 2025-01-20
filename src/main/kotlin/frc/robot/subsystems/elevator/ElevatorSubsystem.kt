@@ -61,10 +61,11 @@ object ElevatorSubsystem: SubsystemBase() {
 			Alert("New elevator setpoint not in motion range!", kError).set(true)
 		}
 		with(elevatorControlRequest) {
-			if ((isAtMaxHeight && (currentHeight.asMeters < newSetpoint.asMeters)) || (isAtMinHeight && (newSetpoint.asMeters < currentHeight.meters))) {
-				Position = currentHeight.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
+			// TODO: Update hamosadlib to be able to compare
+			Position = if ((isAtMaxHeight && (currentHeight.asMeters < newSetpoint.asMeters)) || (isAtMinHeight && (newSetpoint.asMeters < currentHeight.meters))) {
+				currentHeight.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
 			} else {
-				Position = newSetpoint.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
+				newSetpoint.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
 			}
 			Slot = 0
 		}
