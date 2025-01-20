@@ -8,19 +8,20 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-// TODO: Find a better name
-data class GrabberState(val height: Length, val angle: Rotation2d) {
+/** Represents a state of the elevator and the grabber. */
+data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotation2d) {
 	companion object {
-		val L1 = GrabberState(ElevatorConstants.L1_HEIGHT, GrabberConstants.L1_ANGLE)
-		val L2 = GrabberState(ElevatorConstants.L2_HEIGHT, GrabberConstants.L2_ANGLE)
-		val L3 = GrabberState(ElevatorConstants.L3_HEIGHT, GrabberConstants.L3_ANGLE)
-		val L4 = GrabberState(ElevatorConstants.L4_HEIGHT, GrabberConstants.L2_ANGLE)
+		val L1 = CoralHandlerState(ElevatorConstants.L1_HEIGHT, GrabberConstants.L1_ANGLE)
+		val L2 = CoralHandlerState(ElevatorConstants.L2_HEIGHT, GrabberConstants.L2_ANGLE)
+		val L3 = CoralHandlerState(ElevatorConstants.L3_HEIGHT, GrabberConstants.L3_ANGLE)
+		val L4 = CoralHandlerState(ElevatorConstants.L4_HEIGHT, GrabberConstants.L2_ANGLE)
 
-		val CORAL_STATION = GrabberState(ElevatorConstants.CORAL_STATION_HEIGHT, GrabberConstants.CORAL_STATION_ANGLE)
-		val INTAKE = GrabberState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKING_ANGLE) // TODO: Intaking angle to intake angle
+		val CORAL_STATION = CoralHandlerState(ElevatorConstants.CORAL_STATION_HEIGHT, GrabberConstants.CORAL_STATION_ANGLE)
+		val INTAKE = CoralHandlerState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKING_ANGLE) // TODO: Intaking angle to intake angle
 	}
 }
 
-fun setGrabberStateCommand(grabberState: GrabberState) = withName("Set grabber state") {
-	ElevatorSubsystem.setHeightCommand(grabberState.height) alongWith GrabberSubsystem.setAngleCommand(grabberState.angle)
+/** Sets the state of the elevator and the grabber. */
+fun setCoralHandlerStateCommand(grabberState: CoralHandlerState) = withName("Set grabber state") {
+	ElevatorSubsystem.setHeightCommand(grabberState.elevatorHeight) alongWith GrabberSubsystem.setAngleCommand(grabberState.grabberAngle)
 }
