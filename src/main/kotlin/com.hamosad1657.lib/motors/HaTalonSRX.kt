@@ -8,7 +8,7 @@ import com.hamosad1657.lib.math.clamp
 import com.hamosad1657.lib.math.wrapPositionSetpoint
 import com.hamosad1657.lib.robotPrintError
 import com.hamosad1657.lib.units.toNeutralMode
-import com.revrobotics.CANSparkBase.IdleMode
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 
 class HaTalonSRX(deviceID: Int) : WPI_TalonSRX(deviceID) {
 	init {
