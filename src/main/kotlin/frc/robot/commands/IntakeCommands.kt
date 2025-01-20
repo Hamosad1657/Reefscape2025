@@ -7,7 +7,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
 
-/** Runs the intake motor so that it will intake a coral and/or drive it towards the elevator. ends instantly. */
+/** Runs the intake motor so that it will intake a coral and/or drive it towards the elevator. */
 fun IntakeSubsystem.runMotorCommand() = withName("Run motor") {
 	run { runMotor() }
 }
@@ -23,15 +23,17 @@ fun IntakeSubsystem.stopMotorCommand() = withName("Stop motor") {
 
 // --- Angle commands ---
 
+/** Sets the intake angle to the retracted angle. Ends instantly */
 fun IntakeSubsystem.retractIntakeCommand() = withName("Retract intake") {
 	runOnce { setAngleToRetract() }
 }
 
+/** Sets the intake angle to the deployed angle. Ends instantly. */
 fun IntakeSubsystem.deployIntakeCommand() = withName("Deploy intake") {
 	runOnce { setAngleToDeploy() }
 }
 
-enum class IntakeState(val shouldExitState: () -> Boolean) {
+private enum class IntakeState(val shouldExitState: () -> Boolean) {
 	Deploying(shouldExitState = {
 		IntakeSubsystem.isWithinAngleTolerance
 	}),
