@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
-import frc.robot.subsystems.grabber.GrabberConstants.GrabberAngle
 import kotlin.math.absoluteValue
 import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
