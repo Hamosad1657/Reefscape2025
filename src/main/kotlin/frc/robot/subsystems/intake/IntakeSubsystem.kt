@@ -57,7 +57,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		return currentAngle.cos * Constants.ANGLE_KG
 	}
 
-	private fun isMovingTowardsLimit(output: Volts): Boolean = !(
+	private fun isMovingTowardsLimits(output: Volts): Boolean = !(
 		(!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
 			(isAtMaxAngleLimit && output <= 0.0) ||
 			(isAtMinAngleLimit && output >= 0.0)
@@ -69,7 +69,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range", true)
 		} else angleSetpoint = newSetpoint
 		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
-		if (!isMovingTowardsLimit(output)) {
+		if (!isMovingTowardsLimits(output)) {
 			angleMotor.setVoltage(output + calculateIntakeFF())
 		} else {
 			angleMotor.setVoltage(calculateIntakeFF())
