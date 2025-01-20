@@ -22,7 +22,7 @@ fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 }
 
 fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("Get to angle") {
-	runOnce{ angleSetpoint = angle }
+	runOnce { angleSetpoint = angle }
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
