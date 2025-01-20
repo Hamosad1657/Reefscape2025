@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Robot
 import frc.robot.RobotMap
 import kotlin.math.absoluteValue
 import frc.robot.subsystems.elevator.ElevatorConstants as Constants
@@ -86,6 +87,8 @@ object ElevatorSubsystem: SubsystemBase() {
 		builder.addDoubleProperty("Elevator height Meters", { currentHeight.asMeters }, null)
 		builder.addDoubleProperty("Elevator setpoint Meters", { currentSetpoint.asMeters }, null)
 
-		builder.addDoubleProperty("Motor current Amps", { mainMotor.supplyCurrent.value.baseUnitMagnitude() }, null)
+		if (Robot.isTesting) {
+			builder.addDoubleProperty("Motor current Amps", { mainMotor.supplyCurrent.value.baseUnitMagnitude() }, null)
+		}
 	}
 }
