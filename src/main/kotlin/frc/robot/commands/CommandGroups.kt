@@ -14,10 +14,10 @@ data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotat
 		val L1 = CoralHandlerState(ElevatorConstants.L1_HEIGHT, GrabberConstants.L1_ANGLE)
 		val L2 = CoralHandlerState(ElevatorConstants.L2_HEIGHT, GrabberConstants.L2_ANGLE)
 		val L3 = CoralHandlerState(ElevatorConstants.L3_HEIGHT, GrabberConstants.L3_ANGLE)
-		val L4 = CoralHandlerState(ElevatorConstants.L4_HEIGHT, GrabberConstants.L2_ANGLE)
+		val L4 = CoralHandlerState(ElevatorConstants.L4_HEIGHT, GrabberConstants.L4_ANGLE)
 
 		val CORAL_STATION = CoralHandlerState(ElevatorConstants.CORAL_STATION_HEIGHT, GrabberConstants.CORAL_STATION_ANGLE)
-		val INTAKE = CoralHandlerState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKING_ANGLE) // TODO: Intaking angle to intake angle
+		val INTAKE = CoralHandlerState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKE_ANGLE) // TODO: Intaking angle to intake angle
 	}
 }
 
