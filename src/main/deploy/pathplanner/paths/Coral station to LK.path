@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6061643835685224,
-        "y": 5.474978595897649
+        "x": 1.1652049180327868,
+        "y": 6.973975409836065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4454918032786885,
-        "y": 6.060512295081967
+        "x": 2.3096300747803076,
+        "y": 6.5130282598871565
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2103751124806283,
-        "y": 7.006106289412339
+        "x": 2.733196721311476,
+        "y": 6.484877049180327
       },
       "prevControl": {
-        "x": 2.503032786885246,
-        "y": 6.384180327868852
+        "x": 2.2356343370104432,
+        "y": 6.852900111341955
+      },
+      "nextControl": {
+        "x": 3.4739345329216467,
+        "y": 5.936988771671903
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.5891188524590167,
+        "y": 5.441946721311475
+      },
+      "prevControl": {
+        "x": 3.307023909091858,
+        "y": 6.060552705695987
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "LK coral station",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 126.0
   },
   "useDefaultConstraints": true
 }

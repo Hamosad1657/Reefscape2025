@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6061643835685224,
-        "y": 5.474978595897649
+        "x": 7.6,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4454918032786885,
-        "y": 6.060512295081967
+        "x": 6.790050744088134,
+        "y": 5.166073389351781
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2103751124806283,
-        "y": 7.006106289412339
+        "x": 5.344118852459016,
+        "y": 5.477909836065574
       },
       "prevControl": {
-        "x": 2.503032786885246,
-        "y": 6.384180327868852
+        "x": 7.285477610807726,
+        "y": 5.125262962107589
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "LK coral station",
+  "folder": "barge zones to reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
