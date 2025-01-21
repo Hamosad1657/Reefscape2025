@@ -65,4 +65,8 @@ object RobotMap {
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
 		const val BEAM_BREAK_CHANNEL = 0
 	}
+
+	object LEDs {
+		const val PWM_PORT = 0
+	}
 }
