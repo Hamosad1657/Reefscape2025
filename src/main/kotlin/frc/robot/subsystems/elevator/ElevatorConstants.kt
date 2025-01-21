@@ -29,7 +29,7 @@ object ElevatorConstants {
 		}
 	}
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
-		MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive // TODO
+		MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive
 	}
 
 	val HEIGHT_PID_GAINS = PIDGains(kP = 0.0)

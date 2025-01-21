@@ -64,8 +64,7 @@ object ElevatorSubsystem: SubsystemBase() {
 			DriverStation.reportWarning("New elevator setpoint of ${newSetpoint.meters} meters is not in the elevator motion range.", true)
 		}
 		with(elevatorControlRequest) {
-			// TODO: Update hamosadlib to be able to compare
-			Position = if ((isAtMaxHeight && (currentHeight.asMeters < newSetpoint.asMeters)) || (isAtMinHeight && (newSetpoint.asMeters < currentHeight.meters))) {
+			Position = if ((isAtMaxHeight && (currentHeight < newSetpoint)) || (isAtMinHeight && (newSetpoint < currentHeight))) {
 				currentHeight.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
 			} else {
 				newSetpoint.asMeters / Constants.ROTATION_METERS_RATIO.asMeters
