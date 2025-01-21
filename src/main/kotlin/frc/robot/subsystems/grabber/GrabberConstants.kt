@@ -44,6 +44,6 @@ object GrabberConstants {
 	val L3_ANGLE = Rotation2d()
 	val L4_ANGLE = Rotation2d()
 
-	val INTAKING_ANGLE = Rotation2d()
+	val INTAKE_ANGLE = Rotation2d()
 	val CORAL_STATION_ANGLE = Rotation2d()
 }
