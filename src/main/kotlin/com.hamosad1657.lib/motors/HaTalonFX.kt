@@ -9,7 +9,7 @@ import com.hamosad1657.lib.math.clamp
 import com.hamosad1657.lib.robotPrintError
 import com.hamosad1657.lib.units.PercentOutput
 import com.hamosad1657.lib.units.toNeutralModeValue
-import com.revrobotics.CANSparkBase.IdleMode
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 
 /**
  * Max safe temperature for the time span of a match.
@@ -44,11 +44,6 @@ class HaTalonFX(deviceNumber: Int, canBusName: String) : TalonFX(deviceNumber, c
 			super.setNeutralMode(value.toNeutralModeValue())
 			field = value
 		}
-
-	/** USE [idleMode] SETTER INSTEAD. */
-	override fun setNeutralMode(neutralMode: NeutralModeValue) {
-		robotPrintError("Use [idleMode] setter instead of [setNeutralMode]", true)
-	}
 
 	var forwardLimit: () -> Boolean = { false }
 	var reverseLimit: () -> Boolean = { false }
@@ -107,7 +102,7 @@ class HaTalonFX(deviceNumber: Int, canBusName: String) : TalonFX(deviceNumber, c
 		}
 
 	val isTempSafe: Boolean
-		get() = deviceTemp.value < FalconSafeTempC
+		get() = deviceTemp.value.baseUnitMagnitude() < FalconSafeTempC
 
 	override fun set(output: PercentOutput) {
 		if (maxPercentOutput > minPercentOutput) {
