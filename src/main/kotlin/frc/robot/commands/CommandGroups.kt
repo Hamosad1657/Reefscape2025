@@ -2,6 +2,7 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Length
+import com.hamosad1657.lib.units.meters
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.subsystems.elevator.ElevatorConstants
 import frc.robot.subsystems.elevator.ElevatorSubsystem
@@ -17,7 +18,7 @@ data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotat
 		val L4 = CoralHandlerState(ElevatorConstants.L4_HEIGHT, GrabberConstants.L4_ANGLE)
 
 		val CORAL_STATION = CoralHandlerState(ElevatorConstants.CORAL_STATION_HEIGHT, GrabberConstants.CORAL_STATION_ANGLE)
-		val INTAKE = CoralHandlerState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKE_ANGLE) // TODO: Intaking angle to intake angle
+		val INTAKE = CoralHandlerState(ElevatorConstants.INTAKE_HEIGHT, GrabberConstants.INTAKE_ANGLE)
 	}
 }
 
