@@ -3,6 +3,9 @@ package frc.robot.subsystems.grabber
 import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.motors.HaSparkMax
 import com.hamosad1657.lib.units.Volts
+import com.hamosad1657.lib.units.absoluteValue
+import com.hamosad1657.lib.units.compareTo
+import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import edu.wpi.first.math.geometry.Rotation2d
@@ -14,7 +17,6 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
-import kotlin.math.absoluteValue
 import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
 
@@ -40,16 +42,16 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
-	val isCoralInBeamBreak: Boolean = beamBreak.get() // TODO: check if naturally true or false
+	val isCoralInBeamBreak: Boolean = beamBreak.get()
 
-	val isAtMaxAngleLimit get() = !maxAngleLimit.get() // TODO: check if naturally true or false
-	val isAtMinAngleLimit get() = !minAngleLimit.get() // TODO: check if naturally true or false
+	val isAtMaxAngleLimit get() = !maxAngleLimit.get()
+	val isAtMinAngleLimit get() = !minAngleLimit.get()
 
-	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(
-		angleEncoder.get() + Constants.ANGLE_ENCODER_OFFS.degrees)
+	val currentAngle: Rotation2d get() =
+		angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFS
 	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = angleSetpoint.degrees - currentAngle.degrees
-	val isAngleWithinTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE.degrees
+	val angleError: Rotation2d get() = angleSetpoint - currentAngle
+	val isAngleWithinTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
 	// --- Functions ---
 
@@ -74,7 +76,7 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 
 	fun updateAngleControl(setpoint: Rotation2d = angleSetpoint) {
-		if (setpoint.rotations <= Constants.MIN_ANGLE.rotations || setpoint.rotations <= Constants.MAX_ANGLE.rotations) {
+		if (setpoint <= Constants.MIN_ANGLE || setpoint <= Constants.MAX_ANGLE) {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("Grabber angle request of ${setpoint.degrees} degrees is out of the range of motion", true)
 		}
@@ -98,15 +100,15 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
-		builder.addDoubleProperty("Angle setpoint", { angleSetpoint.degrees }, null)
-		builder.addDoubleProperty("Angle error", { angleError }, null)
+		builder.addDoubleProperty("Current angle deg", { currentAngle.degrees }, null)
+		builder.addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+		builder.addDoubleProperty("Angle error deg", { angleError.degrees }, null)
 		builder.addBooleanProperty("Is angle within tolerance", { isAngleWithinTolerance }, null)
 		builder.addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 		builder.addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
 
 		if (Robot.isTesting) {
-			builder.addDoubleProperty("Wheels motor current", { wheelsMotor.outputCurrent }, null)
+			builder.addDoubleProperty("Wheels motor current Amps", { wheelsMotor.outputCurrent }, null)
 			builder.addBooleanProperty("Beam break current status", { beamBreak.get() }, null)
 		}
 	}
