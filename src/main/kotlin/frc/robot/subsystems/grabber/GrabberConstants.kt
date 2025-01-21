@@ -22,7 +22,7 @@ object GrabberConstants {
 
 	val ANGLE_ENCODER_OFFS: Rotation2d = 0.0.rotations
 
-
+	/** Works in rotations. */
 	val ANGLE_PID_GAINS = PIDGains(
 		kP = 0.0,
 		kI = 0.0,

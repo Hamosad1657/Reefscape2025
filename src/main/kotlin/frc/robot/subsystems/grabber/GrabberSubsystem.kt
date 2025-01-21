@@ -81,7 +81,7 @@ object GrabberSubsystem: SubsystemBase() {
 			DriverStation.reportWarning("Grabber angle request of ${setpoint.degrees} degrees is out of the range of motion", true)
 		}
 		angleSetpoint = setpoint
-		val output = anglePIDController.calculate(currentAngle.degrees, angleSetpoint.degrees)
+		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
 		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
 			(isAtMaxAngleLimit && output <= 0.0) ||
 			(isAtMinAngleLimit && output >= 0.0)) {
