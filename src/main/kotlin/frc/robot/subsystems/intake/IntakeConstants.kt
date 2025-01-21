@@ -18,6 +18,7 @@ object IntakeConstants {
 	const val CURRENT_THRESHOLD: Amps = 0
 	// --- PID ---
 
+	/** Works in rotations. */
 	val ANGLE_PID_GAINS = PIDGains(kP = 0.0)
 	const val ANGLE_KG = 0.0
 
