@@ -44,7 +44,7 @@ object ElevatorSubsystem: SubsystemBase() {
 	val isAtMaxHeight get() = maxHeightLimitSwitch.get()
 
 	val currentHeight: Length get() = Length.fromMeters(heightEncoder.positionSinceBoot.valueAsDouble * Constants.ROTATION_METERS_RATIO.asMeters)
-	val isWithinHeightTolerance get() = (currentSetpoint.meters - currentHeight.meters).absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
+	val isWithinHeightTolerance get() = (currentSetpoint - currentHeight).meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
 
 
 	// --- Functions ---

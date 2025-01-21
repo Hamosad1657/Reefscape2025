@@ -37,7 +37,7 @@ object ElevatorConstants {
 
 	val HEIGHT_TOLERANCE: Length = 0.02.meters
 
-	/** For every 1 rotation of the motor the elevator moves [ROTATION_METERS_RATIO] meters. */
+	/** For every 1 rotation of the motor, the elevator moves [ROTATION_METERS_RATIO] meters. */
 	val ROTATION_METERS_RATIO: Length = 0.0.meters
 
 	val MAX_HEIGHT: Length = 0.0.meters
