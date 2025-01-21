@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake
 import frc.robot.subsystems.intake.IntakeConstants as Constants
 import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.units.Volts
+import com.hamosad1657.lib.units.absoluteValue
+import com.hamosad1657.lib.units.compareTo
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
@@ -42,8 +44,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts */
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get()) + Constants.ENCODER_OFFSET
-	// TODO: Add absoluteValue extension to Rotation2d
-	val isWithinAngleTolerance: Boolean get() = currentAngle.rotations.absoluteValue <= Constants.ANGLE_TOLERANCE.rotations
+	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
 	val isMotorCurrentAboveThreshold: Boolean get() = wheelMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
 
@@ -64,7 +65,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	)
 
 	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
-		if (newSetpoint.rotations <= Constants.MIN_ANGLE.rotations && newSetpoint.rotations >= Constants.MAX_ANGLE.rotations) { // TODO: update hamosadlib
+		if (newSetpoint <= Constants.MIN_ANGLE && newSetpoint >= Constants.MAX_ANGLE) {
 			Alert("New intake angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range", true)
 		} else angleSetpoint = newSetpoint
