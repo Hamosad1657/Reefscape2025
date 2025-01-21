@@ -29,7 +29,7 @@ object ElevatorConstants {
 		}
 	}
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
-		MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive // TODO
+		MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive
 	}
 
 	val HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
@@ -37,7 +37,7 @@ object ElevatorConstants {
 
 	val HEIGHT_TOLERANCE: Length = 0.02.meters
 
-	/** For every 1 rotation of the motor the elevator moves [ROTATION_METERS_RATIO] meters. */
+	/** For every 1 rotation of the motor, the elevator moves [ROTATION_METERS_RATIO] meters. */
 	val ROTATION_METERS_RATIO: Length = 0.0.meters
 
 	val MAX_HEIGHT: Length = 0.0.meters
