@@ -7,14 +7,14 @@ import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-/** Runs the grabber motor in a way that intakes a coral from it's back and ejects it from it's front. */
+/** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. */
 fun GrabberSubsystem.runForwardsCommand() = withName("Run inwards") {
 	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE) } finallyDo {
 		stopWheelsMotor()
 	}
 }
 
-/** Runs the grabber motor in a way that ejects a coral from it's back and intakes it from it's front. */
+/** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. */
 fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 	run { setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE) } finallyDo {
 		stopWheelsMotor()
@@ -26,13 +26,13 @@ fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("Get to angle
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
-	PreLoading(shouldExitState = {
+	Intaking(shouldExitState = {
 		GrabberSubsystem.isCoralInBeamBreak
 	}),
 	Loading(shouldExitState = {
 		!GrabberSubsystem.isCoralInBeamBreak
 	}),
-	Hold(shouldExitState = {
+	Holding(shouldExitState = {
 		GrabberSubsystem.isCoralInBeamBreak
 	}),
 	Finished(shouldExitState = {
@@ -41,18 +41,18 @@ enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 }
 
 fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake command") {
-	var loadFromIntakeState = PreLoading
+	var loadFromIntakeState = Intaking
 	run {
 		when (loadFromIntakeState) {
-			PreLoading -> {
+			Intaking -> {
 				setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
 			}
 			Loading -> {
 				setWheelsMotorVoltage(GrabberConstants.WHEELS_FORWARDS_VOLTAGE)
-				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Hold
+				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Holding
 			}
-			Hold -> {
+			Holding -> {
 				setWheelsMotorVoltage(GrabberConstants.WHEELS_BACKWARDS_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Finished
 			}
