@@ -5,6 +5,8 @@ import com.hamosad1657.lib.units.Volts
 import frc.robot.commands.IntakeState.*
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.YELLOW_FLASH
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
 
@@ -55,7 +57,10 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 		when (intakeState) {
 			Deploying -> {
 				setAngleToDeploy()
-				if (intakeState.shouldExitState()) intakeState = Intaking
+				if (intakeState.shouldExitState()) {
+					intakeState = Intaking
+					LEDsSubsystem.currentMode = YELLOW_FLASH
+				}
 			}
 			Intaking -> {
 				runMotor()
@@ -64,7 +69,10 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 			Retracting -> {
 				setAngleToRetract()
 				runMotor()
-				if (intakeState.shouldExitState()) intakeState = Finished
+				if (intakeState.shouldExitState()) {
+					intakeState = Finished
+					LEDsSubsystem.currentMode = YELLOW_FLASH
+				}
 			}
 			Finished -> {
 				stopMotor()

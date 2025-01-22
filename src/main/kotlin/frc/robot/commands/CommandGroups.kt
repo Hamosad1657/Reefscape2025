@@ -8,6 +8,8 @@ import frc.robot.subsystems.elevator.ElevatorConstants
 import frc.robot.subsystems.elevator.ElevatorSubsystem
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.BLUE_FLASH
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 /** Represents a state of the elevator and the grabber. */
 data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotation2d) {
@@ -23,6 +25,7 @@ data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotat
 }
 
 /** Sets the state of the elevator and the grabber. */
-fun setCoralHandlerStateCommand(grabberState: CoralHandlerState) = withName("Set grabber state") {
-	ElevatorSubsystem.setHeightCommand(grabberState.elevatorHeight) alongWith GrabberSubsystem.setAngleCommand(grabberState.grabberAngle)
+fun setCoralHandlerStateCommand(grabberState: CoralHandlerState, useLEDs: Boolean) = withName("Set grabber state") {
+	ElevatorSubsystem.setHeightCommand(grabberState.elevatorHeight) alongWith GrabberSubsystem.setAngleCommand(grabberState.grabberAngle) finallyDo
+		{ if (useLEDs) LEDsSubsystem.currentMode = BLUE_FLASH }
 }
