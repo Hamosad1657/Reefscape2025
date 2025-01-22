@@ -8,7 +8,8 @@ object LEDsConstants {
 	const val LENGTH = 0
 
 	const val FLASH_TIMEOUT: Seconds = 1.5
-	const val BLINK_TIME: Seconds = 0.1
+	const val FAST_BLINK_TIME: Seconds = 0.1
+	const val SLOW_BLINK_TIME: Seconds = 0.4
 
 	val LED_SPACING = Length.fromMeters(1 / 30.0)
 	const val SCROLL_SPEED: Mps = 1.0
@@ -21,7 +22,7 @@ object LEDsConstants {
 		BLUE_STATIC,
 		RED_STATIC,
 
-		// All flash modes stay on for 1.5 seconds before going back to default
+		// All flash modes stay on for 1.5 seconds before going back to default, with a 0.2 second period
 		GREEN_FLASH,
 		YELLOW_FLASH,
 		BLUE_FLASH,
