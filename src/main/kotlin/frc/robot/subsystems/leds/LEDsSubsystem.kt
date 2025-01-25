@@ -1,5 +1,7 @@
 package frc.robot.subsystems.leds
 
+import com.hamosad1657.lib.units.Seconds
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
@@ -34,16 +36,16 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 				}
 
 				GREEN_FLASH -> {
-					applyFlash(Color.kGreen, false)
+					applyFlash(Color.kGreen, Constants.FAST_BLINK_TIME)
 				}
 				YELLOW_FLASH -> {
-					applyFlash(Color.kYellow, false)
+					applyFlash(Color.kYellow, Constants.FAST_BLINK_TIME)
 				}
 				BLUE_FLASH -> {
-					applyFlash(Color.kBlue, false)
+					applyFlash(Color.kBlue, Constants.FAST_BLINK_TIME)
 				}
 				RED_FLASH -> {
-					applyFlash(Color.kRed, false)
+					applyFlash(Color.kRed, Constants.FAST_BLINK_TIME)
 				}
 
 				RAINBOW_STATIC -> {
@@ -68,9 +70,9 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 
 	private val timer = Timer()
 
-	private fun applyFlash(color: Color, slow: Boolean) {
+	private fun applyFlash(color: Color, blinkTime: Seconds) {
 		timer.start()
-		LEDPattern.solid(color).blink(Seconds.of(if (slow) Constants.SLOW_BLINK_TIME else Constants.FAST_BLINK_TIME)).applyTo(ledBuffer)
+		LEDPattern.solid(color).blink(Units.Seconds.of(blinkTime)).applyTo(ledBuffer)
 	}
 
 	private fun handleFlash() {
