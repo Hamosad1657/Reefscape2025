@@ -7,6 +7,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
+import kotlin.reflect.KParameter
 
 object GrabberConstants {
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
