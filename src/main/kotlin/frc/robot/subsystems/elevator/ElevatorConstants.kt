@@ -9,7 +9,6 @@ import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.meters
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 
 object ElevatorConstants {
 	val MAIN_MOTOR_CONFIGS = TalonFXConfiguration().apply {
