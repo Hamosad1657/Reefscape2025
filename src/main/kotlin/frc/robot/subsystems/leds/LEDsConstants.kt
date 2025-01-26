@@ -22,7 +22,7 @@ object LEDsConstants {
 		BLUE_STATIC,
 		RED_STATIC,
 
-		// All flash modes stay on for 1.5 seconds before going back to default, with a 0.2 second period
+		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
 		GREEN_FLASH,
 		YELLOW_FLASH,
 		BLUE_FLASH,
