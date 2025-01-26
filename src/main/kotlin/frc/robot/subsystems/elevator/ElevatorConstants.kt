@@ -3,15 +3,18 @@ package frc.robot.subsystems.elevator
 import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue.Clockwise_Positive
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.meters
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 
 object ElevatorConstants {
 	val MAIN_MOTOR_CONFIGS = TalonFXConfiguration().apply {
 		with(MotorOutput) {
+			NeutralModeValue.Brake
 			Inverted = Clockwise_Positive
 		}
 		with(CurrentLimits) {
@@ -21,6 +24,7 @@ object ElevatorConstants {
 	}
 	val SECONDARY_MOTOR_CONFIGS = TalonFXConfiguration().apply {
 		with(MotorOutput) {
+			NeutralModeValue.Brake
 			Inverted = Clockwise_Positive
 		}
 		with(CurrentLimits) {
