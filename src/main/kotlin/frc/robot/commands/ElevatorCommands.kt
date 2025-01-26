@@ -11,11 +11,6 @@ fun ElevatorSubsystem.setHeightCommand(height: Length): Command = withName("Set 
 	runOnce { setHeight(height) }
 }
 
-/** Sets elevator height. Ends when height is within tolerance. */
-fun ElevatorSubsystem.setHeightUntilReachedCommand(height: Length): Command = withName("Set height until reached") {
-	run { setHeight(height) } until { isWithinHeightTolerance }
-}
-
 // --- Testing ---
 
 fun ElevatorSubsystem.test_elevatorSetVoltageCommand(voltage: Volts): Command = withName("Set elevator motors voltage") {

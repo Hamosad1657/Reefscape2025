@@ -18,7 +18,7 @@ import frc.robot.RobotMap
 import kotlin.math.absoluteValue
 import frc.robot.subsystems.elevator.ElevatorConstants as Constants
 
-object ElevatorSubsystem: SubsystemBase() {
+object ElevatorSubsystem: SubsystemBase("Elevator subsystem") {
 	// --- Components ---
 
 	private val mainMotor = HaTalonFX(RobotMap.Elevator.MAIN_MOTOR_ID).apply {
