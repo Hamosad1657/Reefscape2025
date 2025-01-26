@@ -74,7 +74,7 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 
 	fun updateAngleControl(setpoint: Rotation2d = angleSetpoint) {
-		if (setpoint <= Constants.MIN_ANGLE || setpoint <= Constants.MAX_ANGLE) {
+		if (setpoint <= Constants.MIN_ANGLE || setpoint >= Constants.MAX_ANGLE) {
 			Alert("New Grabber angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("Grabber angle request of ${setpoint.degrees} degrees is out of the range of motion", true)
 		}
