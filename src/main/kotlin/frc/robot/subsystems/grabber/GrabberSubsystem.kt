@@ -21,7 +21,6 @@ import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
 
 object GrabberSubsystem: SubsystemBase() {
-
 	// --- Components ---
 
 	private val angleMotor = HaSparkFlex(Map.Grabber.ANGLE_MOTOR_ID).apply {
@@ -29,7 +28,6 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 	private val wheelsMotor = HaSparkMax(Map.Grabber.WHEELS_MOTOR_ID).apply {
 		configure(Constants.WHEEL_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
-
 	}
 	private val angleEncoder = DutyCycleEncoder(Map.Grabber.ANGLE_ENCODER_ID)
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
