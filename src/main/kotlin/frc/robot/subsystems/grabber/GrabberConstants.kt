@@ -7,7 +7,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
-import kotlin.reflect.KParameter
 
 object GrabberConstants {
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
@@ -37,6 +36,9 @@ object GrabberConstants {
 
 	val MIN_ANGLE = Rotation2d(0.0)
 	val MAX_ANGLE = Rotation2d(0.0)
+
+	/**The ratio between the motor's rotations to the distance of the Coral in the grabber*/
+	const val ROTATIONS_CENTIMETERS_RATIO = 0.0
 
 	//--- POSITIONS ---
 
