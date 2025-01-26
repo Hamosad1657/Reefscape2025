@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Amps
 import com.hamosad1657.lib.units.Volts
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
 
@@ -29,10 +30,12 @@ object IntakeConstants {
 	val ENCODER_OFFSET = Rotation2d()
 
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
+		IdleMode.kBrake
 		inverted(false)
 		smartCurrentLimit(200)
 	}
 	val ANGLE_MOTOR_CONFIGS = SparkFlexConfig().apply {
+		IdleMode.kBrake
 		inverted(false)
 
 	}
