@@ -21,7 +21,8 @@ fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 	}
 }
 
-fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("Get to angle") {
+/** Sets the grabber angle setpoint. Ends instantly. */
+fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("set angle") {
 	runOnce { angleSetpoint = angle }
 }
 
