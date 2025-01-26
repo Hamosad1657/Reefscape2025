@@ -8,13 +8,13 @@ import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.YELLOW_STATIC
 import frc.robot.subsystems.leds.LEDsSubsystem
 
 fun intakeCoralFromGroundCommand() = withName("Intake coral from ground") {
-	setCoralHandlerStateCommand(CoralHandlerState.INTAKE, useLEDs = false) andThen
+	setCoralHandlerStateCommand(CoralHandlerState.INTAKE) andThen
 		(IntakeSubsystem.intakeCommand() alongWith GrabberSubsystem.loadFromIntakeCommand()) finallyDo
 		{ LEDsSubsystem.currentMode = GREEN_FLASH }
 }
 
 fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral station") {
-	setCoralHandlerStateCommand(CoralHandlerState.CORAL_STATION, useLEDs = true) andThen
+	setCoralHandlerStateCommand(CoralHandlerState.CORAL_STATION) andThen
 		(GrabberSubsystem.loadFromCoralStationCommand() alongWith LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = YELLOW_STATIC }) finallyDo
 		{ LEDsSubsystem.currentMode = GREEN_FLASH }
 }

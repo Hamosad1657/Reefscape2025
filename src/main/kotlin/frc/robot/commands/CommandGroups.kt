@@ -2,8 +2,8 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Length
-import com.hamosad1657.lib.units.meters
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.elevator.ElevatorConstants
 import frc.robot.subsystems.elevator.ElevatorSubsystem
 import frc.robot.subsystems.grabber.GrabberConstants
@@ -24,8 +24,7 @@ data class CoralHandlerState(val elevatorHeight: Length, val grabberAngle: Rotat
 	}
 }
 
-/** Sets the state of the elevator and the grabber. */
-fun setCoralHandlerStateCommand(grabberState: CoralHandlerState, useLEDs: Boolean) = withName("Set grabber state") {
-	ElevatorSubsystem.setHeightCommand(grabberState.elevatorHeight) alongWith GrabberSubsystem.setAngleCommand(grabberState.grabberAngle) finallyDo
-		{ if (useLEDs) LEDsSubsystem.currentMode = BLUE_FLASH }
+/** Sets the state of the elevator and the grabber. Ends instantly. */
+fun setCoralHandlerStateCommand(grabberState: CoralHandlerState) = withName("Set grabber state") {
+	ElevatorSubsystem.setHeightCommand(grabberState.elevatorHeight) alongWith GrabberSubsystem.setAngleCommand(grabberState.grabberAngle)
 }
