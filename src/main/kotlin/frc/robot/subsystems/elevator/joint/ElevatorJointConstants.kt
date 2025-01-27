@@ -10,7 +10,6 @@ import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.meters
-import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
@@ -29,7 +28,7 @@ object ElevatorJointConstants {
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
-			FeedbackRemoteSensorID = RobotMap.ElevatorJoint.CAN_CODER_ID
+			FeedbackRemoteSensorID = RobotMap.ElevatorJoint.HEIGHT_CAN_CODER_ID
 			FeedbackSensorSource = RemoteCANcoder
 		}
 	}
