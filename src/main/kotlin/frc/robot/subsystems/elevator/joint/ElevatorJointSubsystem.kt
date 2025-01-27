@@ -76,6 +76,8 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	val angleError get() = angleSetpoint - currentAngle
 	val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
+	val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
+
 	// --- Functions ---
 
 	fun setElevatorMotorsVoltage(volts: Volts) {
@@ -146,6 +148,8 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 			addBooleanProperty("Is angle within tolerance", { isWithinAngleTolerance }, null)
 			addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
 			addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
+
+			addBooleanProperty("Is within Tolerance", { isWithinTolerance }, null)
 
 			if (Robot.isTesting) {
 				addDoubleProperty("Elevator Motor current Amps", { mainElevatorMotor.supplyCurrent.value.baseUnitMagnitude() }, null)
