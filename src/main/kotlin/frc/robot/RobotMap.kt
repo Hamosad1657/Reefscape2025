@@ -37,7 +37,7 @@ object RobotMap {
 	object Grabber {
 		const val ANGLE_MOTOR_ID = 0
 		const val WHEELS_MOTOR_ID = 0
-		const val ANGLE_ENCODER_ID = 0 // Not ID, PWM_CHANNEL
+		const val ANGLE_ENCODER_ID = 0
 		const val MAX_ANGLE_LIMIT_CHANNEL = 0
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
 		const val BEAM_BREAK_CHANNEL = 0
