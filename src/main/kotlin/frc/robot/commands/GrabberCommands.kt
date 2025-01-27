@@ -21,11 +21,6 @@ fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 	}
 }
 
-/** Sets the grabber angle setpoint. Ends instantly. */
-fun GrabberSubsystem.setAngleCommand(angle: Rotation2d) = withName("set angle") {
-	runOnce { angleSetpoint = angle }
-}
-
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 	Intaking(shouldExitState = {
 		GrabberSubsystem.isCoralInBeamBreak
@@ -72,8 +67,4 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 
 fun GrabberSubsystem.test_setWheelsVoltageCommand(voltage: Volts) = withName("Set wheels voltage") {
 	run { setWheelsMotorVoltage(voltage) }
-}
-
-fun GrabberSubsystem.test_setAngleMotorVoltageCommand(voltage: Volts) = withName("Set angle motor voltage") {
-	run { setAngleMotorVoltage(voltage) }
 }
