@@ -3,10 +3,7 @@ package frc.robot.commands
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
 import frc.robot.commands.IntakeState.*
-import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.YELLOW_FLASH
-import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
 
@@ -44,23 +41,18 @@ private enum class IntakeState(val shouldExitState: () -> Boolean) {
 		IntakeSubsystem.isMotorCurrentAboveThreshold
 	}),
 	Retracting(shouldExitState = {
-		GrabberSubsystem.isCoralInBeamBreak
-	}),
-	Finished(shouldExitState = {
 		false
 	}),
 }
 
+/** Intakes from ground, does not end automatically. */
 fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 	var intakeState = Deploying
 	run {
 		when (intakeState) {
 			Deploying -> {
 				setAngleToDeploy()
-				if (intakeState.shouldExitState()) {
-					intakeState = Intaking
-					LEDsSubsystem.currentMode = YELLOW_FLASH
-				}
+				if (intakeState.shouldExitState()) intakeState = Intaking
 			}
 			Intaking -> {
 				runMotor()
@@ -69,16 +61,9 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 			Retracting -> {
 				setAngleToRetract()
 				runMotor()
-				if (intakeState.shouldExitState()) {
-					intakeState = Finished
-					LEDsSubsystem.currentMode = YELLOW_FLASH
-				}
-			}
-			Finished -> {
-				stopMotor()
 			}
 		}
-	} until { intakeState == Finished }
+	} finallyDo { stopMotor() }
 }
 
 // --- Testing commands ---
