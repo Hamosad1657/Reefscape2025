@@ -41,7 +41,7 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
 	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
 
-	private val heightEncoder = CANcoder(Map.ElevatorJoint.CAN_CODER_ID).apply {
+	private val heightEncoder = CANcoder(Map.ElevatorJoint.HEIGHT_CAN_CODER_ID).apply {
 		configurator.apply(Constants.CAN_CODER_CONFIGS)
 	}
 
