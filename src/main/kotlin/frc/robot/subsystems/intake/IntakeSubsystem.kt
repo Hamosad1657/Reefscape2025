@@ -110,7 +110,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Periodic ---
 
 	override fun periodic() {
-		updateAngleControl()
+		if (Robot.isEnabled) updateAngleControl()
 	}
 
 	// --- Telemetry ---

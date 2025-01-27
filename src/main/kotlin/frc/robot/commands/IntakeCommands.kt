@@ -41,13 +41,11 @@ private enum class IntakeState(val shouldExitState: () -> Boolean) {
 		IntakeSubsystem.isMotorCurrentAboveThreshold
 	}),
 	Retracting(shouldExitState = {
-		false //GrabberSubsystem.hasNote
-	}),
-	Finished(shouldExitState = {
 		false
 	}),
 }
 
+/** Intakes from ground, does not end automatically. */
 fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 	var intakeState = Deploying
 	run {
@@ -63,13 +61,9 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 			Retracting -> {
 				setAngleToRetract()
 				runMotor()
-				if (intakeState.shouldExitState()) intakeState = Finished
-			}
-			Finished -> {
-				stopMotor()
 			}
 		}
-	} until { intakeState == Finished }
+	} finallyDo { stopMotor() }
 }
 
 // --- Testing commands ---
