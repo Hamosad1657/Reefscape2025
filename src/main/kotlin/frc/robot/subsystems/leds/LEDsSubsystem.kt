@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.RobotMap
-import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants as Constants
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 
@@ -25,7 +24,7 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 				GREEN_STATIC -> {
 					LEDPattern.solid(Color.kGreen).applyTo(ledBuffer)
 				}
-				YELLOW_STATIC -> {
+				LOADING_FROM_CORAL_STATION -> {
 					LEDPattern.solid(Color.kYellow).applyTo(ledBuffer)
 				}
 				BLUE_STATIC -> {
@@ -35,16 +34,16 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 					LEDPattern.solid(Color.kRed).applyTo(ledBuffer)
 				}
 
-				GREEN_FLASH -> {
+				ACTION_FINISHED -> {
 					applyFlash(Color.kGreen, Constants.FAST_BLINK_TIME)
 				}
-				YELLOW_FLASH -> {
+				PLACING_CORAL -> {
 					applyFlash(Color.kYellow, Constants.FAST_BLINK_TIME)
 				}
-				BLUE_FLASH -> {
+				REACHED_SETPOINT -> {
 					applyFlash(Color.kBlue, Constants.FAST_BLINK_TIME)
 				}
-				RED_FLASH -> {
+				ACTION_FAILED -> {
 					applyFlash(Color.kRed, Constants.FAST_BLINK_TIME)
 				}
 
@@ -84,16 +83,16 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 
 	private fun handleLEDs() {
 		when (currentMode) {
-			GREEN_FLASH -> {
+			ACTION_FINISHED -> {
 				handleFlash()
 			}
-			YELLOW_FLASH -> {
+			PLACING_CORAL -> {
 				handleFlash()
 			}
-			BLUE_FLASH -> {
+			REACHED_SETPOINT -> {
 				handleFlash()
 			}
-			RED_FLASH -> {
+			ACTION_FAILED -> {
 				handleFlash()
 			}
 

@@ -18,15 +18,15 @@ object LEDsConstants {
 		DEFAULT,
 
 		GREEN_STATIC,
-		YELLOW_STATIC,
+		LOADING_FROM_CORAL_STATION, //yellow static
 		BLUE_STATIC,
 		RED_STATIC,
 
 		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
-		GREEN_FLASH,
-		YELLOW_FLASH,
-		BLUE_FLASH,
-		RED_FLASH,
+		ACTION_FINISHED, //green flash
+		PLACING_CORAL, //yellow flash
+		REACHED_SETPOINT, //blue flash
+		ACTION_FAILED, //red flash
 
 		RAINBOW_STATIC,
 		RAINBOW_SCROLL,
