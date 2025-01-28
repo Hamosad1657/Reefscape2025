@@ -7,6 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.elevator.joint.ElevatorJointConstants
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.LOADING_FROM_CORAL_STATION
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.REACHED_SETPOINT
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 /** Represents a state of the elevator and the grabber. */
 data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
@@ -22,18 +25,27 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 }
 
 /** Maintains an elevator joint state. Never ends. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
 	run {
 		setHeight(state.height)
 		updateAngleControl(state.angle)
+	} finallyDo {
+		if (useLEDs){
+			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT
+			}
+		}
 	}
 }
 
 /** Maintains an elevator joint state. Never ends. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
 	run {
 		setHeight(state().height)
 		updateAngleControl(state().angle)
+	} finallyDo {
+		if (useLEDs){
+			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT}
+		}
 	}
 }
 
