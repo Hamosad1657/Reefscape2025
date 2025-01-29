@@ -9,6 +9,7 @@ import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
+import com.hamosad1657.lib.units.degrees
 import com.hamosad1657.lib.units.meters
 import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
@@ -27,7 +28,7 @@ import frc.robot.RobotMap as Map
 import kotlin.math.absoluteValue
 import frc.robot.subsystems.elevator.joint.ElevatorJointConstants as Constants
 
-object ElevatorJointSubsystem: SubsystemBase("Elevator") {
+object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	// --- Elevator Components ---
 
 	private val mainElevatorMotor = HaTalonFX(Map.ElevatorJoint.MAIN_MOTOR_ID).apply {
@@ -60,23 +61,22 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	private var heightSetpoint: Length = 0.0.meters
 
-	val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
-	val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
+	private val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
+	private val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
 
-	val currentHeight: Length get() = Length.fromMeters(heightEncoder.position.valueAsDouble * Constants.ELEVATOR_ROTATION_METERS_RATIO.asMeters)
-	val heightError get() = heightSetpoint - currentHeight
-	val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
+	private val currentHeight: Length get() = Length.fromMeters(heightEncoder.position.valueAsDouble * Constants.ELEVATOR_ROTATION_METERS_RATIO.asMeters)
+	private val heightError get() = heightSetpoint - currentHeight
+	private val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
 
-	val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
-	val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
+	private val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
+	private val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
 
-	val currentAngle: Rotation2d get() =
-		angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
-	var angleSetpoint = Rotation2d(0.0)
-	val angleError get() = angleSetpoint - currentAngle
-	val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
+	private val currentAngle: Rotation2d get() = angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
+	private var angleSetpoint: Rotation2d = 0.0.degrees
+	private val angleError: Rotation2d get() = angleSetpoint - currentAngle
+	private val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
+	private val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
 
 	// --- Functions ---
 
@@ -117,7 +117,7 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private fun calculateAngleMotorFF(): Volts = currentAngle.cos * Constants.ANGLE_KG
 
 	fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
-		if (newSetpoint >= Constants.MAX_ANGLE || newSetpoint <= Constants.MIN_ANGLE) {
+		if (Constants.MAX_ANGLE <= newSetpoint || newSetpoint <= Constants.MIN_ANGLE) {
 			Alert("New elevator joint angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("Elevator angle request of ${newSetpoint.degrees} degrees is out of the range of motion", true)
 		} else angleSetpoint = newSetpoint
