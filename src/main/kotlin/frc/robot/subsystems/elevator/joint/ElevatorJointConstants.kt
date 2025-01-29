@@ -65,6 +65,11 @@ object ElevatorJointConstants {
 	val L3_HEIGHT = 0.0.meters
 	val L4_HEIGHT = 0.0.meters
 
+	val LOW_REEF_ALGAE_HEIGHT = 0.0.meters
+	val HIGH_REEF_ALGAE_HEIGHT = 0.0.meters
+	val PROCESSOR_HEIGHT = 0.0.meters
+	val NET_HEIGHT = 0.0.meters
+
 	val INTAKE_HEIGHT = 0.0.meters
 	val CORAL_STATION_HEIGHT = 0.0.meters
 
@@ -92,6 +97,10 @@ object ElevatorJointConstants {
 	val L2_ANGLE = Rotation2d()
 	val L3_ANGLE = Rotation2d()
 	val L4_ANGLE = Rotation2d()
+
+	val REEF_ALGAE_ANGLE = Rotation2d()
+	val PROCESSOR_ANGLE = Rotation2d()
+	val NET_ANGLE = Rotation2d()
 
 	val INTAKE_ANGLE = Rotation2d()
 	val CORAL_STATION_ANGLE = Rotation2d()

@@ -16,6 +16,11 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 		val L3 = ElevatorJointState(ElevatorJointConstants.L3_HEIGHT, ElevatorJointConstants.L3_ANGLE)
 		val L4 = ElevatorJointState(ElevatorJointConstants.L4_HEIGHT, ElevatorJointConstants.L4_ANGLE)
 
+		val LOW_REEF_ALGAE = ElevatorJointState(ElevatorJointConstants.LOW_REEF_ALGAE_HEIGHT, ElevatorJointConstants.REEF_ALGAE_ANGLE)
+		val HIGH_REEF_ALGAE = ElevatorJointState(ElevatorJointConstants.HIGH_REEF_ALGAE_HEIGHT, ElevatorJointConstants.REEF_ALGAE_ANGLE)
+		val PROCESSOR = ElevatorJointState(ElevatorJointConstants.PROCESSOR_HEIGHT, ElevatorJointConstants.PROCESSOR_ANGLE)
+		val NET = ElevatorJointState(ElevatorJointConstants.NET_HEIGHT, ElevatorJointConstants.NET_ANGLE)
+
 		val CORAL_STATION = ElevatorJointState(ElevatorJointConstants.CORAL_STATION_HEIGHT, ElevatorJointConstants.CORAL_STATION_ANGLE)
 		val INTAKE = ElevatorJointState(ElevatorJointConstants.INTAKE_HEIGHT, ElevatorJointConstants.INTAKE_ANGLE)
 	}
