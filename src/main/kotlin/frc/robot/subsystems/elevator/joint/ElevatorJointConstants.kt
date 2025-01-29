@@ -33,13 +33,13 @@ object ElevatorJointConstants {
 		}
 	}
 
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d()
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
 			MagnetOffset = ELEVATOR_CAN_CODER_OFFSET.rotations
 		}
 	}
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d()
 
 	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
 	const val ELEVATOR_HEIGHT_KG: Volts = 0.0
