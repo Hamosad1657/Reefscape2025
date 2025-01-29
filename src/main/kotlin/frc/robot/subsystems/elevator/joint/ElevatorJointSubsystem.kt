@@ -38,12 +38,13 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private val secondaryElevatorMotor = HaTalonFX(Map.ElevatorJoint.SECONDARY_MOTOR_ID).apply {
 		Follower(Map.ElevatorJoint.MAIN_MOTOR_ID, true)
 	}
-	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
-	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
-
 	private val heightEncoder = CANcoder(Map.ElevatorJoint.HEIGHT_CAN_CODER_ID).apply {
 		configurator.apply(Constants.CAN_CODER_CONFIGS)
 	}
+
+	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
+	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
+
 
 	// --- Grabber angle components ---
 
@@ -63,15 +64,17 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
 	private val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
 
-	private val currentHeight: Length get() = Length.fromMeters(heightEncoder.position.valueAsDouble * Constants.ELEVATOR_ROTATION_METERS_RATIO.asMeters)
+	private val currentHeight: Length get() = Length.fromMeters(heightEncoder.position.valueAsDouble * Constants.LENGTH_PER_ROTATION.asMeters)
 	private val heightError get() = heightSetpoint - currentHeight
 	private val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
+
+
+	private var angleSetpoint: Rotation2d = 0.0.degrees
 
 	private val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
 	private val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
 
 	private val currentAngle: Rotation2d get() = angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
-	private var angleSetpoint: Rotation2d = 0.0.degrees
 	private val angleError: Rotation2d get() = angleSetpoint - currentAngle
 	private val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
@@ -95,9 +98,9 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		}
 		with(elevatorControlRequest) {
 			Position = if ((isAtMaxHeightLimit && (currentHeight < newSetpoint)) || (isAtMinHeightLimit && (newSetpoint < currentHeight))) {
-				currentHeight.asMeters / Constants.ELEVATOR_ROTATION_METERS_RATIO.asMeters
+				currentHeight.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 			} else {
-				newSetpoint.asMeters / Constants.ELEVATOR_ROTATION_METERS_RATIO.asMeters
+				newSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 			}
 			Slot = 0
 		}
