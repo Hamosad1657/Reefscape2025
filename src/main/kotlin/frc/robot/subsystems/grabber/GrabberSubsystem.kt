@@ -43,12 +43,15 @@ object GrabberSubsystem: SubsystemBase() {
 		motor.setVoltage(voltage)
 	}
 
+	/** Sets the setpoint of the motor relative to where it is now. */
 	fun setMotorSetpoint(lengthSetpoint: Length) {
-		setpoint = Rotation2d.fromRotations(lengthSetpoint.asCentimeters / Constants.LENGTH_FOR_EACH_ROTATION.asCentimeters)
+		setpoint = Rotation2d.fromRotations(
+			currentAngle.rotations + (lengthSetpoint.asCentimeters / Constants.LENGTH_FOR_EACH_ROTATION.asCentimeters)
+		)
 	}
 
 	fun updateMotorPIDControl() {
-		motor.setVoltage(MathUtil.clamp(PIDController.calculate(currentAngle.rotations, currentAngle.rotations + setpoint.rotations), -1.5, 1.5))
+		motor.setVoltage(PIDController.calculate(currentAngle.radians, setpoint.radians))
 	}
 
 	fun stopMotor() {
