@@ -88,7 +88,7 @@ object ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		FeedForward = Constants.ELEVATOR_HEIGHT_KG
 	}
 	fun setHeight(newSetpoint: Length) {
-		if (newSetpoint.meters in 0.0..Constants.MAX_HEIGHT.asMeters) {
+		if (newSetpoint.meters in Constants.MIN_HEIGHT.asMeters..Constants.MAX_HEIGHT.asMeters) {
 			heightSetpoint = newSetpoint
 		} else {
 			Alert("New elevator setpoint not in motion range!", kError).set(true)
