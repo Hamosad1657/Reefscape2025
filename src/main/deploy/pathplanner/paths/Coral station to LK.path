@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1652049180327868,
-        "y": 6.973975409836065
+        "x": 1.8520240127008154,
+        "y": 6.659863414590209
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3096300747803076,
-        "y": 6.5130282598871565
+        "x": 2.4491657658654953,
+        "y": 5.833155916858403
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "LK-coralStationClose"
     },
     {
       "anchor": {
-        "x": 2.733196721311476,
-        "y": 6.484877049180327
+        "x": 3.70934,
+        "y": 5.37692
       },
       "prevControl": {
-        "x": 2.2356343370104432,
-        "y": 6.852900111341955
-      },
-      "nextControl": {
-        "x": 3.4739345329216467,
-        "y": 5.936988771671903
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.5891188524590167,
-        "y": 5.441946721311475
-      },
-      "prevControl": {
-        "x": 3.307023909091858,
-        "y": 6.060552705695987
+        "x": 3.612860159261054,
+        "y": 5.607553129300601
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "LK-close"
     }
   ],
   "rotationTargets": [],
@@ -64,7 +48,7 @@
   "folder": "LK coral station",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.0
+    "rotation": 125.98900000000002
   },
   "useDefaultConstraints": true
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9276131827402136,
-        "y": 1.6667418990645502
+        "x": 7.58032,
+        "y": 1.88303
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.082316832718061,
-        "y": 2.1448693724448926
+        "x": 7.404138380348926,
+        "y": 2.1263048046624444
       },
       "isLocked": true,
-      "linkedName": "CD-coralStationClose"
+      "linkedName": "position2"
     },
     {
       "anchor": {
-        "x": 3.70934,
-        "y": 2.67492
+        "x": 6.04934,
+        "y": 4.02592
       },
       "prevControl": {
-        "x": 3.496758272774178,
-        "y": 2.5433562920494936
+        "x": 6.71610518840941,
+        "y": 3.0970940578456743
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "CD-close"
+      "linkedName": "GH-close"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "CD coral station",
+  "folder": "barge zones to reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.98900000000002
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -42,8 +42,8 @@ object FieldConstants {
 		val KL_AB_CLOSE = Pose2d(3.13834, 4.80592, Rotation2d.fromDegrees(-30.0))
 		val KL_AB_FAR = Pose2d(2.37407, 5.24717, Rotation2d.fromDegrees(-30.0))
 
-		val KL_CORAL_STATION = Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-125.989))
-		val CD_CORAL_STATION = Pose2d(0.0, 0.0, Rotation2d.fromDegrees(125.989))
+		val KL_CORAL_STATION = Pose2d(1.11524, 7.03288, Rotation2d.fromDegrees(-125.989))
+		val CD_CORAL_STATION = Pose2d(1.11514, 1.01899, Rotation2d.fromDegrees(-125.989))
 
 		val AT_A = Pose2d(3.21060, 4.19023, Rotation2d.fromDegrees(0.0))
 		val AT_B = Pose2d(3.21060, 3.86161, Rotation2d.fromDegrees(0.0))
