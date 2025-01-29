@@ -3,10 +3,7 @@
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
-import com.hamosad1657.lib.units.rotations
 import frc.robot.commands.LoadFromIntakeState.*
-import frc.robot.commands.LoadFromIntakeState.Finished
-import frc.robot.commands.LoadFromIntakeState.Holding
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
@@ -53,7 +50,7 @@ enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 		!GrabberSubsystem.isBeamBreakInterfered
 	}),
 	Holding(shouldExitState = {
-		((GrabberSubsystem.setpoint.rotations * GrabberConstants.LENGTH_FOR_EACH_ROTATION.asCentimeters).rotations - GrabberSubsystem.currentAngle).rotations  < GrabberConstants.MOTOR_TOLERANCE.rotations
+		GrabberSubsystem.isInTolerance
 	}),
 	Finished(shouldExitState = {
 		false
@@ -65,11 +62,11 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 	run {
 		when (loadFromIntakeState) {
 			Intaking -> {
-				setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
 			}
 			Loading -> {
-				setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) {
 					loadFromIntakeState = Holding
 					setMotorSetpoint(Length.fromCentimeters(-3))
@@ -79,11 +76,9 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 				updateMotorPIDControl()
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Finished
 			}
-			Finished -> {
-				stopMotor()
-			}
+			Finished -> {}
 		}
-	} until { loadFromIntakeState == Finished }
+	} until { loadFromIntakeState == Finished } finallyDo { stopMotor() }
 }
 
 enum class LoadFromCoralStationState(val shouldExitState: () -> Boolean) {
@@ -103,7 +98,7 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 	run {
 		when (loadFromCoralStationState) {
 			LoadFromCoralStationState.Loading -> {
-				setMotorVoltage(GrabberConstants.CORAL_BACKWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE)
 				if (loadFromCoralStationState.shouldExitState()) {
 					loadFromCoralStationState = LoadFromCoralStationState.Holding
 					setMotorSetpoint(Length.fromCentimeters(-3))
@@ -113,11 +108,9 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 				updateMotorPIDControl()
 				if (loadFromCoralStationState.shouldExitState()) loadFromCoralStationState = LoadFromCoralStationState.Finished
 			}
-			LoadFromCoralStationState.Finished -> {
-				stopMotor()
-			}
+			LoadFromCoralStationState.Finished -> {}
 		}
-	} until { loadFromCoralStationState == LoadFromCoralStationState.Finished }
+	} until { loadFromCoralStationState == LoadFromCoralStationState.Finished } finallyDo { stopMotor() }
 }
 
 //--- Test commands ---
