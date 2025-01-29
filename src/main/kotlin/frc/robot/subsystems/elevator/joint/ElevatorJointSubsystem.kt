@@ -36,8 +36,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		configPID(Constants.ELEVATOR_HEIGHT_PID_GAINS)
 	}
 	private val secondaryElevatorMotor = HaTalonFX(Map.ElevatorJoint.SECONDARY_MOTOR_ID).apply {
-		configurator.apply(Constants.SECONDARY_ELEVATOR_MOTOR_CONFIGS)
-		Follower(Map.ElevatorJoint.MAIN_MOTOR_ID, false)
+		Follower(Map.ElevatorJoint.MAIN_MOTOR_ID, true)
 	}
 	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
 	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)

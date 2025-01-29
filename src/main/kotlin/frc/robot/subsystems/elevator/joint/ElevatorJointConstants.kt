@@ -32,16 +32,7 @@ object ElevatorJointConstants {
 			FeedbackSensorSource = RemoteCANcoder
 		}
 	}
-	val SECONDARY_ELEVATOR_MOTOR_CONFIGS = TalonFXConfiguration().apply {
-		with(MotorOutput) {
-			NeutralMode = Brake
-			Inverted = Clockwise_Positive
-		}
-		with(CurrentLimits) {
-			SupplyCurrentLimit = 100.0
-			SupplyCurrentLimitEnable = true
-		}
-	}
+
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
