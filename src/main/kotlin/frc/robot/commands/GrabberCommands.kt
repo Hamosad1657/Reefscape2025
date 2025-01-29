@@ -10,28 +10,37 @@ import frc.robot.commands.LoadFromIntakeState.Holding
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-/** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. Doesn't end automatically*/
-fun GrabberSubsystem.runForwardsCommand() = withName("Run inwards") {
-	run { setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE) } finallyDo {
+/** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. Doesn't end automatically. */
+fun GrabberSubsystem.ejectCoralCommand() = withName("Run inwards") {
+	run { setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
 
-/** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically*/
-fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
-	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARDS_VOLTAGE) } finallyDo {
+/** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically. */
+fun GrabberSubsystem.loadCoralCommand() = withName("Run outwards") {
+	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
 
+/** Runs the grabber motor so that it will eject an algae to go into the processor. Does not end automatically. */
+fun GrabberSubsystem.ejectAlgaeToProcessorCommand() = withName("Eject Algae to processor") {
+	run { setMotorVoltage(GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE) } finallyDo {
+		stopMotor()
+	}
+}
+
+/** Runs the grabber motor so that it will eject an algae to go into the net. Does not end automatically. */
+fun GrabberSubsystem.ejectAlgaeToNetCommand() = withName("Eject algae to net") {
+	run { setMotorVoltage(GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE) } finallyDo {
+		stopMotor()
+	}
+}
+
+/** Runs the motor inwards to intake an algae. Ends when the beam break is interfered. */
 fun GrabberSubsystem.intakeAlgaeCommand() = withName("Intake Algae") {
 	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } until { isBeamBreakInterfered } finallyDo {
-		stopMotor()
-	}
-}
-
-fun GrabberSubsystem.ejectAlgaeCommand(voltage: Volts) = withName("Eject Algae") {
-	run { setMotorVoltage(voltage) } withTimeout GrabberConstants.ALGAE_EJECT_TIMEOUT_SEC finallyDo {
 		stopMotor()
 	}
 }
