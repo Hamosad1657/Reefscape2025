@@ -7,31 +7,34 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
 
-/** Runs the intake motor so that it will intake a coral and/or drive it towards the elevator. */
-fun IntakeSubsystem.runMotorCommand() = withName("Run motor") {
-	run { runMotor() }
+/** Runs the wheel motor so that it will intake a coral and/or drive it towards the elevator. Doesn't end automatically. */
+fun IntakeSubsystem.runWheelMotorCommand() = withName("Run motor") {
+	run { runWheelMotor() } finallyDo { stopWheelMotor() }
 }
 
-/** Runs the intake motor in reverse so that it will move a coral in it away from the elevator. */
-fun IntakeSubsystem.runMotorReverseCommand() = withName("Run motor reverse") {
-	run { runMotorReverse() }
+/** Runs the wheel motor so that it will move a coral in it away from the elevator. Doesn't end automatically. */
+fun IntakeSubsystem.runWheelMotorReverseCommand() = withName("Run motor reverse") {
+	run { runWheelMotorReverse() }
 }
 
-fun IntakeSubsystem.stopMotorCommand() = withName("Stop motor") {
-	runOnce { stopMotor() }
+/** Stops the wheel motor. Ends instantly. */
+fun IntakeSubsystem.stopWheelMotorCommand() = withName("Stop motor") {
+	runOnce { stopWheelMotor() }
 }
 
 // --- Angle commands ---
 
-/** Sets the intake angle to the retracted angle. Ends instantly */
+/** Maintains a retracted angle. Does not end automatically. */
 fun IntakeSubsystem.retractIntakeCommand() = withName("Retract intake") {
-	runOnce { setAngleToRetract() }
+	run { setAngleToRetracted() }
 }
 
 /** Sets the intake angle to the deployed angle. Ends instantly. */
 fun IntakeSubsystem.deployIntakeCommand() = withName("Deploy intake") {
-	runOnce { setAngleToDeploy() }
+	run { setAngleToDeploy() }
 }
+
+// --- Intake command ---
 
 private enum class IntakeState(val shouldExitState: () -> Boolean) {
 	Deploying(shouldExitState = {
@@ -55,25 +58,26 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 				if (intakeState.shouldExitState()) intakeState = Intaking
 			}
 			Intaking -> {
-				runMotor()
+				setAngleToDeploy()
+				runWheelMotor()
 				if (intakeState.shouldExitState()) intakeState = Retracting
 			}
 			Retracting -> {
-				setAngleToRetract()
-				runMotor()
+				setAngleToRetracted()
+				runWheelMotor()
 			}
 		}
-	} finallyDo { stopMotor() }
+	} finallyDo { stopWheelMotor() }
 }
 
 // --- Testing commands ---
 
-/** Use for testing */
+/** Use for testing. */
 fun IntakeSubsystem.test_openLoopRunWheelsCommand(voltage: Volts) = withName("Open loop run wheels") {
 	run { setWheelMotorVoltage(voltage) }
 }
 
-/** Use for testing */
+/** Use for testing. */
 fun IntakeSubsystem.test_openLoopRunAngleControlCommand(voltage: Volts) = withName("Open loop angle control") {
 	run { setAngleMotorVoltage(voltage) }
 }

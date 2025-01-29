@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap
-import kotlin.math.absoluteValue
 
 object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Components ---
@@ -31,6 +30,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 	private val encoder = DutyCycleEncoder(RobotMap.Intake.ENCODER_ID)
+
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 	private var angleSetpoint = Rotation2d()
 
@@ -42,7 +42,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
 	val isAtMaxAngleLimit: Boolean get() =  maxAngleLimitSwitch.get()
 
-	/** Angle is zero when fully horizontal. Angle increases when the intake retracts */
+	/** Angle is zero when fully horizontal. Angle increases when the intake retracts. */
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get()) + Constants.ENCODER_OFFSET
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
@@ -54,7 +54,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		angleMotor.setVoltage(voltage)
 	}
 
-	private fun calculateIntakeFF(): Volts {
+	private fun calculateAngleFF(): Volts {
 		return currentAngle.cos * Constants.ANGLE_KG
 	}
 
@@ -66,51 +66,46 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
 		if (newSetpoint <= Constants.MIN_ANGLE && newSetpoint >= Constants.MAX_ANGLE) {
-			Alert("New intake angle setpoint not in range. Value not updated", kWarning).set(true)
-			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range", true)
+			Alert("New intake angle setpoint not in range. Value not updated.", kWarning).set(true)
+			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range.", true)
 		} else angleSetpoint = newSetpoint
+
 		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
 		if (!isMovingTowardsLimits(output)) {
-			angleMotor.setVoltage(output + calculateIntakeFF())
+			angleMotor.setVoltage(output + calculateAngleFF())
 		} else {
-			angleMotor.setVoltage(calculateIntakeFF())
+			angleMotor.setVoltage(calculateAngleFF())
 		}
 	}
 
-	fun setIntakeAngle(angle: Rotation2d) {
+	fun setAngle(angle: Rotation2d) {
 		updateAngleControl(angle)
 	}
 
 	fun setAngleToDeploy() {
-		setIntakeAngle(Constants.DEPLOYED_ANGLE)
+		setAngle(Constants.DEPLOYED_ANGLE)
 	}
 
-	fun setAngleToRetract() {
-		setIntakeAngle(Constants.RETRACTED_ANGLE)
+	fun setAngleToRetracted() {
+		setAngle(Constants.RETRACTED_ANGLE)
 	}
 
 	fun setWheelMotorVoltage(voltage: Volts) {
 		wheelMotor.setVoltage(voltage)
 	}
 
-	fun stopMotor() {
-		wheelMotor.stopMotor()
-	}
-
 	/** Runs the intaking motor so that it will intake a coral and/or drive it towards the elevator. */
-	fun runMotor() {
+	fun runWheelMotor() {
 		setWheelMotorVoltage(Constants.INTAKING_VOLTAGE)
 	}
 
 	/** Runs the intaking motor in reverse so that it will move a coral in it away from the elevator. */
-	fun runMotorReverse() {
+	fun runWheelMotorReverse() {
 		setWheelMotorVoltage(-Constants.INTAKING_VOLTAGE)
 	}
 
-	// --- Periodic ---
-
-	override fun periodic() {
-		if (Robot.isEnabled) updateAngleControl()
+	fun stopWheelMotor() {
+		wheelMotor.stopMotor()
 	}
 
 	// --- Telemetry ---
@@ -126,7 +121,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		builder.addBooleanProperty("Current above threshold", { isMotorCurrentAboveThreshold }, null)
 
 		 if (Robot.isTesting) {
-			 builder.addDoubleProperty("Motor current Amps", { wheelMotor.outputCurrent }, null)
+			 builder.addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
 		 }
 	}
 }
