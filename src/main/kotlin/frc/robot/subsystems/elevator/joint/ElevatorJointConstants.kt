@@ -33,7 +33,7 @@ object ElevatorJointConstants {
 		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d()
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromDegrees(0.0)
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
@@ -71,29 +71,30 @@ object ElevatorJointConstants {
 		idleMode(kCoast)
 		inverted(false)
 	}
-	val ANGLE_ENCODER_OFFSET = Rotation2d()
+	val ANGLE_ENCODER_OFFSET = Rotation2d.fromDegrees(0.0)
 
-	/** Works in rotations */
+	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
 		kP = 0.0,
 		kI = 0.0,
 		kD = 0.0,
 	)
 	const val ANGLE_KG: Volts = 0.0
-	val ANGLE_TOLERANCE = Rotation2d()
 
-	val MIN_ANGLE = Rotation2d()
-	val MAX_ANGLE = Rotation2d()
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.0)
 
-	val L1_ANGLE = Rotation2d()
-	val L2_ANGLE = Rotation2d()
-	val L3_ANGLE = Rotation2d()
-	val L4_ANGLE = Rotation2d()
+	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
+	val MAX_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val REEF_ALGAE_ANGLE = Rotation2d()
-	val PROCESSOR_ANGLE = Rotation2d()
-	val NET_ANGLE = Rotation2d()
+	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L2_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L3_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L4_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val INTAKE_ANGLE = Rotation2d()
-	val CORAL_STATION_ANGLE = Rotation2d()
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
+	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
+
+	val INTAKE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(0.0)
 }

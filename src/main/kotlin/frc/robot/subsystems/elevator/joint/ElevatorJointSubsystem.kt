@@ -118,16 +118,19 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	private fun calculateAngleMotorFF(): Volts = currentAngle.cos * Constants.ANGLE_KG
 
+	private fun isMovingTowardsLimits(output: Double) = !((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
+			(isAtMaxAngleLimit && output <= 0.0) ||
+				(isAtMinAngleLimit && output >= 0.0)
+		)
+
 	fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
 		if (Constants.MAX_ANGLE <= newSetpoint || newSetpoint <= Constants.MIN_ANGLE) {
 			Alert("New elevator joint angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("Elevator angle request of ${newSetpoint.degrees} degrees is out of the range of motion", true)
 		} else angleSetpoint = newSetpoint
 
-		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
-		if ((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
-			(isAtMaxAngleLimit && output <= 0.0) ||
-			(isAtMinAngleLimit && output >= 0.0)) {
+		val output = anglePIDController.calculate(currentAngle.radians, angleSetpoint.radians)
+		if (!isMovingTowardsLimits(output)) {
 			angleMotor.setVoltage(output + calculateAngleMotorFF())
 		} else {
 			angleMotor.setVoltage(calculateAngleMotorFF())
