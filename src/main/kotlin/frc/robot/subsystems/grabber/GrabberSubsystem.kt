@@ -24,7 +24,7 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- Components ---
 
-	private val motor = HaSparkMax(Map.Grabber.WHEELS_MOTOR_ID).apply {
+	private val motor = HaSparkMax(Map.Grabber.MOTOR_ID).apply {
 		configure(Constants.MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
@@ -32,9 +32,11 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
+
 	val isCoralInBeamBreak: Boolean get() = beamBreak.get()
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
 	var setpoint: Rotation2d = 0.0.degrees
+
 	val isInTolerance: Boolean get() = (setpoint - currentAngle).absoluteValue <= Constants.MOTOR_TOLERANCE
 
 	// --- Functions ---

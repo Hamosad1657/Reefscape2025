@@ -12,24 +12,36 @@ import frc.robot.subsystems.grabber.GrabberSubsystem
 
 /** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. Doesn't end automatically*/
 fun GrabberSubsystem.runForwardsCommand() = withName("Run inwards") {
-	run { setMotorVoltage(GrabberConstants.FORWARDS_VOLTAGE) } finallyDo {
+	run { setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
 
 /** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically*/
 fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
-	run { setMotorVoltage(GrabberConstants.BACKWARDS_VOLTAGE) } finallyDo {
+	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARDS_VOLTAGE) } finallyDo {
+		stopMotor()
+	}
+}
+
+fun GrabberSubsystem.intakeAlgaeCommand() = withName("Intake Algae") {
+	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } until { isBeamBreakInterfered } finallyDo {
+		stopMotor()
+	}
+}
+
+fun GrabberSubsystem.ejectAlgaeCommand(voltage: Volts) = withName("Eject Algae") {
+	run { setMotorVoltage(voltage) } withTimeout GrabberConstants.ALGAE_EJECT_TIMEOUT_SEC finallyDo {
 		stopMotor()
 	}
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 	Intaking(shouldExitState = {
-		GrabberSubsystem.isCoralInBeamBreak
+		GrabberSubsystem.isBeamBreakInterfered
 	}),
 	Loading(shouldExitState = {
-		!GrabberSubsystem.isCoralInBeamBreak
+		!GrabberSubsystem.isBeamBreakInterfered
 	}),
 	Holding(shouldExitState = {
 		((GrabberSubsystem.setpoint.rotations * GrabberConstants.LENGTH_FOR_EACH_ROTATION.asCentimeters).rotations - GrabberSubsystem.currentAngle).rotations  < GrabberConstants.MOTOR_TOLERANCE.rotations
@@ -44,11 +56,11 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 	run {
 		when (loadFromIntakeState) {
 			Intaking -> {
-				setMotorVoltage(GrabberConstants.FORWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
 			}
 			Loading -> {
-				setMotorVoltage(GrabberConstants.FORWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_FORWARDS_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) {
 					loadFromIntakeState = Holding
 					setMotorSetpoint(Length.fromCentimeters(-3))
@@ -67,7 +79,7 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 
 enum class LoadFromCoralStationState(val shouldExitState: () -> Boolean) {
 	Loading(shouldExitState = {
-		GrabberSubsystem.isCoralInBeamBreak
+		GrabberSubsystem.isBeamBreakInterfered
 	}),
 	Holding(shouldExitState = {
 		GrabberSubsystem.isInTolerance
@@ -82,7 +94,7 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 	run {
 		when (loadFromCoralStationState) {
 			LoadFromCoralStationState.Loading -> {
-				setMotorVoltage(GrabberConstants.BACKWARDS_VOLTAGE)
+				setMotorVoltage(GrabberConstants.CORAL_BACKWARDS_VOLTAGE)
 				if (loadFromCoralStationState.shouldExitState()) {
 					loadFromCoralStationState = LoadFromCoralStationState.Holding
 					setMotorSetpoint(Length.fromCentimeters(-3))
