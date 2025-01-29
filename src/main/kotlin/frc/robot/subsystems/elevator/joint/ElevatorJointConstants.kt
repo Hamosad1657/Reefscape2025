@@ -59,6 +59,7 @@ object ElevatorJointConstants {
 	val ELEVATOR_ROTATION_METERS_RATIO: Length = 0.0.meters
 
 	val MAX_HEIGHT: Length = 0.0.meters
+	val MIN_HEIGHT: Length = 0.0.meters
 
 	val L1_HEIGHT = 0.0.meters
 	val L2_HEIGHT = 0.0.meters
