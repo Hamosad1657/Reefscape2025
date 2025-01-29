@@ -14,7 +14,7 @@ fun IntakeSubsystem.runWheelMotorCommand() = withName("Run motor") {
 
 /** Runs the wheel motor so that it will move a coral in it away from the elevator. Doesn't end automatically. */
 fun IntakeSubsystem.runWheelMotorReverseCommand() = withName("Run motor reverse") {
-	run { runWheelMotorReverse() }
+	run { runWheelMotorReverse() } finallyDo { stopWheelMotor() }
 }
 
 /** Stops the wheel motor. Ends instantly. */

@@ -20,6 +20,7 @@ import frc.robot.Robot
 import frc.robot.RobotMap
 
 object IntakeSubsystem: SubsystemBase("Intake subsystem") {
+
 	// --- Components ---
 
 	private val wheelMotor = HaSparkFlex(RobotMap.Intake.WHEEL_MOTOR_ID, kBrushless).apply {
@@ -39,14 +40,14 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	// --- State getters ---
 
-	val isAtMinAngleLimit: Boolean get() = minAngleLimitSwitch.get()
-	val isAtMaxAngleLimit: Boolean get() =  maxAngleLimitSwitch.get()
+	val isAtMinAngle: Boolean get() = minAngleLimitSwitch.get()
+	val isAtMaxAngle: Boolean get() =  maxAngleLimitSwitch.get()
 
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts. */
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get()) + Constants.ENCODER_OFFSET
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isMotorCurrentAboveThreshold: Boolean get() = wheelMotor.outputCurrent >= Constants.CURRENT_THRESHOLD
+	val isMotorCurrentAboveThreshold: Boolean get() = Constants.CURRENT_THRESHOLD <= wheelMotor.outputCurrent
 
 	// --- Functions ---
 
@@ -59,9 +60,9 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	}
 
 	private fun isMovingTowardsLimits(output: Volts): Boolean = !(
-		(!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
-			(isAtMaxAngleLimit && output <= 0.0) ||
-			(isAtMinAngleLimit && output >= 0.0)
+		(!isAtMaxAngle && !isAtMinAngle) ||
+			(isAtMaxAngle && output <= 0.0) ||
+			(isAtMinAngle && output >= 0.0)
 	)
 
 	private fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
@@ -78,7 +79,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		}
 	}
 
-	fun setAngle(angle: Rotation2d) {
+	private fun setAngle(angle: Rotation2d) {
 		updateAngleControl(angle)
 	}
 
@@ -111,8 +112,8 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-		builder.addBooleanProperty("Is at max angle", { isAtMaxAngleLimit }, null)
-		builder.addBooleanProperty("Is at min angle", { isAtMinAngleLimit }, null)
+		builder.addBooleanProperty("Is at max angle", { isAtMaxAngle }, null)
+		builder.addBooleanProperty("Is at min angle", { isAtMinAngle }, null)
 
 		builder.addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
 		builder.addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
