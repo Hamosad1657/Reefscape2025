@@ -32,7 +32,7 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
-	val isCoralInBeamBreak: Boolean = beamBreak.get()
+	val isBeamBreakInterfered: Boolean = beamBreak.get()
 	val currentAngle: Rotation2d = motor.encoder.position.rotations
 	private var setpoint: Rotation2d = 0.0.degrees
 	val isInTolerance: Boolean get() = (setpoint - currentAngle).absoluteValue <= Constants.MOTOR_TOLERANCE
