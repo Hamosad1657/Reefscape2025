@@ -33,7 +33,7 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- State getters ---
 
 
-	val isCoralInBeamBreak: Boolean get() = beamBreak.get()
+	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
 	var setpoint: Rotation2d = 0.0.degrees
 
@@ -60,7 +60,7 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-			builder.addBooleanProperty("is coral in beam break", { isCoralInBeamBreak }, null)
+			builder.addBooleanProperty("is coral in beam break", { isBeamBreakInterfered }, null)
 
 		if (Robot.isTesting) {
 			builder.addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
