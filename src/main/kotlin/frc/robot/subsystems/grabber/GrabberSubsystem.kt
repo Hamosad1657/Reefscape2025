@@ -62,6 +62,7 @@ object GrabberSubsystem: SubsystemBase() {
 
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
+		
 		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
 		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
 		builder.addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)

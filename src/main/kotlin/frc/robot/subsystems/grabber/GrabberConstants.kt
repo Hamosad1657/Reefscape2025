@@ -25,6 +25,7 @@ object GrabberConstants {
 
 	/** For every 1 rotation of the motor, a coral in the grabber moves [LENGTH_FOR_EACH_ROTATION] inside the grabber. */
 	val LENGTH_FOR_EACH_ROTATION: Length = 0.0.centimeters
+
 	val MOTOR_TOLERANCE: Rotation2d = 0.0.degrees
 
 	/** The voltage needed to move a coral through the intake and out the grabber. */
