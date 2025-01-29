@@ -24,7 +24,7 @@ fun GrabberSubsystem.runBackwardsCommand() = withName("Run outwards") {
 	}
 }
 
-fun GrabberSubsystem.intakeAlgaeCommand() = withName("Grab algae") {
+fun GrabberSubsystem.intakeAlgaeCommand() = withName("Intake Algae") {
 	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } until { isBeamBreakInterfered } finallyDo {
 		stopMotor()
 	}

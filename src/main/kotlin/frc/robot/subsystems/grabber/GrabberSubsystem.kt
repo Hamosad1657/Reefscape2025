@@ -24,7 +24,7 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- Components ---
 
-	private val motor = HaSparkMax(Map.Grabber.WHEELS_MOTOR_ID).apply {
+	private val motor = HaSparkMax(Map.Grabber.MOTOR_ID).apply {
 		configure(Constants.MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
