@@ -45,7 +45,6 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
 	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
 
-
 	// --- Grabber angle components ---
 
 	private val angleMotor = HaSparkFlex(Map.ElevatorJoint.ANGLE_MOTOR_ID).apply {
@@ -93,11 +92,11 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		if (newSetpoint.meters in Constants.MIN_HEIGHT.asMeters..Constants.MAX_HEIGHT.asMeters) {
 			heightSetpoint = newSetpoint
 		} else {
-			Alert("New elevator setpoint not in motion range!", kError).set(true)
-			DriverStation.reportWarning("New elevator setpoint of ${newSetpoint.meters} meters is not in the elevator motion range.", true)
+			Alert("New elevator setpoint not in motion range. Value not updated.", kError).set(true)
+			DriverStation.reportWarning("New elevator setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
 		}
 		with(elevatorControlRequest) {
-			Position = if ((isAtMaxHeightLimit && (currentHeight < newSetpoint)) || (isAtMinHeightLimit && (newSetpoint < currentHeight))) {
+			Position = if ((isAtMaxHeightLimit && (newSetpoint > currentHeight)) || (isAtMinHeightLimit && (newSetpoint < currentHeight))) {
 				currentHeight.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 			} else {
 				newSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
@@ -107,6 +106,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 		mainElevatorMotor.setControl(elevatorControlRequest)
 	}
+
 
 	fun setAngleMotorVoltage(voltage: Volts) {
 		angleMotor.setVoltage(voltage)
@@ -124,7 +124,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		)
 
 	fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
-		if (Constants.MAX_ANGLE <= newSetpoint || newSetpoint <= Constants.MIN_ANGLE) {
+		if (newSetpoint > Constants.MAX_ANGLE || newSetpoint < Constants.MIN_ANGLE) {
 			Alert("New elevator joint angle setpoint not in range. Value not updated", kWarning).set(true)
 			DriverStation.reportWarning("Elevator angle request of ${newSetpoint.degrees} degrees is out of the range of motion", true)
 		} else angleSetpoint = newSetpoint
@@ -136,6 +136,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 			angleMotor.setVoltage(calculateAngleMotorFF())
 		}
 	}
+
 
 	// --- Telemetry ---
 
