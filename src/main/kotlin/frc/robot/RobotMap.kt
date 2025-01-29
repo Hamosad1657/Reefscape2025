@@ -46,9 +46,4 @@ object RobotMap {
 		const val MAX_ANGLE_LIMIT_CHANNEL = 0
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
 	}
-
-	object Climbing {
-		const val CLIMBING_MOTOR_ID = 0
-		const val LIMIT_SWITCH_ID = 0
-	}
 }
