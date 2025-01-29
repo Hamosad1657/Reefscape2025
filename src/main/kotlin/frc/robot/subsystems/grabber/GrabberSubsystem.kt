@@ -19,9 +19,6 @@ import frc.robot.RobotMap as Map
 import frc.robot.subsystems.grabber.GrabberConstants as Constants
 
 object GrabberSubsystem: SubsystemBase() {
-
-	private val PIDController = Constants.PID_GAINS.toPIDController()
-
 	// --- Components ---
 
 	private val motor = HaSparkMax(Map.Grabber.MOTOR_ID).apply {
@@ -30,8 +27,9 @@ object GrabberSubsystem: SubsystemBase() {
 
 	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
 
-	// --- State getters ---
+	private val PIDController = Constants.PID_GAINS.toPIDController()
 
+	// --- State getters ---
 
 	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
@@ -60,7 +58,10 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-			builder.addBooleanProperty("is coral in beam break", { isBeamBreakInterfered }, null)
+		builder.addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
+		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+		builder.addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
 
 		if (Robot.isTesting) {
 			builder.addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)

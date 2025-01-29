@@ -28,6 +28,7 @@ object GrabberConstants {
 
 	const val CORAL_FORWARDS_VOLTAGE: Volts = 0.0
 	const val CORAL_BACKWARDS_VOLTAGE: Volts = 0.0
+
 	const val INTAKE_ALGAE_VOLTAGE: Volts = 0.0
 	const val EJECT_ALGAE_TO_PROCESSOR_VOLTAGE: Volts = 0.0
 	const val EJECT_ALGAE_TO_NET_VOLTAGE: Volts = 0.0
