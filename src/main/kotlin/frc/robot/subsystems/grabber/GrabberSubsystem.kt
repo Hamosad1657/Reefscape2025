@@ -31,11 +31,13 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
-	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
-	var setpoint: Rotation2d = 0.0.degrees
+	private var setpoint: Rotation2d = 0.0.degrees
 
-	val isInTolerance: Boolean get() = (setpoint - currentAngle).absoluteValue <= Constants.MOTOR_TOLERANCE
+	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
+	
+	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
+	val pidError: Rotation2d get() = setpoint - currentAngle
+	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.MOTOR_TOLERANCE
 
 	// --- Functions ---
 
