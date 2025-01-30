@@ -9,7 +9,6 @@ import com.hamosad1657.lib.units.degrees
 import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.DigitalInput
@@ -31,10 +30,13 @@ object GrabberSubsystem: SubsystemBase() {
 
 	// --- State getters ---
 
+	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
+
+	var isUsingPIDControl = false
+		private set
+
 	private var setpoint: Rotation2d = 0.0.degrees
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
-	
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
 	val pidError: Rotation2d get() = setpoint - currentAngle
 	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.MOTOR_TOLERANCE
@@ -42,13 +44,15 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Functions ---
 
 	fun setMotorVoltage(voltage: Volts) {
+		isUsingPIDControl = false
 		motor.setVoltage(voltage)
 	}
 
 	/** Sets the setpoint of the motor relative to where it is now. */
 	fun setMotorSetpoint(lengthSetpoint: Length) {
+		isUsingPIDControl = true
 		setpoint = Rotation2d.fromRotations(
-			currentAngle.rotations + (lengthSetpoint.asCentimeters / Constants.LENGTH_FOR_EACH_ROTATION.asCentimeters)
+			currentAngle.rotations + (lengthSetpoint.asMeters / Constants.LENGTH_FOR_EACH_ROTATION.asMeters)
 		)
 	}
 
@@ -57,6 +61,7 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 
 	fun stopMotor() {
+		isUsingPIDControl = false
 		motor.stopMotor()
 	}
 
@@ -64,9 +69,11 @@ object GrabberSubsystem: SubsystemBase() {
 
 	override fun initSendable(builder: SendableBuilder) {
 		builder.addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
-		
-		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+
+		builder.addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
 		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+		builder.addDoubleProperty("Angle error deg", { pidError.degrees }, null)
 		builder.addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
 
 		if (Robot.isTesting) {
