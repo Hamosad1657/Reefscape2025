@@ -8,14 +8,14 @@ import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
 /** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. Doesn't end automatically. */
-fun GrabberSubsystem.ejectCoralCommand() = withName("Run inwards") {
+fun GrabberSubsystem.ejectCoralCommand() = withName("Eject coral") {
 	run { setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
 
 /** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically. */
-fun GrabberSubsystem.loadCoralCommand() = withName("Run outwards") {
+fun GrabberSubsystem.loadCoralCommand() = withName("Load coral") {
 	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
