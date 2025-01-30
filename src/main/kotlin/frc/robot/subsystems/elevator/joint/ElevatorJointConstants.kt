@@ -32,38 +32,39 @@ object ElevatorJointConstants {
 			FeedbackSensorSource = RemoteCANcoder
 		}
 	}
-	val SECONDARY_ELEVATOR_MOTOR_CONFIGS = TalonFXConfiguration().apply {
-		with(MotorOutput) {
-			NeutralMode = Brake
-			Inverted = Clockwise_Positive
-		}
-		with(CurrentLimits) {
-			SupplyCurrentLimit = 100.0
-			SupplyCurrentLimitEnable = true
-		}
-	}
+
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromDegrees(0.0)
 	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
 			MagnetOffset = ELEVATOR_CAN_CODER_OFFSET.rotations
 		}
 	}
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d()
 
-	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
+	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(
+		kP = 0.0,
+		kI = 0.0,
+		kD = 0.0,
+	)
 	const val ELEVATOR_HEIGHT_KG: Volts = 0.0
 
 	val HEIGHT_TOLERANCE: Length = 0.02.meters
 
-	/** For every 1 rotation of the motor, the elevator moves [ELEVATOR_ROTATION_METERS_RATIO] meters. */
-	val ELEVATOR_ROTATION_METERS_RATIO: Length = 0.0.meters
+	/** For every 1 rotation of the motor, the elevator moves [LENGTH_PER_ROTATION] meters. */
+	val LENGTH_PER_ROTATION: Length = 0.0.meters
 
 	val MAX_HEIGHT: Length = 0.0.meters
+	val MIN_HEIGHT: Length = 0.0.meters
 
 	val L1_HEIGHT = 0.0.meters
 	val L2_HEIGHT = 0.0.meters
 	val L3_HEIGHT = 0.0.meters
 	val L4_HEIGHT = 0.0.meters
+
+	val LOW_REEF_ALGAE_HEIGHT = 0.0.meters
+	val HIGH_REEF_ALGAE_HEIGHT = 0.0.meters
+	val PROCESSOR_HEIGHT = 0.0.meters
+	val NET_HEIGHT = 0.0.meters
 
 	val INTAKE_HEIGHT = 0.0.meters
 	val CORAL_STATION_HEIGHT = 0.0.meters
@@ -74,25 +75,30 @@ object ElevatorJointConstants {
 		idleMode(kCoast)
 		inverted(false)
 	}
-	val ANGLE_ENCODER_OFFSET = Rotation2d()
+	val ANGLE_ENCODER_OFFSET = Rotation2d.fromDegrees(0.0)
 
-	/** Works in rotations */
+	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
 		kP = 0.0,
 		kI = 0.0,
 		kD = 0.0,
 	)
 	const val ANGLE_KG: Volts = 0.0
-	val ANGLE_TOLERANCE = Rotation2d()
 
-	val MIN_ANGLE = Rotation2d()
-	val MAX_ANGLE = Rotation2d()
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.0)
 
-	val L1_ANGLE = Rotation2d()
-	val L2_ANGLE = Rotation2d()
-	val L3_ANGLE = Rotation2d()
-	val L4_ANGLE = Rotation2d()
+	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
+	val MAX_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val INTAKE_ANGLE = Rotation2d()
-	val CORAL_STATION_ANGLE = Rotation2d()
+	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L2_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L3_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L4_ANGLE = Rotation2d.fromDegrees(0.0)
+
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
+	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
+
+	val INTAKE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(0.0)
 }
