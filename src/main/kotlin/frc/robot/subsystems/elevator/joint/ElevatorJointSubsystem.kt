@@ -60,24 +60,24 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	private var heightSetpoint: Length = Length()
 
-	private val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
-	private val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
+	val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
+	val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
 
-	private val currentHeight: Length get() = Length.fromMeters(mainElevatorMotor.position.value.magnitude() * Constants.LENGTH_PER_ROTATION.asMeters)
-	private val heightError get() = heightSetpoint - currentHeight
-	private val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
+	val currentHeight: Length get() = Length.fromMeters(mainElevatorMotor.position.value.magnitude() * Constants.LENGTH_PER_ROTATION.asMeters)
+	val heightError get() = heightSetpoint - currentHeight
+	val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
 
 
 	private var angleSetpoint: Rotation2d = 0.0.degrees
 
-	private val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
-	private val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
+	val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
+	val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
 
-	private val currentAngle: Rotation2d get() = angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
-	private val angleError: Rotation2d get() = angleSetpoint - currentAngle
-	private val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
+	val currentAngle: Rotation2d get() = angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
+	val angleError: Rotation2d get() = angleSetpoint - currentAngle
+	val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	private val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
+	val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
 
 	// --- Functions ---
 
