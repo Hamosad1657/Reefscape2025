@@ -16,7 +16,8 @@ fun intakeCoralFromGroundCommand() = withName("Intake coral from ground") {
 
 fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral station") {
 	ElevatorJointSubsystem.maintainElevatorJointStateCommand(ElevatorJointState.CORAL_STATION, true) raceWith
-		(waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen (GrabberSubsystem.loadFromCoralStationCommand() alongWith LEDsSubsystem.runOnce {
+		(waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+			(GrabberSubsystem.loadFromCoralStationCommand() alongWith LEDsSubsystem.runOnce {
 			LEDsSubsystem.currentMode = LOADING_FROM_CORAL_STATION
 		})) finallyDo
 		{ LEDsSubsystem.currentMode = ACTION_FINISHED }

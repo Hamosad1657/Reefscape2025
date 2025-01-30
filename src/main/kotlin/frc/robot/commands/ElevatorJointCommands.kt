@@ -35,10 +35,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 		setHeight(state.height)
 		updateAngleControl(state.angle)
 	} finallyDo {
-		if (useLEDs){
-			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT
-			}
-		}
+		if (useLEDs){ LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT } }
 	}
 }
 
@@ -49,7 +46,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> Elevat
 		updateAngleControl(state().angle)
 	} finallyDo {
 		if (useLEDs){
-			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT}
+			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT }
 		}
 	}
 }
