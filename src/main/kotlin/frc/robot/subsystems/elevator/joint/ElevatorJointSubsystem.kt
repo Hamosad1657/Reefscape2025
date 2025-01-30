@@ -89,7 +89,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		FeedForward = Constants.ELEVATOR_HEIGHT_KG
 		Slot = 0
 	}
-	fun setHeight(newSetpoint: Length) {
+	fun setHeight(newSetpoint: Length = heightError) {
 		if (newSetpoint.meters in Constants.MIN_HEIGHT.asMeters..Constants.MAX_HEIGHT.asMeters) {
 			heightSetpoint = newSetpoint
 		} else {
@@ -97,11 +97,10 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 			DriverStation.reportWarning("New elevator joint height setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
 		}
 		with(elevatorControlRequest) {
-			Position = if ((isAtMaxHeightLimit && (newSetpoint > currentHeight)) || (isAtMinHeightLimit && (newSetpoint < currentHeight))) {
-				currentHeight.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
-			} else {
-				newSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
-			}
+			LimitForwardMotion = isAtMaxHeightLimit
+			LimitReverseMotion = isAtMinHeightLimit
+
+			Position = heightSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 		}
 
 		mainElevatorMotor.setControl(elevatorControlRequest)
@@ -118,7 +117,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	private fun calculateAngleMotorFF(): Volts = currentAngle.cos * Constants.ANGLE_KG
 
-	private fun isMovingTowardsLimits(output: Double) = !((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
+	private fun isMovingTowardsAngleLimits(output: Double) = !((!isAtMaxAngleLimit && !isAtMinAngleLimit) ||
 			(isAtMaxAngleLimit && output <= 0.0) ||
 				(isAtMinAngleLimit && output >= 0.0)
 		)
@@ -130,13 +129,12 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		} else angleSetpoint = newSetpoint
 
 		val output = anglePIDController.calculate(currentAngle.radians, angleSetpoint.radians)
-		if (!isMovingTowardsLimits(output)) {
+		if (!isMovingTowardsAngleLimits(output)) {
 			angleMotor.setVoltage(output + calculateAngleMotorFF())
 		} else {
 			angleMotor.setVoltage(calculateAngleMotorFF())
 		}
 	}
-
 
 	// --- Telemetry ---
 
