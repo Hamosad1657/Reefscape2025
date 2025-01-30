@@ -87,13 +87,14 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	private var elevatorControlRequest = MotionMagicVoltage(0.0).apply {
 		FeedForward = Constants.ELEVATOR_HEIGHT_KG
+		Slot = 0
 	}
 	fun setHeight(newSetpoint: Length) {
 		if (newSetpoint.meters in Constants.MIN_HEIGHT.asMeters..Constants.MAX_HEIGHT.asMeters) {
 			heightSetpoint = newSetpoint
 		} else {
-			Alert("New elevator setpoint not in motion range. Value not updated.", kError).set(true)
-			DriverStation.reportWarning("New elevator setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
+			Alert("New elevator joint height setpoint not in motion range. Value not updated.", kError).set(true)
+			DriverStation.reportWarning("New elevator joint height setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
 		}
 		with(elevatorControlRequest) {
 			Position = if ((isAtMaxHeightLimit && (newSetpoint > currentHeight)) || (isAtMinHeightLimit && (newSetpoint < currentHeight))) {
@@ -101,7 +102,6 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 			} else {
 				newSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 			}
-			Slot = 0
 		}
 
 		mainElevatorMotor.setControl(elevatorControlRequest)

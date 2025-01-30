@@ -26,7 +26,7 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 	}
 }
 
-/** Maintains an elevator joint state. Never ends. */
+/** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
 	run {
 		setHeight(state.height)
@@ -34,7 +34,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 	}
 }
 
-/** Maintains an elevator joint state. Never ends. */
+/** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
 	run {
 		setHeight(state().height)
