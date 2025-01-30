@@ -58,12 +58,12 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	// --- State Getters ---
 
-	private var heightSetpoint: Length = 0.0.meters
+	private var heightSetpoint: Length = Length()
 
 	private val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
 	private val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
 
-	private val currentHeight: Length get() = Length.fromMeters(heightEncoder.position.valueAsDouble * Constants.LENGTH_PER_ROTATION.asMeters)
+	private val currentHeight: Length get() = Length.fromMeters(mainElevatorMotor.position.value.magnitude() * Constants.LENGTH_PER_ROTATION.asMeters)
 	private val heightError get() = heightSetpoint - currentHeight
 	private val isWithinHeightTolerance get() = heightError.meters.absoluteValue <= Constants.HEIGHT_TOLERANCE.asMeters
 
@@ -142,6 +142,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		with(builder) {
 			addBooleanProperty("Is at min height", { isAtMinHeightLimit }, null)
 			addBooleanProperty("Is at max height", { isAtMaxHeightLimit }, null)
+			addDoubleProperty("Height error cm", { heightError.asCentimeters }, null)
 			addBooleanProperty("Is in height tolerance", { isWithinHeightTolerance }, null)
 			addDoubleProperty("Elevator height Meters", { currentHeight.asMeters }, null)
 			addDoubleProperty("Elevator setpoint Meters", { heightSetpoint.asMeters }, null)

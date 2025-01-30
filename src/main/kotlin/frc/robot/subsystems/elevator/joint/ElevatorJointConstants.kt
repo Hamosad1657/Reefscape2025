@@ -41,7 +41,11 @@ object ElevatorJointConstants {
 		}
 	}
 
-	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(kP = 0.0)
+	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(
+		kP = 0.0,
+		kI = 0.0,
+		kD = 0.0,
+	)
 	const val ELEVATOR_HEIGHT_KG: Volts = 0.0
 
 	val HEIGHT_TOLERANCE: Length = 0.02.meters
