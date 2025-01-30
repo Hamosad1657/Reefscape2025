@@ -117,9 +117,9 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 		builder.addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
 		builder.addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
-		builder.addBooleanProperty("Angle withing tolerance", { isWithinAngleTolerance }, null)
+		builder.addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
 
-		builder.addBooleanProperty("Current above threshold", { isMotorCurrentAboveThreshold }, null)
+		builder.addBooleanProperty("Is current above threshold", { isMotorCurrentAboveThreshold }, null)
 
 		 if (Robot.isTesting) {
 			 builder.addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
