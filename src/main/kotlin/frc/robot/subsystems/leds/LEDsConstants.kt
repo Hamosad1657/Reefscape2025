@@ -5,7 +5,7 @@ import com.hamosad1657.lib.units.Mps
 import com.hamosad1657.lib.units.Seconds
 
 object LEDsConstants {
-	const val LENGTH = 0
+	const val LENGTH = 30
 
 	const val FLASH_TIMEOUT: Seconds = 1.5
 	const val FAST_BLINK_TIME: Seconds = 0.1
@@ -14,13 +14,14 @@ object LEDsConstants {
 	val LED_SPACING = Length.fromMeters(1 / 30.0)
 	const val SCROLL_SPEED: Mps = 1.0
 
+
 	enum class LEDsMode {
 		DEFAULT,
 
 		GREEN_STATIC,
 		LOADING_FROM_CORAL_STATION, //yellow static
-		BLUE_STATIC,
-		RED_STATIC,
+		BLUE_ALLIANCE,
+		RED_ALLIANCE,
 
 		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
 		ACTION_FINISHED, //green flash

@@ -29,24 +29,29 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 	}
 }
 
+
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
+	var activatedLedsAlready = false
 	run {
 		setHeight(state.height)
 		updateAngleControl(state.angle)
-	} finallyDo {
-		if (useLEDs){ LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT } }
+		if (useLEDs && isWithinTolerance && !activatedLedsAlready) {
+			LEDsSubsystem.currentMode = REACHED_SETPOINT
+			activatedLedsAlready = true
+		}
 	}
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
+	var activatedLedsAlready = false
 	run {
 		setHeight(state().height)
 		updateAngleControl(state().angle)
-	} finallyDo {
-		if (useLEDs){
-			LEDsSubsystem.runOnce { LEDsSubsystem.currentMode = REACHED_SETPOINT }
+		if (useLEDs && isWithinTolerance && !activatedLedsAlready) {
+			LEDsSubsystem.currentMode = REACHED_SETPOINT
+			activatedLedsAlready = true
 		}
 	}
 }

@@ -68,6 +68,6 @@ object RobotMap {
 	}
 
 	object LEDs {
-		const val PWM_PORT = 0
+		const val PWM_PORT = 9
 	}
 }

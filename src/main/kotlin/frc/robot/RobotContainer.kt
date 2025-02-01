@@ -1,6 +1,10 @@
 package frc.robot
 
+import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.commands.*
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -15,6 +19,10 @@ import edu.wpi.first.wpilibj2.command.Command
  */
 object RobotContainer
 {
+    private const val JOYSTICK_DEADBAND = 0.02
+
+    private val controllerA = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_A_CONTROLLER_PORT)
+
     init
     {
         configureBindings()
@@ -23,7 +31,7 @@ object RobotContainer
     /** Use this method to define your `trigger->command` mappings. */
     private fun configureBindings()
     {
-
+        controllerA.square().onTrue(intakeCoralFromGroundCommand())
     }
 
     fun getAutonomousCommand(): Command?

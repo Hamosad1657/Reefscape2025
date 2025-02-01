@@ -3,6 +3,10 @@ package frc.robot
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.wpilibj.Alert
+import edu.wpi.first.wpilibj.Alert.AlertType.kError
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
@@ -20,6 +24,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
  */
 object Robot : TimedRobot()
 {
+    val alliance: Alliance
+        get() {
+        val allianceOptional = DriverStation.getAlliance()
+        return if (allianceOptional.isPresent) {
+            allianceOptional.get()
+        } else Alliance.Blue.also {
+            Alert("Robot alliance could not be determined", kError).set(true)
+            DriverStation.reportError("Robot alliance could not be determined", true)
+        }
+    }
+
     const val isTesting = false
     const val isCompetition = false
 
