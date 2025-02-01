@@ -33,4 +33,41 @@ object RobotMap {
 			const val CAN_CODER_ID = 12
 		}
 	}
+
+	object ElevatorJoint {
+		const val MAIN_MOTOR_ID = 0
+		const val SECONDARY_MOTOR_ID = 0
+		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
+		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
+		const val HEIGHT_CAN_CODER_ID = 0
+
+		const val ANGLE_MOTOR_ID = 0
+		const val ANGLE_ENCODER_PWM_CHANNEL = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 0
+		const val MIN_ANGLE_LIMIT_CHANNEL = 0
+	}
+
+	object Climbing {
+		const val CLIMBING_MOTOR_ID = 0
+		const val LIMIT_SWITCH_ID = 0
+	}
+
+	object Intake {
+		const val ANGLE_MOTOR_ID = 0
+		const val WHEEL_MOTOR_ID = 0
+
+		const val ENCODER_ID = 0
+
+		const val MIN_ANGLE_LIMIT_CHANNEL = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 0
+	}
+
+	object Grabber {
+		const val MOTOR_ID = 0
+		const val BEAM_BREAK_CHANNEL = 0
+	}
+
+	object LEDs {
+		const val PWM_PORT = 0
+	}
 }
