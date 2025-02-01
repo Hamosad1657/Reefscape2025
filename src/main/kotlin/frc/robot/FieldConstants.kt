@@ -1,11 +1,24 @@
 package frc.robot
 
+import com.hamosad1657.lib.units.Length
+import com.hamosad1657.lib.units.degrees
 import com.hamosad1657.lib.units.meters
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.networktables.NetworkTableInstance
 
 object FieldConstants {
+	val fieldLength = Length.fromInches(690.876)
+	val fieldWidth = Length.fromInches(317)
+
 	object Poses {
+		/** Mirrors a pose on the field in both axes, and rotates it by 180.0 degrees */
+		fun mirrorPose(pose: Pose2d) = Pose2d(
+			fieldLength.asMeters - pose.x,
+			fieldWidth.asMeters - pose.y,
+			pose.rotation + 180.0.degrees,
+		)
+
 		val AB_CLOSE = Pose2d(2.92934, 4.02592, Rotation2d.fromDegrees(0.0))
 		val AB_FAR = Pose2d(2.04684, 4.02592, Rotation2d.fromDegrees(0.0))
 
@@ -57,7 +70,6 @@ object FieldConstants {
 		val AT_J = Pose2d(4.98641, 5.21549, Rotation2d.fromDegrees(-120.0))
 		val AT_K = Pose2d(3.99226, 5.21549, Rotation2d.fromDegrees(-60.0))
 		val AT_L = Pose2d(3.70767, 5.05118, Rotation2d.fromDegrees(-60.0))
-
 
 		val CLOSE_POSES = listOf(
 			AB_CLOSE,
