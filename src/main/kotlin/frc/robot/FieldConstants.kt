@@ -17,40 +17,40 @@ object FieldConstants {
 			pose.rotation + 180.0.degrees,
 		)
 
-		val AB_CLOSE = Pose2d(2.92934, 4.02592, Rotation2d.fromDegrees(0.0))
+		val AB_CLOSE = Pose2d(2.82951, 4.02592, Rotation2d.fromDegrees(0.0))
 		val AB_FAR = Pose2d(2.04684, 4.02592, Rotation2d.fromDegrees(0.0))
 
-		val AB_CD_CLOSE = Pose2d(3.13834, 3.246, Rotation2d.fromDegrees(30.0))
+		val AB_CD_CLOSE = Pose2d(3.05189, 3.196, Rotation2d.fromDegrees(30.0))
 		val AB_CD_FAR = Pose2d(2.37407, 2.80467, Rotation2d.fromDegrees(30.0))
 
-		val CD_CLOSE = Pose2d(3.70934, 2.67492, Rotation2d.fromDegrees(60.0))
+		val CD_CLOSE = Pose2d(3.65942, 2.58847, Rotation2d.fromDegrees(60.0))
 		val CD_FAR = Pose2d(3.26809, 1.91065, Rotation2d.fromDegrees(60.0))
 
-		val CD_EF_CLOSE = Pose2d(4.48934, 2.46592, Rotation2d.fromDegrees(90.0))
+		val CD_EF_CLOSE = Pose2d(4.48934, 2.36609, Rotation2d.fromDegrees(90.0))
 		val CD_EF_FAR = Pose2d(4.48934, 1.58342, Rotation2d.fromDegrees(90.0))
 
-		val EF_CLOSE = Pose2d(5.26934, 2.67492, Rotation2d.fromDegrees(120.0))
+		val EF_CLOSE = Pose2d(5.31925, 2.58847, Rotation2d.fromDegrees(120.0))
 		val EF_FAR = Pose2d(5.71059, 1.91065, Rotation2d.fromDegrees(120.0))
 
-		val EF_GH_CLOSE = Pose2d(5.84034, 3.24592, Rotation2d.fromDegrees(150.0))
+		val EF_GH_CLOSE = Pose2d(5.92679, 3.19600, Rotation2d.fromDegrees(150.0))
 		val EF_GH_FAR = Pose2d(6.60460, 2.80467, Rotation2d.fromDegrees(150.0))
 
-		val GH_CLOSE = Pose2d(6.04934, 4.02592, Rotation2d.fromDegrees(180.0))
+		val GH_CLOSE = Pose2d(6.14916, 4.02592, Rotation2d.fromDegrees(180.0))
 		val GH_FAR = Pose2d(6.93184, 4.02592, Rotation2d.fromDegrees(180.0))
 
-		val GH_IJ_CLOSE = Pose2d(5.84034, 4.80592, Rotation2d.fromDegrees(-150.0))
+		val GH_IJ_CLOSE = Pose2d(5.92679, 4.85583, Rotation2d.fromDegrees(-150.0))
 		val GH_IJ_FAR = Pose2d(6.60460, 5.24717, Rotation2d.fromDegrees(-150.0))
 
-		val IJ_CLOSE = Pose2d(5.26934, 5.37692, Rotation2d.fromDegrees(-120.0))
+		val IJ_CLOSE = Pose2d(5.31925, 5.46337, Rotation2d.fromDegrees(-120.0))
 		val IJ_FAR = Pose2d(5.71059, 6.14118, Rotation2d.fromDegrees(-120.0))
 
-		val IJ_KL_CLOSE = Pose2d(4.48934, 5.58592, Rotation2d.fromDegrees(-90.0))
+		val IJ_KL_CLOSE = Pose2d(4.48934, 5.68574, Rotation2d.fromDegrees(-90.0))
 		val IJ_KL_FAR = Pose2d(4.48934, 6.46842, Rotation2d.fromDegrees(-90.0))
 
-		val KL_CLOSE = Pose2d(3.70934, 5.37692, Rotation2d.fromDegrees(-60.0))
+		val KL_CLOSE = Pose2d(3.65942, 5.46337, Rotation2d.fromDegrees(-60.0))
 		val KL_FAR = Pose2d(3.26809, 6.14118, Rotation2d.fromDegrees(-60.0))
 
-		val KL_AB_CLOSE = Pose2d(3.13834, 4.80592, Rotation2d.fromDegrees(-30.0))
+		val KL_AB_CLOSE = Pose2d(3.05189, 4.85583, Rotation2d.fromDegrees(-30.0))
 		val KL_AB_FAR = Pose2d(2.37407, 5.24717, Rotation2d.fromDegrees(-30.0))
 
 		val KL_CORAL_STATION = Pose2d(1.11524, 7.03288, Rotation2d.fromDegrees(125.989))
