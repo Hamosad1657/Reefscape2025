@@ -2,7 +2,6 @@ package frc.robot.autonomous
 
 import com.hamosad1657.lib.ReefSide
 import com.pathplanner.lib.path.GoalEndState
-import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.Alert
@@ -67,25 +66,25 @@ fun findPosesBetweenReefSides(startSide: ReefSide, endSide: ReefSide, far: Boole
  * @param startSide - The side of the reef the list should start from. 0 is AB and the numbers go counter clockwise.
  * (1 is CD, 2 is EF, and so on until 5 which is KL).
  * @param endSide - The side of the reef the list should end on, in the same format.
- * @param shouldStartClose - Whether the path should start close to the reef or not.
- * @param shouldEndClose - whether the path should end close to the reef or not.
+ * @param startClose - Whether the path should start close to the reef or not.
+ * @param sEndClose - whether the path should end close to the reef or not.
  * @param far - Whether the path should go around close to the reef or far from it.
  * @param useQuickest - Whether to choose if to go clockwise or counterclockwise automatically or not. If set to false a
- * value for [clockwise] must be given.
- * @param clockwise - If not choosing path automatically, this decides in what direction around the reef the path would go.
+ * value for [isClockwise] must be given.
+ * @param isClockwise - If not choosing path automatically, this decides in what direction around the reef the path would go.
  */
 fun generatePathAroundReef(
 	startSide: ReefSide,
 	endSide: ReefSide,
-	shouldStartClose: Boolean,
-	shouldEndClose: Boolean,
+	startClose: Boolean,
+	sEndClose: Boolean,
 	far: Boolean,
 	useQuickest: Boolean,
-	clockwise: Boolean = false,
+	isClockwise: Boolean = false,
 ): PathPlannerPath {
-	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, clockwise).toMutableList()
-	if (shouldStartClose) poses.add(0, FieldConstants.Poses.CLOSE_POSES[startSide.number * 2])
-	if (shouldEndClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide.number * 2])
+	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, isClockwise).toMutableList()
+	if (startClose) poses.add(0, FieldConstants.Poses.CLOSE_POSES[startSide.number * 2])
+	if (sEndClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide.number * 2])
 	val waypoints = PathPlannerPath.waypointsFromPoses(poses)
 	val constraints = SwerveConstants.PATH_FOLLOWING_CONSTRAINTS
 	return PathPlannerPath(waypoints, constraints, null, GoalEndState(0.0, poses.last().rotation))
