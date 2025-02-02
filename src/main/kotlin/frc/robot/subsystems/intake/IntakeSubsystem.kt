@@ -30,7 +30,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	private val angleMotor = HaSparkFlex(RobotMap.Intake.ANGLE_MOTOR_ID, kBrushless).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val encoder = DutyCycleEncoder(RobotMap.Intake.ENCODER_ID)
+	private val encoder = DutyCycleEncoder(RobotMap.Intake.ENCODER_ID) // TODO: It needs to be a CANCoder
 
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 	private var angleSetpoint = Rotation2d()
