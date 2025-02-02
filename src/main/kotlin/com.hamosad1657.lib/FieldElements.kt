@@ -1,6 +1,5 @@
 package com.hamosad1657.lib
 
-import com.hamosad1657.lib.ReefSide.Companion
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
@@ -53,6 +52,9 @@ class ReefSide private constructor(
 	/** The number of this side, going from 0 -> 5. */
 	val sideNumber: Int
 ) {
+	init {
+		if (sideNumber !in 0..5) DriverStation.reportError("Invalid reef side", true)
+	}
 	companion object {
 		val AB = ReefSide(0)
 		val CD = ReefSide(1)
@@ -60,5 +62,14 @@ class ReefSide private constructor(
 		val GH = ReefSide(3)
 		val IJ = ReefSide(4)
 		val KL = ReefSide(5)
+	}
+	val sideName get() = when (sideNumber) {
+		0 -> "AB"
+		1 -> "CD"
+		2 -> "EF"
+		3 -> "GH"
+		4 -> "IJ"
+		5 -> "KL"
+		else -> ""
 	}
 }
