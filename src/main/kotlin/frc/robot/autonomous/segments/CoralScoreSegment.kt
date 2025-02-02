@@ -26,9 +26,9 @@ class CoralScoreSegment(
 	private val branchToScoreOn: Branch,
 	isClockwise: Boolean,
 ): AutonomousSegment(branchToScoreOn.pipe.side, branchToScoreOn.pipe.side, isClockwise) {
-	override fun generateCommand(alliance: Alliance) = withName("Score coral on pipe ${branchToScoreOn.pipe.letter} level ${branchToScoreOn.level.level}") {
+	override fun generateCommand(alliance: Alliance) = withName("Score coral on pipe ${branchToScoreOn.pipe.letter} level ${branchToScoreOn.level.number}") {
 		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
-			when (branchToScoreOn.level.level) {
+			when (branchToScoreOn.level.number) {
 				2 -> ElevatorJointState.L2
 				3 -> ElevatorJointState.L3
 				4 -> ElevatorJointState.L4
@@ -45,7 +45,7 @@ class CoralScoreSegment(
 				// Eject a coral
 				(GrabberSubsystem.ejectCoralCommand() withTimeout(1.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
 				// Get back to the pose around the reef
-				SwerveSubsystem.alignToPoseCommand({FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.sideNumber * 2]}, true)
+				SwerveSubsystem.alignToPoseCommand({FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]}, true)
 		)
 		) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
 	}
