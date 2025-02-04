@@ -1,6 +1,5 @@
 package com.hamosad1657.lib
 
-import com.hamosad1657.lib.ReefSide.Companion
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
@@ -34,7 +33,7 @@ class Pipe private constructor(val letter: Char) {
 }
 
 /** Represents one of the levels of a pipe (1->4). Use the companion object. */
-class PipeLevel private constructor(val level: Int) {
+class PipeLevel private constructor(val number: Int) {
 	companion object {
 		val L1 = PipeLevel(1)
 		val L2 = PipeLevel(2)
@@ -42,7 +41,7 @@ class PipeLevel private constructor(val level: Int) {
 		val L4 = PipeLevel(4)
 	}
 
-	operator fun compareTo(other: PipeLevel): Int = this.level - other.level
+	operator fun compareTo(other: PipeLevel): Int = this.number - other.number
 }
 
 /** Represents one branch on a reef. */
@@ -51,8 +50,11 @@ data class Branch(val pipe: Pipe, val level: PipeLevel)
 /** Represents a side on the reef. */
 class ReefSide private constructor(
 	/** The number of this side, going from 0 -> 5. */
-	val sideNumber: Int
+	val number: Int
 ) {
+	init {
+		if (number !in 0..5) DriverStation.reportError("Invalid reef side", true)
+	}
 	companion object {
 		val AB = ReefSide(0)
 		val CD = ReefSide(1)
@@ -60,5 +62,14 @@ class ReefSide private constructor(
 		val GH = ReefSide(3)
 		val IJ = ReefSide(4)
 		val KL = ReefSide(5)
+	}
+	val sideName get() = when (number) {
+		0 -> "AB"
+		1 -> "CD"
+		2 -> "EF"
+		3 -> "GH"
+		4 -> "IJ"
+		5 -> "KL"
+		else -> ""
 	}
 }
