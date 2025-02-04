@@ -30,9 +30,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Subsystem
 import frc.robot.FieldConstants
 import frc.robot.Robot
+import frc.robot.vision.AprilTagVision
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
-import frc.robot.vision.AprilTagVision.aprilTagCamera
-import frc.robot.vision.singleTagReefToPose
+import frc.robot.vision.AprilTagVision.photonAprilTagCamera
 
 object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	::TalonFX,
@@ -161,32 +161,29 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	private val visionFieldWidget = Field2d()
 
 	private fun addVisionMeasurement() {
-		if (!aprilTagCamera.useOneTagMode) {
-			if (aprilTagCamera.hasTargets == true) {
-				aprilTagCamera.estimatedGlobalPose?.let {
+		if (!photonAprilTagCamera.useOneTagMode) {
+			if (photonAprilTagCamera.hasTargets == true) {
+				photonAprilTagCamera.estimatedGlobalPose?.let {
 					super.addVisionMeasurement(
 						it.estimatedPose.toPose2d().let { that ->
 							Pose2d(that.x, that.y, currentHeading)
 						},
 						state.Timestamp,
-						aprilTagCamera.calculatePositionStdDevs(pigeon),
+						photonAprilTagCamera.poseEstimationStdDevs,
 					)
 
 					visionFieldWidget.robotPose = it.estimatedPose.toPose2d()
-
-					aprilTagCamera.lastEstimatedPose = it.estimatedPose
-					aprilTagCamera.lastPigeonAngle = pigeon.yaw.valueAsDouble.degrees
 				}
 			}
 		}
 		else {
-			if (aprilTagCamera.isTagDetected(aprilTagCamera.oneTagModeID)) {
+			if (photonAprilTagCamera.isTagDetected(photonAprilTagCamera.oneTagModeID)) {
 
-				aprilTagCamera.estimatedGlobalPose!!.estimatedPose.toPose2d().let {
+				photonAprilTagCamera.estimatedGlobalPose!!.estimatedPose.toPose2d().let {
 					super.addVisionMeasurement(
 						Pose2d(it.translation, currentHeading),
 						state.Timestamp,
-						aprilTagCamera.calculatePositionStdDevs(pigeon)
+						photonAprilTagCamera.poseEstimationStdDevs
 					)
 
 					visionFieldWidget.robotPose = it
@@ -214,9 +211,9 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	// --- Periodic ---
 
 	override fun periodic() {
-		val allUnreadResults = aprilTagCamera.camera.allUnreadResults
+		val allUnreadResults = photonAprilTagCamera.camera.allUnreadResults
 		if (allUnreadResults.isNotEmpty()) {
-			aprilTagCamera.result = allUnreadResults.first()
+			photonAprilTagCamera.result = allUnreadResults.first()
 		}
 		if (useVisionPoseEstimation) addVisionMeasurement()
 
