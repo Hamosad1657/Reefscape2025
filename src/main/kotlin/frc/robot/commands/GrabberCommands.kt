@@ -1,15 +1,33 @@
-   package frc.robot.commands
+package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
+import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-/** Runs the grabber motor in a way that intakes a coral through it's back and ejects it through it's front. Doesn't end automatically. */
-fun GrabberSubsystem.ejectCoralCommand() = withName("Eject coral") {
-	run { setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE) } finallyDo {
+enum class GrabberEjectMode {
+	L1,
+	L2,
+	L3,
+	L4,
+	PROCESSOR,
+	NET,
+}
+
+/** Ejects a game piece from the grabber. Does not end automatically. */
+fun GrabberSubsystem.eject(mode: GrabberEjectMode) = withName("Eject from grabber") {
+	run {
+		setMotorVoltage(
+			when (mode) {
+				L1, L2, L3, L4 -> GrabberConstants.CORAL_FORWARD_VOLTAGE
+				PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE
+				NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
+			}
+		)
+	} finallyDo {
 		stopMotor()
 	}
 }
@@ -17,20 +35,6 @@ fun GrabberSubsystem.ejectCoralCommand() = withName("Eject coral") {
 /** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically. */
 fun GrabberSubsystem.loadCoralCommand() = withName("Load coral") {
 	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE) } finallyDo {
-		stopMotor()
-	}
-}
-
-/** Runs the grabber motor so that it will eject an algae to go into the processor. Does not end automatically. */
-fun GrabberSubsystem.ejectAlgaeToProcessorCommand() = withName("Eject Algae to processor") {
-	run { setMotorVoltage(GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE) } finallyDo {
-		stopMotor()
-	}
-}
-
-/** Runs the grabber motor so that it will eject an algae to go into the net. Does not end automatically. */
-fun GrabberSubsystem.ejectAlgaeToNetCommand() = withName("Eject algae to net") {
-	run { setMotorVoltage(GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
