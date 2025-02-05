@@ -1,5 +1,6 @@
 package com.hamosad1657.lib
 
+import com.hamosad1657.lib.ReefSide.Companion
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
@@ -71,5 +72,12 @@ class ReefSide private constructor(
 		4 -> "IJ"
 		5 -> "KL"
 		else -> ""
+	}
+}
+
+class CoralStation private constructor(private val side: ReefSide) {
+	companion object {
+		val KL = CoralStation(ReefSide.KL)
+		val CD = CoralStation(ReefSide.CD)
 	}
 }
