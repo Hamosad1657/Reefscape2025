@@ -32,6 +32,21 @@ fun GrabberSubsystem.eject(mode: GrabberEjectMode) = withName("Eject from grabbe
 	}
 }
 
+/** Ejects a game piece from the grabber. Does not end automatically. */
+fun GrabberSubsystem.eject(mode: () -> GrabberEjectMode) = withName("Eject from grabber") {
+	run {
+		setMotorVoltage(
+			when (mode()) {
+				L1, L2, L3, L4 -> GrabberConstants.CORAL_FORWARD_VOLTAGE
+				PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE
+				NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
+			}
+		)
+	} finallyDo {
+		stopMotor()
+	}
+}
+
 /** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically. */
 fun GrabberSubsystem.loadCoralCommand() = withName("Load coral") {
 	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE) } finallyDo {
