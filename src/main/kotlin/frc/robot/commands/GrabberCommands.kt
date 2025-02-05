@@ -18,7 +18,7 @@ enum class GrabberEjectMode {
 }
 
 /** Ejects a game piece from the grabber. Does not end automatically. */
-fun GrabberSubsystem.eject(mode: GrabberEjectMode) = withName("Eject from grabber") {
+fun GrabberSubsystem.ejectCommand(mode: GrabberEjectMode) = withName("Eject from grabber") {
 	run {
 		setMotorVoltage(
 			when (mode) {
@@ -33,7 +33,7 @@ fun GrabberSubsystem.eject(mode: GrabberEjectMode) = withName("Eject from grabbe
 }
 
 /** Ejects a game piece from the grabber. Does not end automatically. */
-fun GrabberSubsystem.eject(mode: () -> GrabberEjectMode) = withName("Eject from grabber") {
+fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode) = withName("Eject from grabber") {
 	run {
 		setMotorVoltage(
 			when (mode()) {
