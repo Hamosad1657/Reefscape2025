@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import frc.robot.FieldConstants
 import frc.robot.commands.*
+import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
@@ -43,7 +44,7 @@ class CoralScoreSegment(
 				// Align to the pipe
 				SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
 				// Eject a coral
-				(GrabberSubsystem.ejectCoralCommand() withTimeout(1.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
+				(GrabberSubsystem.ejectCommand(L4) withTimeout(1.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand({FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]}, true)
 		)
