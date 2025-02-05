@@ -9,8 +9,6 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.Velocity
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType.MotionMagicExpo
 import com.ctre.phoenix6.swerve.SwerveRequest
 import com.hamosad1657.lib.units.MpsSquared
-import com.hamosad1657.lib.units.degrees
-import com.hamosad1657.lib.units.rotations
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -28,9 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Subsystem
-import frc.robot.FieldConstants
 import frc.robot.Robot
-import frc.robot.vision.AprilTagVision
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
 
