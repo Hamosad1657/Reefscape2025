@@ -57,6 +57,7 @@ object RobotMap {
 		const val WHEEL_MOTOR_ID = 0
 
 		const val ENCODER_ID = 0
+		const val CANCODER_ID = 0
 
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
 		const val MAX_ANGLE_LIMIT_CHANNEL = 0
@@ -68,6 +69,6 @@ object RobotMap {
 	}
 
 	object LEDs {
-		const val PWM_PORT = 0
+		const val PWM_PORT = 9
 	}
 }
