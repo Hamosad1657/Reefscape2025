@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType.MotionMagicExpo
 import com.ctre.phoenix6.swerve.SwerveRequest
 import com.hamosad1657.lib.units.MpsSquared
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Subsystem
+import frc.robot.FieldConstants
 import frc.robot.Robot
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
@@ -153,6 +155,13 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		Alert("Reset pose to $pose", kWarning).set(true)
 	}
 
+	fun resetPoseToPathStart(path: PathPlannerPath, flip: Boolean) {
+		resetOdometry(
+			if (flip) FieldConstants.Poses.mirrorPose(path.startingHolonomicPose.get())
+			else path.startingHolonomicPose.get()
+		)
+	}
+
 	/** Update the odometry using the detected AprilTag (if any were detected). */
 	private val visionFieldWidget = Field2d()
 
@@ -218,7 +227,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 
 	// --- Telemetry ---
 
-	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish();
+	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish()
 
 	override fun initSendable(builder: SendableBuilder) {
 		builder.setSmartDashboardType("Subsystem")
