@@ -7,6 +7,8 @@ import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 enum class GrabberEjectMode {
 	L1,
@@ -29,6 +31,7 @@ fun GrabberSubsystem.ejectCommand(mode: GrabberEjectMode) = withName("Eject from
 		)
 	} finallyDo {
 		stopMotor()
+		LEDsSubsystem.currentMode = ACTION_FINISHED
 	}
 }
 
