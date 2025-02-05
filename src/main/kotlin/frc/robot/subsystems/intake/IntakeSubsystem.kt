@@ -6,6 +6,7 @@ import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
+import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
@@ -30,10 +31,10 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	private val angleMotor = HaSparkFlex(RobotMap.Intake.ANGLE_MOTOR_ID, kBrushless).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val encoder = angleMotor.encoder.also {
-		it.setPosition(cancoder.position.valueAsDouble)
+
+	private val canCoder = CANcoder(RobotMap.Intake.CANCODER_ID).apply {
+		configurator.apply(Constants.CAN_CODER_CONFIGS)
 	}
-	private val cancoder = CANcoder(RobotMap.Intake.CANCODER_ID)
 
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 	private var angleSetpoint = Rotation2d()
@@ -47,7 +48,8 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	val isAtMaxAngle: Boolean get() =  maxAngleLimitSwitch.get()
 
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts. */
-	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.position) + Constants.ENCODER_OFFSET
+	val currentAngle: Rotation2d get() = canCoder.absolutePosition.value.baseUnitMagnitude().rotations
+
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
 	val isMotorCurrentAboveThreshold: Boolean get() = Constants.CURRENT_THRESHOLD <= wheelMotor.outputCurrent
