@@ -50,7 +50,9 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	private val angleMotor = HaSparkFlex(Map.ElevatorJoint.ANGLE_MOTOR_ID).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val angleEncoder = DutyCycleEncoder(Map.ElevatorJoint.ANGLE_ENCODER_PWM_CHANNEL)
+	private val angleEncoder = DutyCycleEncoder(Map.ElevatorJoint.ANGLE_ENCODER_PWM_CHANNEL).apply {
+		setInverted(false)
+	}
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 
 	private val maxAngleLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_ANGLE_LIMIT_CHANNEL)
