@@ -209,7 +209,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 			::setChassisSpeeds,
 			Constants.PATH_PLANNER_CONFIG,
 			Constants.ROBOT_CONFIG,
-			{ Robot.alliance == Red },
+			{ false },
 			this,
 		)
 	}
