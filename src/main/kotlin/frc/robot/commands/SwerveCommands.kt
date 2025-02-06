@@ -2,6 +2,7 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.Alert
 import com.hamosad1657.lib.Alert.AlertType.ERROR
+import com.hamosad1657.lib.CoralStation
 import com.hamosad1657.lib.Pipe
 import com.hamosad1657.lib.Pipe.Companion
 import com.hamosad1657.lib.commands.*
@@ -178,6 +179,19 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
 			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field", true)
 			return runOnce {  }
+		}
+	}
+	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
+}
+
+fun SwerveSubsystem.alignToCoralStation(coralStation: CoralStation, alliance: Alliance): Command {
+	val targetPose = when (coralStation) {
+		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
+		CoralStation.CD -> FieldConstants.Poses.CD_CORAL_STATION
+		else -> Pose2d().also {
+			Alert("Invalid coral station alignment request.", ERROR).set(true)
+			DriverStation.reportError("Coral station requested to align to is invalid.", true)
+			return runOnce { }
 		}
 	}
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)

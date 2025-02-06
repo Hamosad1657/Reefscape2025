@@ -155,6 +155,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		Alert("Reset pose to $pose", kWarning).set(true)
 	}
 
+	/** Resets the robot's estimated pose to a given path's starting point. */
 	fun resetPoseToPathStart(path: PathPlannerPath, flip: Boolean) {
 		resetOdometry(
 			if (flip) FieldConstants.Poses.mirrorPose(path.startingHolonomicPose.get())
