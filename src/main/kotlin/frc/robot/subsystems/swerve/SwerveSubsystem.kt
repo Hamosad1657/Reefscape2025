@@ -10,7 +10,6 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType.MotionMagicExpo
 import com.ctre.phoenix6.swerve.SwerveRequest
 import com.hamosad1657.lib.units.MpsSquared
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -23,14 +22,12 @@ import edu.wpi.first.util.sendable.SendableRegistry
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
-import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Subsystem
-import frc.robot.FieldConstants
 import frc.robot.Robot
-import frc.robot.subsystems.swerve.SwerveConstants as Constants
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
+import frc.robot.subsystems.swerve.SwerveConstants as Constants
 
 object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	::TalonFX,
@@ -48,7 +45,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		configureAutoBuilder()
 	}
 
-	val useVisionPoseEstimation = true
+	private var useVisionPoseEstimation = true
 
 	// --- Deriving class member aliases ---
 
@@ -133,7 +130,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 
 	/** Sets the expected gyroscope angle. */
 	fun setGyro(angle: Rotation2d) {
-		pigeon.setYaw(angle.degrees)
+		resetRotation(angle)
 	}
 
 	/** Sets the gyroscope angle to 0. */
@@ -155,48 +152,31 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		Alert("Reset pose to $pose", kWarning).set(true)
 	}
 
-	/** Resets the robot's estimated pose to a given path's starting point. */
-	fun resetPoseToPathStart(path: PathPlannerPath, flip: Boolean) {
-		resetOdometry(
-			if (flip) FieldConstants.Poses.mirrorPose(path.startingHolonomicPose.get())
-			else path.startingHolonomicPose.get()
-		)
-	}
-
 	/** Update the odometry using the detected AprilTag (if any were detected). */
 	private val visionFieldWidget = Field2d()
 
 	private fun addVisionMeasurement() {
-		if (!photonAprilTagCamera.useOneTagMode) {
-			if (photonAprilTagCamera.hasTargets == true) {
+		if (!photonAprilTagCamera.useOneTagMode && photonAprilTagCamera.hasTargets == true) {
 				photonAprilTagCamera.estimatedGlobalPose?.let {
 					super.addVisionMeasurement(
-						it.estimatedPose.toPose2d().let { that ->
-							Pose2d(that.x, that.y, currentHeading)
-						},
+						it.estimatedPose.toPose2d(),//.let { that -> Pose2d(that.x, that.y, currentHeading) },
 						state.Timestamp,
 						photonAprilTagCamera.poseEstimationStdDevs,
 					)
 
 					visionFieldWidget.robotPose = it.estimatedPose.toPose2d()
 				}
-			}
 		}
-		else {
-			if (photonAprilTagCamera.isTagDetected(photonAprilTagCamera.oneTagModeID)) {
-
-				photonAprilTagCamera.estimatedGlobalPose!!.estimatedPose.toPose2d().let {
-					super.addVisionMeasurement(
-						Pose2d(it.translation, currentHeading),
-						state.Timestamp,
-						photonAprilTagCamera.poseEstimationStdDevs
+		else if (photonAprilTagCamera.isTagDetected(photonAprilTagCamera.oneTagModeID)) {
+			photonAprilTagCamera.estimatedGlobalPose!!.estimatedPose.toPose2d().let {
+				super.addVisionMeasurement(
+					Pose2d(it.translation, currentHeading),
+					state.Timestamp,
+					photonAprilTagCamera.poseEstimationStdDevs,
 					)
-
-					visionFieldWidget.robotPose = it
-				}
+				visionFieldWidget.robotPose = it
 			}
 		}
-
 	}
 
 	// --- PathPlanner ---
@@ -228,7 +208,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 
 	// --- Telemetry ---
 
-	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish()
+	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish();
 
 	override fun initSendable(builder: SendableBuilder) {
 		builder.setSmartDashboardType("Subsystem")

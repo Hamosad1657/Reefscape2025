@@ -4,7 +4,6 @@ import com.hamosad1657.lib.Alert
 import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.CoralStation
 import com.hamosad1657.lib.Pipe
-import com.hamosad1657.lib.Pipe.Companion
 import com.hamosad1657.lib.commands.*
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
@@ -108,10 +107,24 @@ fun SwerveSubsystem.aimTowardsCommand(target: Translation2d) = withName("Aim tow
 
 // --- Path following ---
 
-fun SwerveSubsystem.followPathCommand(path: PathPlannerPath) =
-	withName("Follow path $path") { AutoBuilder.followPath(path) }
+/**
+ * Follows a pathplanner path.
+ *
+ * @param path - The path to follow.
+ * @param flip - Whether to flip the path (for following as red alliance). When set to true, the path
+ * is flipped across the x and y of the field, and rotation is rotated by 180 degrees.
+ */
+fun SwerveSubsystem.followPathCommand(path: PathPlannerPath, flip: Boolean) =
+	withName("Follow path ${path.name}") { AutoBuilder.followPath(if (flip) path.flipPath() else path) }
 
-/** Make sure your project has a navgrid.json in order to know where field obstacles are */
+fun SwerveSubsystem.followInitialPathCommand(path: PathPlannerPath, flip: Boolean) =
+	withName("Follow initial path ${path.name}") {
+		val pathToFollow = if (flip) path.flipPath() else path
+		runOnce { resetOdometry(pathToFollow.startingHolonomicPose.get()) } andThen
+			followPathCommand(pathToFollow, false)
+	}
+
+/** Make sure your project has a navgrid.json in order to know where field obstacles are. */
 fun SwerveSubsystem.driveToPoseCommand(target: Pose2d) = withName("drive to $target") {
 	AutoBuilder.pathfindToPose(target, SwerveConstants.PATH_FOLLOWING_CONSTRAINTS, 0.0)
 }
@@ -144,7 +157,7 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 		val chassisSpeeds = ChassisSpeeds(
 			driveVelocity.x,
 			driveVelocity.y,
-			SwerveConstants.CHASSIS_ANGLE_PID_CONTROLLER.calculate(currentHeading.radians, currentTargetPose.rotation.radians),
+			SwerveConstants.CHASSIS_ANGLE_PID_CONTROLLER.calculate(currentHeading.radians, currentTargetPose.rotation.radians - PI),
 		)
 
 		drive(
@@ -177,7 +190,7 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 		Pipe.L -> FieldConstants.Poses.AT_L
 		else -> Pose2d().also {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
-			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field", true)
+			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field.", true)
 			return runOnce {  }
 		}
 	}
