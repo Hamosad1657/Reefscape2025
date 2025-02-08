@@ -48,18 +48,23 @@ object SwerveConstants {
 			enableContinuousInput(-PI, PI)
 		}
 
+	/** Uses radians. */
+	val CORAL_PID_CONTROLLER = PIDController(2.5, 0.0, 0.0).apply {
+		setTolerance(2.0)
+	}
+
 // --- Configs ---
 
 	private val STEER_PID_GAINS: Slot0Configs = Slot0Configs()
-		.withKP(40.0).withKI(0.0).withKD(0.0)
+		.withKP(60.0).withKI(0.0).withKD(0.0)
 		.withKS(0.0).withKV(0.0).withKA(0.0)
 		.withStaticFeedforwardSign(UseClosedLoopSign)
 
 	// When using closed-loop control, the drive motor uses the control
 	// output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
 	private val DRIVE_PID_GAINS: Slot0Configs = Slot0Configs()
-		.withKP(0.09).withKI(0.0).withKD(0.0)
-		.withKS(0.0).withKV(0.12)
+		.withKP(0.02).withKI(0.0).withKD(0.0)
+		.withKS(0.0).withKV(0.119)
 
 	// The closed-loop output type to use for the steer motors
 	// This affects the PID/FF gains for the steer motors
