@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.351873921983684,
-        "y": 6.744782324210965
+        "x": 6.566450494168148,
+        "y": 6.030431442524999
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "position6"
     },
     {
       "anchor": {
-        "x": 5.71059,
-        "y": 6.14118
+        "x": 5.483,
+        "y": 4.92901
       },
       "prevControl": {
-        "x": 6.691014528476639,
-        "y": 6.709721413389008
+        "x": 5.6380231686797275,
+        "y": 5.125142142119788
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "IJ-far"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "barge zones to reef",
+  "folder": "Autonomous Preset Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

@@ -4,8 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "CD coral station",
+    "Autonomous Preset Paths",
     "LK coral station",
-    "Default autonomous",
     "barge zones to reef"
   ],
   "autoFolders": [],

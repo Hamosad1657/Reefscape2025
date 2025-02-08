@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 7.58032,
-        "y": 7.25989
+        "y": 1.88303
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.351873921983684,
-        "y": 6.744782324210965
+        "x": 5.802084331225858,
+        "y": 2.141567465139765
       },
-      "isLocked": true,
-      "linkedName": "position6"
+      "isLocked": false,
+      "linkedName": "position2"
     },
     {
       "anchor": {
-        "x": 5.71059,
-        "y": 6.14118
+        "x": 4.7748,
+        "y": 2.71417
       },
       "prevControl": {
-        "x": 6.691014528476639,
-        "y": 6.709721413389008
+        "x": 4.97404195263559,
+        "y": 2.865175444636799
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "IJ-far"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "barge zones to reef",
+  "folder": "Autonomous Preset Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
