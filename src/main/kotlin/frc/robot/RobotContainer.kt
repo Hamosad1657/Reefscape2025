@@ -1,6 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 
 /**
@@ -19,7 +18,6 @@ object RobotContainer
     init
     {
         configureBindings()
-        SmartDashboard.putData(SwerveSubsystem)
     }
 
     /** Use this method to define your `trigger->command` mappings. */

@@ -159,7 +159,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		if (!photonAprilTagCamera.useOneTagMode && photonAprilTagCamera.hasTargets == true) {
 				photonAprilTagCamera.estimatedGlobalPose?.let {
 					super.addVisionMeasurement(
-						it.estimatedPose.toPose2d(),//.let { that -> Pose2d(that.x, that.y, currentHeading) },
+						it.estimatedPose.toPose2d().let { that -> Pose2d(that.x, that.y, currentHeading) },
 						state.Timestamp,
 						photonAprilTagCamera.poseEstimationStdDevs,
 					)
@@ -208,7 +208,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 
 	// --- Telemetry ---
 
-	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish();
+	private val posesPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("poseArray", Pose2d.struct).publish()
 
 	override fun initSendable(builder: SendableBuilder) {
 		builder.setSmartDashboardType("Subsystem")
