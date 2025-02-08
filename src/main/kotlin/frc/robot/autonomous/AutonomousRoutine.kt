@@ -25,8 +25,9 @@ class AutonomousRoutine(
 		val command = SequentialCommandGroup()
 
 		command.addCommands(
-			SwerveSubsystem.followPathCommand(
-				PathPlannerPath.fromPathFile("Position $startingPosition to ${startingReefSide.sideName}-far")
+			SwerveSubsystem.followInitialPathCommand(
+				PathPlannerPath.fromPathFile("Position $startingPosition to ${startingReefSide.sideName}-far"),
+				alliance == Alliance.Red,
 			)
 		)
 
@@ -40,12 +41,13 @@ class AutonomousRoutine(
 							generatePathAroundReef(
 								segments[i-1].endingSide,
 								currentSegment.startingSide,
-								false,
-								false,
-								true,
+								startClose = false,
+								endClose = false,
+								far = true,
 								useQuickest = false,
-								currentSegment.isClockwise,
-							)
+								isClockwise = currentSegment.isClockwise,
+							),
+							alliance == Alliance.Red,
 						)
 					)
 				}
@@ -56,12 +58,13 @@ class AutonomousRoutine(
 							generatePathAroundReef(
 								startingReefSide,
 								currentSegment.startingSide,
-								false,
-								false,
-								true,
+								startClose = false,
+								endClose = false,
+								far = true,
 								useQuickest = false,
-								currentSegment.isClockwise,
-							)
+								isClockwise = currentSegment.isClockwise,
+							),
+							alliance == Alliance.Red,
 						)
 					)
 				}

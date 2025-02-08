@@ -67,7 +67,7 @@ fun findPosesBetweenReefSides(startSide: ReefSide, endSide: ReefSide, far: Boole
  * (1 is CD, 2 is EF, and so on until 5 which is KL).
  * @param endSide - The side of the reef the list should end on, in the same format.
  * @param startClose - Whether the path should start close to the reef or not.
- * @param sEndClose - whether the path should end close to the reef or not.
+ * @param endClose - whether the path should end close to the reef or not.
  * @param far - Whether the path should go around close to the reef or far from it.
  * @param useQuickest - Whether to choose if to go clockwise or counterclockwise automatically or not. If set to false a
  * value for [isClockwise] must be given.
@@ -77,14 +77,14 @@ fun generatePathAroundReef(
 	startSide: ReefSide,
 	endSide: ReefSide,
 	startClose: Boolean,
-	sEndClose: Boolean,
+	endClose: Boolean,
 	far: Boolean,
 	useQuickest: Boolean,
 	isClockwise: Boolean = false,
 ): PathPlannerPath {
 	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, isClockwise).toMutableList()
 	if (startClose) poses.add(0, FieldConstants.Poses.CLOSE_POSES[startSide.number * 2])
-	if (sEndClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide.number * 2])
+	if (endClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide.number * 2])
 	val waypoints = PathPlannerPath.waypointsFromPoses(poses)
 	val constraints = SwerveConstants.PATH_FOLLOWING_CONSTRAINTS
 	return PathPlannerPath(waypoints, constraints, null, GoalEndState(0.0, poses.last().rotation))
