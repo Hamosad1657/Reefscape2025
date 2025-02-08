@@ -6,8 +6,10 @@ import com.hamosad1657.lib.units.meters
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
+import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.FieldConstants
 import frc.robot.commands.*
+import frc.robot.commands.ElevatorJointState.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
@@ -30,6 +32,7 @@ class CoralScoreSegment(
 	override fun generateCommand(alliance: Alliance) = withName("Score coral on pipe ${branchToScoreOn.pipe.letter} level ${branchToScoreOn.level.number}") {
 		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
 			when (branchToScoreOn.level.number) {
+				1 -> ElevatorJointState.L1
 				2 -> ElevatorJointState.L2
 				3 -> ElevatorJointState.L3
 				4 -> ElevatorJointState.L4
@@ -44,9 +47,15 @@ class CoralScoreSegment(
 				// Align to the pipe
 				SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
 				// Eject a coral
-				(GrabberSubsystem.ejectCommand(L4) withTimeout(1.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
+				(GrabberSubsystem.ejectCommand(L4) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
 				// Get back to the pose around the reef
-				SwerveSubsystem.alignToPoseCommand({FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]}, true)
+				SwerveSubsystem.alignToPoseCommand(
+					{
+						val pose = FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]
+						if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
+					},
+					true,
+				)
 		)
 		) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
 	}
