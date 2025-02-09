@@ -32,9 +32,9 @@ class CollectAlgaeSegment(
 		) raceWith (
 			// Wait for elevator to get to state
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
-				// Align to the pipe
+				// Align to the reef side
 				SwerveSubsystem.alignToReefSide(algaeToCollect.reefSide, alliance) andThen
-				// Eject a coral
+				// collect algae
 				(GrabberSubsystem.intakeAlgaeCommand() withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand(

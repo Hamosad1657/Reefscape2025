@@ -201,12 +201,12 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 
 fun SwerveSubsystem.alignToReefSide(reefSide: ReefSide, alliance: Alliance): Command {
 	val targetPose = when (reefSide) {
-		ReefSide.AB -> FieldConstants.Poses.AB
-		ReefSide.CD -> FieldConstants.Poses.CD
-		ReefSide.EF -> FieldConstants.Poses.EF
-		ReefSide.GH -> FieldConstants.Poses.GH
-		ReefSide.IJ -> FieldConstants.Poses.IJ
-		ReefSide.KL -> FieldConstants.Poses.KL
+		ReefSide.AB -> FieldConstants.Poses.AT_AB_CENTER
+		ReefSide.CD -> FieldConstants.Poses.AT_CD_CENTER
+		ReefSide.EF -> FieldConstants.Poses.AT_EF_CENTER
+		ReefSide.GH -> FieldConstants.Poses.AT_GH_CENTER
+		ReefSide.IJ -> FieldConstants.Poses.AT_IJ_CENTER
+		ReefSide.KL -> FieldConstants.Poses.AT_KL_CENTER
 		else -> Pose2d().also {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
 			DriverStation.reportError("reef side requested to align to of char $reefSide is not present on the field.", true)
