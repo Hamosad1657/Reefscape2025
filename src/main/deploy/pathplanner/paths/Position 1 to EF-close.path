@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.31925,
-        "y": 2.58847
+        "x": 5.157236842105262,
+        "y": 2.9088815789473688
       },
       "prevControl": {
-        "x": 6.08148553410035,
-        "y": 1.9095516945996729
+        "x": 5.919472376205612,
+        "y": 2.2299632735470416
       },
       "nextControl": null,
       "isLocked": true,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "barge zones to reef",

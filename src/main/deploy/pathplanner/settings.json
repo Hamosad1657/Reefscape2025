@@ -3,8 +3,8 @@
   "robotLength": 0.822,
   "holonomicMode": true,
   "pathFolders": [
-    "CD coral station",
     "Autonomous Preset Paths",
+    "CD coral station",
     "LK coral station",
     "barge zones to reef"
   ],

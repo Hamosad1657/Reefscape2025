@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.58032,
-        "y": 7.25989
+        "x": 7.58,
+        "y": 6.16928
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.71373373898017,
-        "y": 6.658061724139955
+        "x": 7.357427683811115,
+        "y": 6.05543113498012
       },
-      "isLocked": true,
-      "linkedName": "position6"
+      "isLocked": false,
+      "linkedName": "position5"
     },
     {
       "anchor": {
-        "x": 5.31925,
-        "y": 5.46337
+        "x": 5.137993421052631,
+        "y": 5.1411184210526315
       },
       "prevControl": {
-        "x": 6.052754290317895,
-        "y": 6.154283632551822
+        "x": 5.556907621973152,
+        "y": 5.3230893595962465
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "IJ-close"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 150.0
   },
   "reversed": false,
-  "folder": "barge zones to reef",
+  "folder": "Autonomous Preset Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
