@@ -85,13 +85,13 @@ object FieldConstants {
 		val AT_KL_LEFT = Pose2d(4.20388, 5.33767, Rotation2d.fromDegrees(-60.0))
 		val AT_KL_RIGHT = Pose2d(3.49606, 4.92901, Rotation2d.fromDegrees(-60.0))
 
-		//TODO: Find locations
-		val AT_AB_CENTER = Pose2d(3.21060, 4.43458, Rotation2d.fromDegrees(0.0))
-		val AT_CD_CENTER = Pose2d(3.49606, 3.12283, Rotation2d.fromDegrees(60.0))
-		val AT_EF_CENTER = Pose2d(5.48261, 3.12283, Rotation2d.fromDegrees(120.0))
-		val AT_GH_CENTER = Pose2d(5.76807, 4.43458, Rotation2d.fromDegrees(180.0))
-		val AT_IJ_CENTER = Pose2d(5.48261, 4.92901, Rotation2d.fromDegrees(-120.0))
-		val AT_KL_CENTER = Pose2d(4.20388, 5.33767, Rotation2d.fromDegrees(-60.0))
+
+		val AT_AB_CENTER = Pose2d(3.21060, 4.02592, Rotation2d.fromDegrees(0.0))
+		val AT_CD_CENTER = Pose2d(3.84997, 2.91850, Rotation2d.fromDegrees(60.0))
+		val AT_EF_CENTER = Pose2d(5.12871, 2.91850, Rotation2d.fromDegrees(120.0))
+		val AT_GH_CENTER = Pose2d(5.76807, 4.02592, Rotation2d.fromDegrees(180.0))
+		val AT_IJ_CENTER = Pose2d(5.12871, 5.13334, Rotation2d.fromDegrees(-120.0))
+		val AT_KL_CENTER = Pose2d(3.84997, 5.13334, Rotation2d.fromDegrees(-60.0))
 
 		val CLOSE_POSES = listOf(
 			AB_CLOSE,
