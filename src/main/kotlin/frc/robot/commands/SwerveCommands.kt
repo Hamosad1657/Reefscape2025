@@ -4,6 +4,8 @@ import com.hamosad1657.lib.Alert
 import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.CoralStation
 import com.hamosad1657.lib.Pipe
+import com.hamosad1657.lib.ReefSide
+import com.hamosad1657.lib.ReefSide.Companion
 import com.hamosad1657.lib.commands.*
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
@@ -191,6 +193,23 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 		else -> Pose2d().also {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
 			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field.", true)
+			return runOnce {  }
+		}
+	}
+	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
+}
+
+fun SwerveSubsystem.alignToReefSide(reefSide: ReefSide, alliance: Alliance): Command {
+	val targetPose = when (reefSide) {
+		ReefSide.AB -> FieldConstants.Poses.AB
+		ReefSide.CD -> FieldConstants.Poses.CD
+		ReefSide.EF -> FieldConstants.Poses.EF
+		ReefSide.GH -> FieldConstants.Poses.GH
+		ReefSide.IJ -> FieldConstants.Poses.IJ
+		ReefSide.KL -> FieldConstants.Poses.KL
+		else -> Pose2d().also {
+			Alert("Invalid pipe alignment request.", ERROR).set(true)
+			DriverStation.reportError("reef side requested to align to of char $reefSide is not present on the field.", true)
 			return runOnce {  }
 		}
 	}
