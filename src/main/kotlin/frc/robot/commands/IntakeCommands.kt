@@ -7,12 +7,12 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
 
-/** Runs the wheel motor so that it will intake a coral and/or drive it towards the elevator. Doesn't end automatically. */
+/** Runs the wheel motor so that it will intake a coral and drive it towards the elevator. Doesn't end automatically. */
 fun IntakeSubsystem.runWheelMotorCommand() = withName("Run motor") {
 	run { runWheelMotor() } finallyDo { stopWheelMotor() }
 }
 
-/** Runs the wheel motor so that it will move a coral in it away from the elevator. Doesn't end automatically. */
+/** Runs the wheel motor so that it will eject a coral. Doesn't end automatically. */
 fun IntakeSubsystem.runWheelMotorReverseCommand() = withName("Run motor reverse") {
 	run { runWheelMotorReverse() } finallyDo { stopWheelMotor() }
 }
