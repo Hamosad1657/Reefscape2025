@@ -44,7 +44,7 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
-	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
+	var currentState = UP_RIGHTING
 	runOnce { currentState = UP_RIGHTING } andThen run {
 		when (currentState) {
 			UP_RIGHTING -> {
@@ -80,7 +80,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
-	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
+	var currentState = UP_RIGHTING
 	runOnce { currentState = UP_RIGHTING } andThen run {
 		when (currentState) {
 			UP_RIGHTING -> {
