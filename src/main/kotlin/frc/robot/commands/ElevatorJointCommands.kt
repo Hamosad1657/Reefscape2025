@@ -5,6 +5,7 @@ import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.commands.MaintainElevatorJointStateState.*
 import frc.robot.subsystems.elevator.joint.ElevatorJointConstants
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 
@@ -26,19 +27,90 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 	}
 }
 
+private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Boolean) {
+	UP_RIGHTING({
+		ElevatorJointSubsystem.isWithinAngleTolerance
+	}),
+	GETTING_TO_HEIGHT({
+		ElevatorJointSubsystem.isWithinHeightTolerance
+	}),
+	GETTING_TO_ANGLE({
+		ElevatorJointSubsystem.isWithinAngleTolerance
+	}),
+	MAINTAINING_STATE({
+		false
+	}),
+}
+
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
-	run {
-		setHeight(state.height)
-		updateAngleControl(state.angle)
+	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
+	runOnce { currentState = UP_RIGHTING } andThen run {
+		when (currentState) {
+			UP_RIGHTING -> {
+				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
+
+				if (currentState.shouldExitState()) {
+					currentState = GETTING_TO_HEIGHT
+				}
+			}
+			GETTING_TO_HEIGHT -> {
+				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
+				setHeight(state.height)
+
+				if (currentState.shouldExitState()) {
+					currentState = GETTING_TO_ANGLE
+				}
+			}
+			GETTING_TO_ANGLE -> {
+				updateAngleControl(state.angle)
+				setHeight(state.height)
+
+				if (currentState.shouldExitState()) {
+					currentState = MAINTAINING_STATE
+				}
+			}
+			MAINTAINING_STATE -> {
+				updateAngleControl(state.angle)
+				setHeight(state.height)
+			}
+		}
 	}
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
-	run {
-		setHeight(state().height)
-		updateAngleControl(state().angle)
+	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
+	runOnce { currentState = UP_RIGHTING } andThen run {
+		when (currentState) {
+			UP_RIGHTING -> {
+				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
+
+				if (currentState.shouldExitState()) {
+					currentState = GETTING_TO_HEIGHT
+				}
+			}
+			GETTING_TO_HEIGHT -> {
+				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
+				setHeight(state().height)
+
+				if (currentState.shouldExitState()) {
+					currentState = GETTING_TO_ANGLE
+				}
+			}
+			GETTING_TO_ANGLE -> {
+				updateAngleControl(state().angle)
+				setHeight(state().height)
+
+				if (currentState.shouldExitState()) {
+					currentState = MAINTAINING_STATE
+				}
+			}
+			MAINTAINING_STATE -> {
+				updateAngleControl(state().angle)
+				setHeight(state().height)
+			}
+		}
 	}
 }
 
