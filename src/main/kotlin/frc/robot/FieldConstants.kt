@@ -22,10 +22,6 @@ object FieldConstants {
 
 		val REEF_CENTER = Translation2d(4.48934, 4.02592)
 
-
-		//TODO: find processor location
-		val PROCESSOR = Pose2d(0.0,0.0,Rotation2d.fromDegrees(0.0))
-
 		val AB_CLOSE = Pose2d(2.82951, 4.02592, Rotation2d.fromDegrees(0.0))
 		val AB_FAR = Pose2d(2.04684, 4.02592, Rotation2d.fromDegrees(0.0))
 
