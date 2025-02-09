@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.MaintainElevatorJointStateState.*
 import frc.robot.subsystems.elevator.joint.ElevatorJointConstants
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.REACHED_SETPOINT
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 /** Represents a state of the elevator and the grabber. */
 data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
@@ -43,7 +45,7 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
 	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
 	runOnce { currentState = UP_RIGHTING } andThen run {
 		when (currentState) {
@@ -68,6 +70,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
+					if (useLEDs) LEDsSubsystem.currentMode = REACHED_SETPOINT
 				}
 			}
 			MAINTAINING_STATE -> {
@@ -79,7 +82,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
 	var currentState = MaintainElevatorJointStateState.UP_RIGHTING
 	runOnce { currentState = UP_RIGHTING } andThen run {
 		when (currentState) {
@@ -104,6 +107,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> Elevat
 
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
+					if (useLEDs) LEDsSubsystem.currentMode = REACHED_SETPOINT
 				}
 			}
 			MAINTAINING_STATE -> {
