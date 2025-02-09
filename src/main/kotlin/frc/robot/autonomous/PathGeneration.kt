@@ -1,15 +1,17 @@
 package frc.robot.autonomous
 
 import com.hamosad1657.lib.ReefSide
+import com.hamosad1657.lib.units.degrees
 import com.pathplanner.lib.path.GoalEndState
+import com.pathplanner.lib.path.IdealStartingState
 import com.pathplanner.lib.path.PathPlannerPath
+import com.pathplanner.lib.path.PointTowardsZone
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import frc.robot.FieldConstants
 import frc.robot.subsystems.swerve.SwerveConstants
-
-// TODO: Make the robot look towards the center throughout the path
 
 /**
  * Creates a list of poses for creating a path between two sides of the reef.
@@ -28,32 +30,32 @@ fun findPosesBetweenReefSides(startSide: ReefSide, endSide: ReefSide, far: Boole
 	}
 
 	val delta = if (endSide.number >= startSide.number) endSide.number - startSide.number else startSide.number - endSide.number
-	val isClockwise = if (endSide.number >= startSide.number) delta >= 3 else delta <= 3
+	val isClockwiseQuickest = if (endSide.number >= startSide.number) delta >= 3 else delta <= 3
 
 	val numberOfSteps = if (delta > 3) 6-delta else delta
 
 	val poses = MutableList(0) { Pose2d() }
-	if ((isClockwise && useQuickest) || (!useQuickest && clockwise) ) {
+	if ((isClockwiseQuickest && useQuickest) || (!useQuickest && clockwise) ) {
 		for (i in startSide.number downTo(startSide.number-numberOfSteps)) {
 			val poseIndex = if (i < 0) (6 + i) * 2 else i * 2
 			val nextPoseIndex = if (poseIndex == 0) 11 else poseIndex - 1
 			if (far) {
-				poses.add(FieldConstants.Poses.FAR_POSES[(poseIndex)])
-				if (i != startSide.number-numberOfSteps) poses.add(FieldConstants.Poses.FAR_POSES[nextPoseIndex])
+				poses.add(FieldConstants.Poses.FAR_POSES[(poseIndex)].let { Pose2d(it.x, it.y, it.rotation + 90.0.degrees) })
+				if (i != startSide.number-numberOfSteps) poses.add(FieldConstants.Poses.FAR_POSES[nextPoseIndex].let { Pose2d(it.x, it.y, it.rotation + 90.0.degrees) })
 			} else {
-				poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex])
-				if (i != startSide.number-numberOfSteps) poses.add(FieldConstants.Poses.CLOSE_POSES[nextPoseIndex])
+				poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex].let { Pose2d(it.x, it.y, it.rotation + 90.0.degrees) })
+				if (i != startSide.number-numberOfSteps) poses.add(FieldConstants.Poses.CLOSE_POSES[nextPoseIndex].let { Pose2d(it.x, it.y, it.rotation + 90.0.degrees) })
 			}
 		}
 	} else {
 		for (i in startSide.number..startSide.number+numberOfSteps) {
 			val poseIndex = if (i > 5) (i - 6) * 2 else i * 2
 			if (far) {
-				poses.add(FieldConstants.Poses.FAR_POSES[poseIndex])
-				if (i != startSide.number+numberOfSteps) poses.add(FieldConstants.Poses.FAR_POSES[poseIndex + 1])
+				poses.add(FieldConstants.Poses.FAR_POSES[poseIndex].let { Pose2d(it.x, it.y, it.rotation - 90.0.degrees) })
+				if (i != startSide.number+numberOfSteps) poses.add(FieldConstants.Poses.FAR_POSES[poseIndex + 1].let { Pose2d(it.x, it.y, it.rotation - 90.0.degrees) })
 			} else {
-				poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex])
-				if (i != startSide.number+numberOfSteps) poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex + 1])
+				poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex].let { Pose2d(it.x, it.y, it.rotation - 90.0.degrees) })
+				if (i != startSide.number+numberOfSteps) poses.add(FieldConstants.Poses.CLOSE_POSES[poseIndex + 1].let { Pose2d(it.x, it.y, it.rotation - 90.0.degrees) })
 			}
 		}
 	}
@@ -82,10 +84,29 @@ fun generatePathAroundReef(
 	useQuickest: Boolean,
 	isClockwise: Boolean = false,
 ): PathPlannerPath {
-	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, isClockwise).toMutableList()
+	val delta = if (endSide.number >= startSide.number) endSide.number - startSide.number else startSide.number - endSide.number
+	val isClockwiseQuickest = if (endSide.number >= startSide.number) delta >= 3 else delta <= 3
+
+	val poses = findPosesBetweenReefSides(startSide, endSide, far, useQuickest, isClockwiseQuickest).toMutableList()
+
 	if (startClose) poses.add(0, FieldConstants.Poses.CLOSE_POSES[startSide.number * 2])
 	if (endClose) poses.add(FieldConstants.Poses.CLOSE_POSES[endSide.number * 2])
+
 	val waypoints = PathPlannerPath.waypointsFromPoses(poses)
+
 	val constraints = SwerveConstants.PATH_FOLLOWING_CONSTRAINTS
-	return PathPlannerPath(waypoints, constraints, null, GoalEndState(0.0, poses.last().rotation))
+
+	return PathPlannerPath(
+		waypoints,
+		listOf(),
+		listOf(PointTowardsZone("Point towards reef", FieldConstants.Poses.REEF_CENTER, 0.0, 1.0)),
+		listOf(),
+		listOf(),
+		constraints,
+		IdealStartingState(0.0, poses[0].rotation +
+			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) 90.0.degrees else (-90.0).degrees),
+		GoalEndState(0.0, poses.last().rotation +
+			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) 90.0.degrees else (-90.0).degrees),
+		false,
+	)
 }
