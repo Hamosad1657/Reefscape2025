@@ -4,6 +4,7 @@ import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 
 object FieldConstants {
 	val fieldLength = Length.fromInches(690.876)
@@ -16,6 +17,8 @@ object FieldConstants {
 			fieldWidth.asMeters - pose.y,
 			pose.rotation + 180.0.degrees,
 		)
+
+		val REEF_CENTER = Translation2d(4.48934, 4.02592)
 
 		val AB_CLOSE = Pose2d(2.82951, 4.02592, Rotation2d.fromDegrees(0.0))
 		val AB_FAR = Pose2d(2.04684, 4.02592, Rotation2d.fromDegrees(0.0))
