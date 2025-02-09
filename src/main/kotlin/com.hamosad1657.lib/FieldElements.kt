@@ -49,7 +49,7 @@ class PipeLevel private constructor(val number: Int) {
 data class Branch(val pipe: Pipe, val level: PipeLevel)
 
 /** Represents one Algae on a reef. **/
-class ReefAlgae private constructor(val reef: ReefSide, val level: PipeLevel) {
+class ReefAlgae private constructor(val reefSide: ReefSide, val level: PipeLevel) {
 	companion object {
 		val AB_Algae = ReefAlgae(com.hamosad1657.lib.ReefSide.AB, PipeLevel.L3)
 		val CD_Algae = ReefAlgae(com.hamosad1657.lib.ReefSide.CD, PipeLevel.L2)
