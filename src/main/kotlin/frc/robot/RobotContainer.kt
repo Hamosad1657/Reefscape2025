@@ -64,7 +64,7 @@ object RobotContainer
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
             R2().whileTrue(ElevatorJointSubsystem.maintainElevatorJointStateCommand({ elevatorJointState }, useLEDs = true))
-            R1().whileTrue(GrabberSubsystem.ejectCommand{ grabberEjectMode } withTimeout(EJECT_TIMEOUT))
+            R1().whileTrue(GrabberSubsystem.ejectCommand({ grabberEjectMode }, false) withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
                 intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralCommand()

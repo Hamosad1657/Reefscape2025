@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.elevator.joint.ElevatorJointConstants
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.LOADING_FROM_CORAL_STATION
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.REACHED_SETPOINT
 import frc.robot.subsystems.leds.LEDsSubsystem
 
@@ -32,13 +31,13 @@ data class ElevatorJointState(val height: Length, val angle: Rotation2d) {
 
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
-	var activatedLedsAlready = false
+	var activatedLEDsAlready = false
 	run {
 		setHeight(state.height)
 		updateAngleControl(state.angle)
-		if (useLEDs && isWithinTolerance && !activatedLedsAlready) {
+		if (useLEDs && isWithinTolerance && !activatedLEDsAlready) {
 			LEDsSubsystem.currentMode = REACHED_SETPOINT
-			activatedLedsAlready = true
+			activatedLEDsAlready = true
 		}
 	}
 }

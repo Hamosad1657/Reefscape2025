@@ -5,8 +5,6 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.LEDPattern
@@ -71,7 +69,7 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 				applyFlash(Color(0,0,255), Constants.FAST_BLINK_TIME)
 				handleFlash()
 			}
-			PLACING_CORAL -> {
+			EJECTING -> {
 				applyFlash(Color(255,0,255), Constants.FAST_BLINK_TIME)
 				handleFlash()
 			}
