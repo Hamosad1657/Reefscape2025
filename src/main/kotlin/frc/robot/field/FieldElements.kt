@@ -1,12 +1,13 @@
-package com.hamosad1657.lib
+package frc.robot.field
 
-import com.hamosad1657.lib.AlgaeHeight.HIGH
-import com.hamosad1657.lib.AlgaeHeight.LOW
+import frc.robot.field.AlgaeHeight.HIGH
+import frc.robot.field.AlgaeHeight.LOW
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
 class Pipe private constructor(val letter: Char) {
-	val side: ReefSide get() = when (letter) {
+	val side: ReefSide
+		get() = when (letter) {
 		'A', 'B' -> ReefSide.AB
 		'C', 'D' -> ReefSide.CD
 		'E', 'F' -> ReefSide.EF
