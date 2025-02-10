@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command
 	JsonSubTypes.Type(value = CoralScoreSegment::class, name = "CoralScoreSegment"),
 	JsonSubTypes.Type(value = CoralStationSegment::class, name = "CoralStationSegment"),
 	JsonSubTypes.Type(value = CollectAlgaeSegment::class, name = "CollectAlgaeSegment"),
-	JsonSubTypes.Type(value = EjectAlgaeIntoNetSegment::class, name = "EjectAlgaeIntoNetSegment"),
-	JsonSubTypes.Type(value = EjectAlgaeIntoProcessorSegment::class, name = "EjectAlgaeIntoProcessorSegment"),
+	JsonSubTypes.Type(value = EjectAlgaeToNet::class, name = "EjectAlgaeToNetSegment"),
+	JsonSubTypes.Type(value = EjectAlgaeToProcessorSegment::class, name = "EjectAlgaeToProcessorSegment"),
 )
 abstract class AutonomousSegment(
 	val startingSide: ReefSide,

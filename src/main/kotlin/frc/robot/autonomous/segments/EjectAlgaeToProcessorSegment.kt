@@ -13,11 +13,11 @@ import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
-class EjectAlgaeIntoProcessorSegment(
+class EjectAlgaeToProcessorSegment(
 	startingSide: ReefSide,
 	endingSide: ReefSide,
 	isClockwise: Boolean,
-	): AutonomousSegment(startingSide, startingSide, isClockwise) {
+	): AutonomousSegment(startingSide, endingSide, isClockwise) {
 		override fun generateCommand(alliance: Alliance) = withName("eject algae in processor") {
 			// Get to Processor
 			SwerveSubsystem.alignToPoseCommand(
@@ -27,14 +27,14 @@ class EjectAlgaeIntoProcessorSegment(
 				},
 				true,
 			)
-			//Tell elevator to be in state
+			// Set elevator state
 			ElevatorJointSubsystem.maintainElevatorJointStateCommand(
 				ElevatorJointState.PROCESSOR,
 				true
 			)
 			// Wait until elevator state is in tolerance
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
-			//Eject in processor
+			// Eject in processor
 				(GrabberSubsystem.ejectCommand(PROCESSOR) withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 			// Get to the endingSide
 			SwerveSubsystem.alignToPoseCommand(

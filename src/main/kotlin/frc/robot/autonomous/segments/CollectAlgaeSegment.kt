@@ -19,7 +19,9 @@ class CollectAlgaeSegment(
 	private val algaeToCollect: ReefAlgae,
 	isClockwise: Boolean,
 ): AutonomousSegment(algaeToCollect.reefSide, algaeToCollect.reefSide, isClockwise) {
-	override fun generateCommand(alliance: Alliance) = withName("collect algae from pipe ${algaeToCollect.reefSide} level ${algaeToCollect.level.number}") {
+	override fun generateCommand(alliance: Alliance) = withName(
+		"Collect algae from side ${algaeToCollect.reefSide.sideName} ${if (algaeToCollect.level.number == 2) "LOW" else "HIGH"}"
+	) {
 		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
 			when (algaeToCollect.level.number) {
 				2 -> ElevatorJointState.LOW_REEF_ALGAE
@@ -33,9 +35,9 @@ class CollectAlgaeSegment(
 			// Wait for elevator to get to state
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
 				// Align to the reef side
-				SwerveSubsystem.alignToReefSide(algaeToCollect.reefSide, alliance) andThen
+				((SwerveSubsystem.alignToReefSide(algaeToCollect.reefSide, alliance) andThen wait(2.0)) raceWith
 				// collect algae
-				(GrabberSubsystem.intakeAlgaeCommand() withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
+				GrabberSubsystem.intakeAlgaeCommand() finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand(
 					{

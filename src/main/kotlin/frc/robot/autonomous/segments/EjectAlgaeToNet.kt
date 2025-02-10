@@ -14,17 +14,17 @@ import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
-class EjectAlgaeIntoNetSegment(
+class EjectAlgaeToNet(
 	startingSide: ReefSide,
 	endingSide: ReefSide,
 	isClockwise: Boolean,
 	private val netPose: Int,
-): AutonomousSegment(startingSide, startingSide, isClockwise) {
-	override fun generateCommand(alliance: Alliance) = withName("eject algae in net ") {
+): AutonomousSegment(startingSide, endingSide, isClockwise) {
+	override fun generateCommand(alliance: Alliance) = withName("eject algae to net ") {
 		// Get to Net Position
 		SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("${startingSide.sideName}-far to netPosition"),
-			alliance == Alliance.Red,
+			alliance == Red,
 		)
 		//Tell elevator to be in state
 		ElevatorJointSubsystem.maintainElevatorJointStateCommand(
@@ -33,7 +33,7 @@ class EjectAlgaeIntoNetSegment(
 		)
 		// Wait until elevator state is in tolerance
 		waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
-			//Eject in processor
+			//Eject in net
 			(GrabberSubsystem.ejectCommand(NET) withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 			// Get to the ending pose side
 			SwerveSubsystem.alignToPoseCommand(
