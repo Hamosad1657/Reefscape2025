@@ -7,7 +7,7 @@ import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 import frc.robot.subsystems.leds.LEDsSubsystem
 
 enum class GrabberEjectMode {
@@ -36,7 +36,7 @@ fun GrabberSubsystem.ejectCommand(mode: GrabberEjectMode) = withName("Eject from
 }
 
 /** Ejects a game piece from the grabber. Does not end automatically. */
-fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode) = withName("Eject from grabber") {
+fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode, useLEDs: Boolean) = withName("Eject from grabber") {
 	run {
 		setMotorVoltage(
 			when (mode()) {
@@ -45,8 +45,12 @@ fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode) = withName("Ejec
 				NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
 			}
 		)
+		if (useLEDs){
+			LEDsSubsystem.currentMode = EJECTING
+		}
 	} finallyDo {
 		stopMotor()
+		LEDsSubsystem.currentMode = ACTION_FINISHED
 	}
 }
 
