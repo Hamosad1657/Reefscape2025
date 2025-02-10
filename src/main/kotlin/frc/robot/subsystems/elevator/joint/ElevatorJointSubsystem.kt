@@ -60,6 +60,8 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	// --- State Getters ---
 
+	var isMaintainingState = false
+
 	private var heightSetpoint: Length = Length()
 
 	val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
@@ -79,7 +81,7 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 	val angleError: Rotation2d get() = angleSetpoint - currentAngle
 	val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance
+	val isWithinTolerance get() = isWithinAngleTolerance && isWithinHeightTolerance && isMaintainingState
 
 	// --- Functions ---
 

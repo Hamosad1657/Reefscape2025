@@ -45,7 +45,7 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
 	var currentState = UP_RIGHTING
-	runOnce { currentState = UP_RIGHTING } andThen run {
+	runOnce { currentState = UP_RIGHTING; isMaintainingState = false } andThen run {
 		when (currentState) {
 			UP_RIGHTING -> {
 				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
@@ -68,6 +68,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
+					isMaintainingState = true
 				}
 			}
 			MAINTAINING_STATE -> {
@@ -81,7 +82,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJoin
 /** Maintains an elevator joint state. Does not end automatically. */
 fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> ElevatorJointState) = withName("Maintain elevator joint state") {
 	var currentState = UP_RIGHTING
-	runOnce { currentState = UP_RIGHTING } andThen run {
+	runOnce { currentState = UP_RIGHTING; isMaintainingState = false } andThen run {
 		when (currentState) {
 			UP_RIGHTING -> {
 				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
@@ -104,6 +105,7 @@ fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: () -> Elevat
 
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
+					isMaintainingState = true
 				}
 			}
 			MAINTAINING_STATE -> {
