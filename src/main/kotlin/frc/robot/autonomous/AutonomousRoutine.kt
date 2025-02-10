@@ -1,5 +1,6 @@
 package frc.robot.autonomous
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.hamosad1657.lib.ReefSide
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import frc.robot.autonomous.segments.AutonomousSegment
 import frc.robot.commands.*
 import frc.robot.subsystems.swerve.SwerveSubsystem
+import java.io.File
 
 /**
  * Represents an autonomous routine for the robot to follow.
@@ -75,5 +77,14 @@ class AutonomousRoutine(
 		}
 
 		return command
+	}
+
+	companion object {
+		fun createFromJSON(name: String): AutonomousRoutine {
+			val objectMapper = ObjectMapper()
+			val file = File("/home/lvuser/deploy/autonomous/$name")
+
+			return objectMapper.readValue(file, AutonomousRoutine::class.java)
+		}
 	}
 }
