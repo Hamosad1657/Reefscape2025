@@ -27,7 +27,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem
  */
 object RobotContainer
 {
-    private const val JOYSTICK_DEADBAND = 0.05
+    private const val JOYSTICK_DEADBAND = 0.06
     private const val EJECT_TIMEOUT: Seconds = 2.0
 
     var elevatorJointState = ElevatorJointState.INTAKE
@@ -67,7 +67,7 @@ object RobotContainer
             R1().whileTrue(GrabberSubsystem.ejectCommand({ grabberEjectMode }, false) withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
-                intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralCommand()
+                intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralDriveCommand()
             )
 
             // TODO: Triangle().toggleOnTrue(alignToClosestPipeCommand())
