@@ -25,7 +25,7 @@ object LEDsConstants {
 
 		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
 		ACTION_FINISHED, //green flash
-		PLACING_CORAL, //yellow flash
+		EJECTING, //yellow flash
 		REACHED_SETPOINT, //blue flash
 		ACTION_FAILED, //red flash
 

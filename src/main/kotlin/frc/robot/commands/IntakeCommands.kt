@@ -4,6 +4,8 @@ import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
 import frc.robot.commands.IntakeState.*
 import frc.robot.subsystems.intake.IntakeSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
 
@@ -49,13 +51,18 @@ private enum class IntakeState(val shouldExitState: () -> Boolean) {
 }
 
 /** Intakes from ground, does not end automatically. */
-fun IntakeSubsystem.intakeCommand() = withName("Intake") {
+fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake") {
 	var intakeState = Deploying
 	run {
 		when (intakeState) {
 			Deploying -> {
 				setAngleToDeploy()
-				if (intakeState.shouldExitState()) intakeState = Intaking
+				if (intakeState.shouldExitState()) {
+					intakeState = Intaking
+					if (useLEDs) {
+						LEDsSubsystem.currentMode = REACHED_SETPOINT
+					}
+				}
 			}
 			Intaking -> {
 				setAngleToDeploy()
@@ -63,11 +70,17 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 				if (intakeState.shouldExitState()) intakeState = Retracting
 			}
 			Retracting -> {
+				if (useLEDs) {
+					LEDsSubsystem.currentMode = EJECTING
+				}
 				setAngleToRetracted()
 				runWheelMotor()
 			}
 		}
-	} finallyDo { stopWheelMotor() }
+	} finallyDo {
+		stopWheelMotor()
+		LEDsSubsystem.currentMode = ACTION_FINISHED
+	}
 }
 
 // --- Testing commands ---
