@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.639826277122134,
-        "y": 5.664521421283534
+        "x": 6.671591483627614,
+        "y": 5.653134016829997
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "IJ-far"
     },
     {
       "anchor": {
-        "x": 7.25735655737705,
-        "y": 6.14118
+        "x": 7.34414,
+        "y": 6.04308
       },
       "prevControl": {
-        "x": 6.4137547644148825,
-        "y": 6.3116219609694415
+        "x": 6.331210940940842,
+        "y": 6.194530189874366
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "NET position"
     }
   ],
   "rotationTargets": [],

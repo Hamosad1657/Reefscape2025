@@ -96,7 +96,7 @@ object FieldConstants {
 		val AT_KL_CENTER = Pose2d(3.84997, 5.13334, Rotation2d.fromDegrees(-60.0))
 
 		//TODO: Find position (except for the angle)
-		val AT_NET_POSITION = Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0))
+		val AT_NET_POSITION = Pose2d(7.34414, 6.04308, Rotation2d.fromDegrees(0.0))
 
 		val CLOSE_POSES = listOf(
 			AB_CLOSE,
