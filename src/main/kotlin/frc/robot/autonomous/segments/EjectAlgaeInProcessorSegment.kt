@@ -21,7 +21,7 @@ class EjectAlgaeInProcessorSegment(
 	private val startingReefSide: ReefSide,
 	isClockwise: Boolean,
 	): AutonomousSegment(startingReefSide, startingReefSide, isClockwise) {
-		override fun generateCommand(alliance: Alliance) = withName("place ") {
+		override fun generateCommand(alliance: Alliance) = withName("eject algae in processor") {
 			// Get to Processor
 			SwerveSubsystem.alignToPoseCommand(
 				{
