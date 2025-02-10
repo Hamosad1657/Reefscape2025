@@ -45,8 +45,8 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
-	maintainElevatorJointStateCommand({ state })
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
+	maintainElevatorJointStateCommand({ state }, useLEDs)
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
