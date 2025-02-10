@@ -1,11 +1,13 @@
-package com.hamosad1657.lib
+package frc.robot.field
 
-import com.hamosad1657.lib.ReefSide.Companion
+import frc.robot.field.AlgaeHeight.HIGH
+import frc.robot.field.AlgaeHeight.LOW
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
 class Pipe private constructor(val letter: Char) {
-	val side: ReefSide get() = when (letter) {
+	val side: ReefSide
+		get() = when (letter) {
 		'A', 'B' -> ReefSide.AB
 		'C', 'D' -> ReefSide.CD
 		'E', 'F' -> ReefSide.EF
@@ -48,6 +50,23 @@ class PipeLevel private constructor(val number: Int) {
 /** Represents one branch on a reef. */
 data class Branch(val pipe: Pipe, val level: PipeLevel)
 
+enum class AlgaeHeight {
+	LOW,
+	HIGH,
+}
+
+/** Represents one Algae on a reef. **/
+class ReefAlgae private constructor(val side: ReefSide, val height: AlgaeHeight) {
+	companion object {
+		val AB = ReefAlgae(ReefSide.AB, HIGH)
+		val CD = ReefAlgae(ReefSide.CD, LOW)
+		val EF = ReefAlgae(ReefSide.EF, HIGH)
+		val GH = ReefAlgae(ReefSide.GH, LOW)
+		val IJ = ReefAlgae(ReefSide.IJ, HIGH)
+		val KL = ReefAlgae(ReefSide.KL, LOW)
+	}
+}
+
 /** Represents a side on the reef. */
 class ReefSide private constructor(
 	/** The number of this side, going from 0 -> 5. */
@@ -75,9 +94,7 @@ class ReefSide private constructor(
 	}
 }
 
-class CoralStation private constructor(private val side: ReefSide) {
-	companion object {
-		val KL = CoralStation(ReefSide.KL)
-		val CD = CoralStation(ReefSide.CD)
-	}
+enum class CoralStation {
+	KL,
+	CD,
 }
