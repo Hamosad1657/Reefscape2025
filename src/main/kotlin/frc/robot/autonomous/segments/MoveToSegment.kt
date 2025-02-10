@@ -1,9 +1,9 @@
 package frc.robot.autonomous.segments
 
-import com.hamosad1657.lib.ReefSide
 import com.hamosad1657.lib.commands.*
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.field.ReefSide
 
 /**
  * A segment which does nothing. Used to move the robot to another side of the reef.

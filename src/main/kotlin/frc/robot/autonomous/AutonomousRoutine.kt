@@ -1,13 +1,13 @@
 package frc.robot.autonomous
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.hamosad1657.lib.ReefSide
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import frc.robot.autonomous.segments.AutonomousSegment
 import frc.robot.commands.*
+import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import java.io.File
 
@@ -28,7 +28,7 @@ class AutonomousRoutine(
 
 		command.addCommands(
 			SwerveSubsystem.followInitialPathCommand(
-				PathPlannerPath.fromPathFile("Position $startingPosition to ${startingReefSide.sideName}-far"),
+				PathPlannerPath.fromPathFile("Position $startingPosition to ${startingReefSide.name}-far"),
 				alliance == Alliance.Red,
 			)
 		)

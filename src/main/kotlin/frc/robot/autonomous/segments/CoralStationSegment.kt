@@ -1,12 +1,11 @@
 package frc.robot.autonomous.segments
 
-import com.hamosad1657.lib.CoralStation
-import com.hamosad1657.lib.CoralStation.Companion
-import com.hamosad1657.lib.ReefSide
 import com.hamosad1657.lib.commands.*
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import frc.robot.commands.*
+import frc.robot.field.CoralStation
+import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 /**
@@ -27,13 +26,13 @@ class CoralStationSegment(
 ): AutonomousSegment(startingSide, endingSide, isClockwise) {
 	override fun generateCommand(alliance: Alliance) = withName("Get to coral station ${if (coralStation == CoralStation.KL) "KL" else "CD"}") {
 		SwerveSubsystem.followPathCommand(
-			PathPlannerPath.fromPathFile("${startingSide.sideName}-far to ${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station"),
+			PathPlannerPath.fromPathFile("${startingSide.name}-far to ${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station"),
 			alliance == Alliance.Red,
 		) andThen (
 			SwerveSubsystem.alignToCoralStation(coralStation, alliance) alongWith
 			intakeCoralFromCoralStationCommand()
 		) andThen SwerveSubsystem.followPathCommand(
-			PathPlannerPath.fromPathFile("${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station to ${startingSide.sideName}-far"),
+			PathPlannerPath.fromPathFile("${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station to ${startingSide.name}-far"),
 			alliance == Alliance.Red,
 		)
 	}

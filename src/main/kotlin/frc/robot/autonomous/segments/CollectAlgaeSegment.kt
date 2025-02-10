@@ -1,14 +1,13 @@
 package frc.robot.autonomous.segments
 
-import com.hamosad1657.lib.ReefAlgae
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.meters
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.FieldConstants
 import frc.robot.commands.*
+import frc.robot.field.AlgaeHeight.HIGH
+import frc.robot.field.AlgaeHeight.LOW
+import frc.robot.field.ReefAlgae
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
@@ -18,30 +17,27 @@ import frc.robot.subsystems.swerve.SwerveSubsystem
 class CollectAlgaeSegment(
 	private val algaeToCollect: ReefAlgae,
 	isClockwise: Boolean,
-): AutonomousSegment(algaeToCollect.reefSide, algaeToCollect.reefSide, isClockwise) {
+): AutonomousSegment(algaeToCollect.side, algaeToCollect.side, isClockwise) {
 	override fun generateCommand(alliance: Alliance) = withName(
-		"Collect algae from side ${algaeToCollect.reefSide.sideName} ${if (algaeToCollect.level.number == 2) "LOW" else "HIGH"}"
+		"Collect algae from side ${algaeToCollect.side.name} ${algaeToCollect.height.name}"
 	) {
 		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
-			when (algaeToCollect.level.number) {
-				2 -> ElevatorJointState.LOW_REEF_ALGAE
-				3 -> ElevatorJointState.HIGH_REEF_ALGAE
-				else -> ElevatorJointState(0.0.meters, Rotation2d()).also {
-					DriverStation.reportError("Invalid algae collect segment", true)
-				}
+			when (algaeToCollect.height) {
+				LOW -> ElevatorJointState.LOW_REEF_ALGAE
+				HIGH -> ElevatorJointState.HIGH_REEF_ALGAE
 			},
 			true,
 		) raceWith (
 			// Wait for elevator to get to state
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
 				// Align to the reef side
-				((SwerveSubsystem.alignToReefSide(algaeToCollect.reefSide, alliance) andThen wait(2.0)) raceWith
+				((SwerveSubsystem.alignToReefSide(algaeToCollect.side, alliance) andThen wait(2.0)) raceWith
 				// collect algae
 				GrabberSubsystem.intakeAlgaeCommand() finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand(
 					{
-						val pose = FieldConstants.Poses.FAR_POSES[algaeToCollect.reefSide.number * 2]
+						val pose = FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2]
 						if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
 					},
 					true,

@@ -2,9 +2,9 @@ package frc.robot.autonomous.segments
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.hamosad1657.lib.ReefSide
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.field.ReefSide
 
 /**
  * An abstract superclass representing a segment of an autonomous routine.
