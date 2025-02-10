@@ -45,41 +45,8 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState, useLEDs: Boolean) = withName("Maintain elevator joint state") {
-	var currentState = UP_RIGHTING
-	runOnce { currentState = UP_RIGHTING; isMaintainingState = false } andThen run {
-		when (currentState) {
-			UP_RIGHTING -> {
-				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
-
-				if (currentState.shouldExitState()) {
-					currentState = GETTING_TO_HEIGHT
-				}
-			}
-			GETTING_TO_HEIGHT -> {
-				updateAngleControl(ElevatorJointConstants.INTAKE_ANGLE)
-				setHeight(state.height)
-
-				if (currentState.shouldExitState()) {
-					currentState = GETTING_TO_ANGLE
-				}
-			}
-			GETTING_TO_ANGLE -> {
-				updateAngleControl(state.angle)
-				setHeight(state.height)
-
-				if (currentState.shouldExitState()) {
-					currentState = MAINTAINING_STATE
-					if (useLEDs) LEDsSubsystem.currentMode = REACHED_SETPOINT
-					isMaintainingState = true
-				}
-			}
-			MAINTAINING_STATE -> {
-				updateAngleControl(state.angle)
-				setHeight(state.height)
-			}
-		}
-	}
+fun ElevatorJointSubsystem.maintainElevatorJointStateCommand(state: ElevatorJointState) = withName("Maintain elevator joint state") {
+	maintainElevatorJointStateCommand({ state })
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
