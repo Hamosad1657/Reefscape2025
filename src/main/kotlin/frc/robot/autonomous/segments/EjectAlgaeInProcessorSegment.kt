@@ -1,11 +1,7 @@
 package frc.robot.autonomous.segments
 
-import com.hamosad1657.lib.ReefAlgae
 import com.hamosad1657.lib.ReefSide
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.meters
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.FieldConstants
@@ -25,7 +21,7 @@ class EjectAlgaeInProcessorSegment(
 			// Get to Processor
 			SwerveSubsystem.alignToPoseCommand(
 				{
-					val pose = FieldConstants.Poses.PROCESSOR
+					val pose = FieldConstants.Poses.AT_PROCESSOR
 					if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
 				},
 				true,
