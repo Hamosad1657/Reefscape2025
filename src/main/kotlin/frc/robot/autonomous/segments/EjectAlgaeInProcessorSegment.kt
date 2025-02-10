@@ -14,9 +14,10 @@ import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 class EjectAlgaeInProcessorSegment(
-	private val startingReefSide: ReefSide,
+	startingSide: ReefSide,
+	endingSide: ReefSide,
 	isClockwise: Boolean,
-	): AutonomousSegment(startingReefSide, startingReefSide, isClockwise) {
+	): AutonomousSegment(startingSide, startingSide, isClockwise) {
 		override fun generateCommand(alliance: Alliance) = withName("eject algae in processor") {
 			// Get to Processor
 			SwerveSubsystem.alignToPoseCommand(
@@ -35,10 +36,10 @@ class EjectAlgaeInProcessorSegment(
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
 			//Eject in processor
 				(GrabberSubsystem.ejectCommand(PROCESSOR) withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
-			// Get back to the pose around the reef
+			// Get to the endingSide
 			SwerveSubsystem.alignToPoseCommand(
 				{
-					val pose = FieldConstants.Poses.FAR_POSES[startingReefSide.number * 2]
+					val pose = FieldConstants.Poses.FAR_POSES[endingSide.number * 2]
 					if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
 				},
 				true,
