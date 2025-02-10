@@ -18,6 +18,9 @@ object FieldConstants {
 			pose.rotation + 180.0.degrees,
 		)
 
+		//TODO: find the locations (except for the angle)
+		val AT_NET_POSITION = Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0))
+
 		val AT_PROCESSOR = Pose2d(5.98744, 0.58700,Rotation2d.fromDegrees(-90.0))
 
 		val REEF_CENTER = Translation2d(4.48934, 4.02592)
