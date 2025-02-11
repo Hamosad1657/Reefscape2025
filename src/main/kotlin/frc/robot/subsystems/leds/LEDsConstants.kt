@@ -18,7 +18,6 @@ object LEDsConstants {
 	enum class LEDsMode {
 		DEFAULT,
 
-		GREEN_STATIC,
 		LOADING_FROM_CORAL_STATION, //yellow static
 		BLUE_ALLIANCE,
 		RED_ALLIANCE,

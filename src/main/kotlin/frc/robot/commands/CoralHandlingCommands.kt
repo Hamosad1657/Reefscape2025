@@ -8,7 +8,7 @@ import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 import frc.robot.subsystems.leds.LEDsSubsystem
 
 fun intakeCoralFromGroundCommand() = withName("Intake coral from ground") {
-	JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true, JointedElevatorState.INTAKE) raceWith
+	JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.INTAKE) raceWith
 		(waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 		(IntakeSubsystem.intakeCommand(true) raceWith  GrabberSubsystem.loadFromIntakeCommand())) finallyDo
 		{ LEDsSubsystem.currentMode = ACTION_FINISHED }

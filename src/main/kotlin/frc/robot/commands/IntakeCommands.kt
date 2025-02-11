@@ -71,7 +71,7 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake") {
 			}
 			Retracting -> {
 				if (useLEDs) {
-					LEDsSubsystem.currentMode = EJECTING
+					LEDsSubsystem.currentMode = REACHED_SETPOINT
 				}
 				setAngleToRetracted()
 				runWheelMotor()
