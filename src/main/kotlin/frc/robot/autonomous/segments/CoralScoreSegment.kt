@@ -1,18 +1,17 @@
 package frc.robot.autonomous.segments
 
-import com.hamosad1657.lib.Branch
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.meters
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
-import frc.robot.FieldConstants
+import frc.robot.field.FieldConstants
 import frc.robot.commands.*
-import frc.robot.commands.ElevatorJointState.*
 import frc.robot.commands.GrabberEjectMode.*
-import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
+import frc.robot.field.Branch
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -30,22 +29,22 @@ class CoralScoreSegment(
 	isClockwise: Boolean,
 ): AutonomousSegment(branchToScoreOn.pipe.side, branchToScoreOn.pipe.side, isClockwise) {
 	override fun generateCommand(alliance: Alliance) = withName("Score coral on pipe ${branchToScoreOn.pipe.letter} level ${branchToScoreOn.level.number}") {
-		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
+		(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(
+			true,
 			when (branchToScoreOn.level.number) {
-				1 -> ElevatorJointState.L1
-				2 -> ElevatorJointState.L2
-				3 -> ElevatorJointState.L3
-				4 -> ElevatorJointState.L4
-				else -> ElevatorJointState(0.0.meters, Rotation2d()).also {
+				1 -> JointedElevatorState.L1
+				2 -> JointedElevatorState.L2
+				3 -> JointedElevatorState.L3
+				4 -> JointedElevatorState.L4
+				else -> JointedElevatorState(0.0.meters, Rotation2d()).also {
 					DriverStation.reportError("Invalid coral score segment", true)
 				}
 			},
-			true,
 		) raceWith (
 	// Wait for elevator to get to state
-	waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+	waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 	// Align to the pipe
-	SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
+	SwerveSubsystem.alignToPipeCommand({ branchToScoreOn.pipe} , alliance) andThen
 	// Eject a coral
 	(GrabberSubsystem.ejectCommand(L4) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
 	// Get back to the pose around the reef
@@ -55,6 +54,6 @@ class CoralScoreSegment(
 			if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
 		},
 		true,
-	))) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+	))) andThen waitUntil { JointedElevatorSubsystem.isWithinTolerance }
 	}
 }

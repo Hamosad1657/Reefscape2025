@@ -31,7 +31,7 @@ class CollectAlgaeSegment(
 			// Wait for elevator to get to state
 			waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 				// Align to the reef side
-				((SwerveSubsystem.alignToReefSide({ algaeToCollect.side }, alliance) andThen wait(1.5)) raceWith
+				((SwerveSubsystem.alignToReefSideCommand({ algaeToCollect.side }, alliance) andThen wait(1.5)) raceWith
 				// collect algae
 				GrabberSubsystem.intakeAlgaeCommand() finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 				// Get back to the pose around the reef

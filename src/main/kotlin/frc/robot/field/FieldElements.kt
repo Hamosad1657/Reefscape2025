@@ -68,7 +68,26 @@ enum class ReefSide(val number: Int) {
 	EF(2),
 	GH(3),
 	IJ(4),
-	KL(5),
+	KL(5);
+
+	val left = when (number) {
+		0 -> Pipe.A
+		1 -> Pipe.C
+		2 -> Pipe.E
+		3 -> Pipe.G
+		4 -> Pipe.I
+		5 -> Pipe.K
+		else -> Pipe.A
+	}
+	val right = when (number) {
+		0 -> Pipe.B
+		1 -> Pipe.D
+		2 -> Pipe.F
+		3 -> Pipe.H
+		4 -> Pipe.J
+		5 -> Pipe.L
+		else -> Pipe.B
+	}
 }
 
 enum class CoralStation {

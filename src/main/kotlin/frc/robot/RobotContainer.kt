@@ -30,6 +30,8 @@ object RobotContainer
     var elevatorJointState = JointedElevatorState.INTAKE
     var grabberEjectMode = GrabberEjectMode.L1
 
+    var shouldAlignToRightPipe = false
+
 
     private val controllerA = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_A_CONTROLLER_PORT)
 
@@ -67,9 +69,10 @@ object RobotContainer
                 intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralDriveCommand()
             )
 
-            // TODO: Triangle().toggleOnTrue(alignToClosestPipeCommand())
+            triangle().toggleOnTrue(SwerveSubsystem.alignToPipeCommand(
+                { SwerveSubsystem.closestReefSide.let { if (shouldAlignToRightPipe) it.right else it.left } }, Robot.alliance)
+            )
             square().toggleOnTrue(intakeCoralFromCoralStationCommand())
-            // TODO: Circle().whileTrue(alignToCoralStationCommand())
 
             // TODO: Pathfinding
         }
