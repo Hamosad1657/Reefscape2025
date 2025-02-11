@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.MaintainElevatorJointStateState.*
 import frc.robot.subsystems.jointedElevator.JointedElevatorConstants
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.REACHED_SETPOINT
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 /** Represents a state of the elevator and the grabber. */
 data class JointedElevatorState(val height: Length, val angle: Rotation2d) {
@@ -43,12 +45,12 @@ private enum class MaintainElevatorJointStateState(val shouldExitState: () -> Bo
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: JointedElevatorState) = withName("Maintain elevator joint state") {
-	maintainJointedElevatorStateCommand({ state })
+fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(useLEDs: Boolean ,state: JointedElevatorState) = withName("Maintain elevator joint state") {
+	maintainJointedElevatorStateCommand(useLEDs) { state }
 }
 
 /** Maintains an elevator joint state. Does not end automatically. */
-fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> JointedElevatorState) = withName("Maintain elevator joint state") {
+fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(useLEDs: Boolean, state: () -> JointedElevatorState) = withName("Maintain elevator joint state") {
 	var currentState = UP_RIGHTING
 	runOnce { currentState = UP_RIGHTING; isMaintainingState = false } andThen run {
 		when (currentState) {
