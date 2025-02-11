@@ -19,17 +19,7 @@ enum class GrabberEjectMode {
 
 /** Ejects a game piece from the grabber. Does not end automatically. */
 fun GrabberSubsystem.ejectCommand(mode: GrabberEjectMode) = withName("Eject from grabber") {
-	run {
-		setMotorVoltage(
-			when (mode) {
-				L1, L2, L3, L4 -> GrabberConstants.CORAL_FORWARD_VOLTAGE
-				PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE
-				NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
-			}
-		)
-	} finallyDo {
-		stopMotor()
-	}
+	ejectCommand { mode }
 }
 
 /** Ejects a game piece from the grabber. Does not end automatically. */
