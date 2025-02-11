@@ -1,4 +1,4 @@
-package frc.robot.subsystems.elevator.joint
+package frc.robot.subsystems.jointedElevator
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -15,7 +15,7 @@ import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.RobotMap
 
-object ElevatorJointConstants {
+object JointedElevatorConstants {
 	// --- Elevator constants ---
 
 	val MAIN_ELEVATOR_MOTOR_CONFIGS = TalonFXConfiguration().apply {
@@ -28,7 +28,7 @@ object ElevatorJointConstants {
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
-			FeedbackRemoteSensorID = RobotMap.ElevatorJoint.HEIGHT_CAN_CODER_ID
+			FeedbackRemoteSensorID = RobotMap.JointedElevator.HEIGHT_CAN_CODER_ID
 			FeedbackSensorSource = RemoteCANcoder
 		}
 	}
