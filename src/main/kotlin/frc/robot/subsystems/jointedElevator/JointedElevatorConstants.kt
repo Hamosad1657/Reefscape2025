@@ -28,7 +28,7 @@ object JointedElevatorConstants {
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
-			FeedbackRemoteSensorID = RobotMap.ElevatorJoint.HEIGHT_CAN_CODER_ID
+			FeedbackRemoteSensorID = RobotMap.JointedElevator.HEIGHT_CAN_CODER_ID
 			FeedbackSensorSource = RemoteCANcoder
 		}
 	}

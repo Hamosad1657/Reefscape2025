@@ -30,32 +30,32 @@ import frc.robot.subsystems.jointedElevator.JointedElevatorConstants as Constant
 object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	// --- Elevator Components ---
 
-	private val mainElevatorMotor = HaTalonFX(Map.ElevatorJoint.MAIN_MOTOR_ID).apply {
+	private val mainElevatorMotor = HaTalonFX(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID).apply {
 		configurator.apply(Constants.MAIN_ELEVATOR_MOTOR_CONFIGS)
 		configPID(Constants.ELEVATOR_HEIGHT_PID_GAINS)
 	}
-	private val secondaryElevatorMotor = HaTalonFX(Map.ElevatorJoint.SECONDARY_MOTOR_ID).apply {
-		Follower(Map.ElevatorJoint.MAIN_MOTOR_ID, true)
+	private val secondaryElevatorMotor = HaTalonFX(Map.JointedElevator.SECONDARY_HEIGHT_MOTOR_ID).apply {
+		Follower(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID, true)
 	}
-	private val heightEncoder = CANcoder(Map.ElevatorJoint.HEIGHT_CAN_CODER_ID).apply {
+	private val heightEncoder = CANcoder(Map.JointedElevator.HEIGHT_CAN_CODER_ID).apply {
 		configurator.apply(Constants.CAN_CODER_CONFIGS)
 	}
 
-	private val maxHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
-	private val minHeightLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
+	private val maxHeightLimitSwitch = DigitalInput(Map.JointedElevator.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
+	private val minHeightLimitSwitch = DigitalInput(Map.JointedElevator.MIN_HEIGHT_LIMIT_SWITCH_CHANNEL)
 
 	// --- Grabber angle components ---
 
-	private val angleMotor = HaSparkFlex(Map.ElevatorJoint.ANGLE_MOTOR_ID).apply {
+	private val angleMotor = HaSparkFlex(Map.JointedElevator.ANGLE_MOTOR_ID).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val angleEncoder = DutyCycleEncoder(Map.ElevatorJoint.ANGLE_ENCODER_PWM_CHANNEL).apply {
+	private val angleEncoder = DutyCycleEncoder(Map.JointedElevator.ANGLE_ENCODER_PWM_CHANNEL).apply {
 		setInverted(false)
 	}
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 
-	private val maxAngleLimitSwitch = DigitalInput(Map.ElevatorJoint.MAX_ANGLE_LIMIT_CHANNEL)
-	private val minAngleLimitSwitch = DigitalInput(Map.ElevatorJoint.MIN_ANGLE_LIMIT_CHANNEL)
+	private val maxAngleLimitSwitch = DigitalInput(Map.JointedElevator.MAX_ANGLE_LIMIT_CHANNEL)
+	private val minAngleLimitSwitch = DigitalInput(Map.JointedElevator.MIN_ANGLE_LIMIT_CHANNEL)
 
 	// --- State Getters ---
 
