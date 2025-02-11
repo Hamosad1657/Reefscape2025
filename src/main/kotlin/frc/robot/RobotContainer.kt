@@ -6,9 +6,9 @@ import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.*
-import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeSubsystem
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 /**
@@ -27,7 +27,7 @@ object RobotContainer
     private const val JOYSTICK_DEADBAND = 0.06
     private const val EJECT_TIMEOUT: Seconds = 2.0
 
-    var elevatorJointState = ElevatorJointState.INTAKE
+    var elevatorJointState = JointedElevatorState.INTAKE
     var grabberEjectMode = GrabberEjectMode.L1
 
 
@@ -47,7 +47,7 @@ object RobotContainer
             true,
         )
 
-        ElevatorJointSubsystem.defaultCommand = ElevatorJointSubsystem.maintainElevatorJointStateCommand(ElevatorJointState.INTAKE, false)
+        JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.INTAKE)
 
         GrabberSubsystem.defaultCommand = GrabberSubsystem.runOnce { GrabberSubsystem.stopMotor() }
 
@@ -60,7 +60,7 @@ object RobotContainer
             options().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.zeroGyro() })
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
-            R2().whileTrue(ElevatorJointSubsystem.maintainElevatorJointStateCommand({ elevatorJointState }, useLEDs = true))
+            R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { elevatorJointState })
             R1().whileTrue(GrabberSubsystem.ejectCommand({ grabberEjectMode }, false) withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
