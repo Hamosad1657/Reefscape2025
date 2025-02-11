@@ -1,4 +1,4 @@
-package frc.robot.subsystems.elevator.joint
+package frc.robot.subsystems.jointedElevator
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicVoltage
@@ -10,7 +10,6 @@ import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
 import com.hamosad1657.lib.units.degrees
-import com.hamosad1657.lib.units.meters
 import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
@@ -26,9 +25,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap as Map
 import kotlin.math.absoluteValue
-import frc.robot.subsystems.elevator.joint.ElevatorJointConstants as Constants
+import frc.robot.subsystems.jointedElevator.JointedElevatorConstants as Constants
 
-object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
+object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	// --- Elevator Components ---
 
 	private val mainElevatorMotor = HaTalonFX(Map.ElevatorJoint.MAIN_MOTOR_ID).apply {
@@ -97,8 +96,8 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 		if (newSetpoint.meters in Constants.MIN_HEIGHT.asMeters..Constants.MAX_HEIGHT.asMeters) {
 			heightSetpoint = newSetpoint
 		} else {
-			Alert("New elevator joint height setpoint not in motion range. Value not updated.", kError).set(true)
-			DriverStation.reportWarning("New elevator joint height setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
+			Alert("New jointed elevator height setpoint not in motion range. Value not updated.", kError).set(true)
+			DriverStation.reportWarning("New jointed elevator height setpoint of ${newSetpoint.meters} meters is not in the range of motion.", true)
 		}
 		with(elevatorControlRequest) {
 			LimitForwardMotion = isAtMaxHeightLimit
@@ -128,8 +127,8 @@ object  ElevatorJointSubsystem: SubsystemBase("Elevator") {
 
 	fun updateAngleControl(newSetpoint: Rotation2d = angleSetpoint) {
 		if (newSetpoint > Constants.MAX_ANGLE || newSetpoint < Constants.MIN_ANGLE) {
-			Alert("New elevator joint angle setpoint not in range. Value not updated", kWarning).set(true)
-			DriverStation.reportWarning("Elevator angle request of ${newSetpoint.degrees} degrees is out of the range of motion", true)
+			Alert("New jointed elevator angle setpoint not in range. Value not updated", kWarning).set(true)
+			DriverStation.reportWarning("jointed elevator angle request of ${newSetpoint.degrees} degrees is out of the range of motion", true)
 		} else angleSetpoint = newSetpoint
 
 		val output = anglePIDController.calculate(currentAngle.radians, angleSetpoint.radians)
