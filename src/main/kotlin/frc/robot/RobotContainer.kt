@@ -2,7 +2,6 @@ package frc.robot
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.HaCommandPS4Controller
-import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.wpilibj2.command.Command
@@ -10,8 +9,6 @@ import frc.robot.commands.*
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
-import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 /**
