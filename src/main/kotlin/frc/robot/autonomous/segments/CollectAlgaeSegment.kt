@@ -7,19 +7,19 @@ import frc.robot.FieldConstants
 import frc.robot.commands.*
 import frc.robot.field.AlgaeHeight.HIGH
 import frc.robot.field.AlgaeHeight.LOW
-import frc.robot.field.ReefAlgae
 import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
+import frc.robot.field.ReefAlgae
 
 class CollectAlgaeSegment(
 	private val algaeToCollect: ReefAlgae,
 	isClockwise: Boolean,
 ): AutonomousSegment(algaeToCollect.side, algaeToCollect.side, isClockwise) {
 	override fun generateCommand(alliance: Alliance) = withName(
-		"Collect algae from side ${algaeToCollect.side.name} ${algaeToCollect.height.name}"
+		"Collect algae from side ${algaeToCollect.side.name} ${algaeToCollect.height}"
 	) {
 		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
 			when (algaeToCollect.height) {
@@ -31,7 +31,7 @@ class CollectAlgaeSegment(
 			// Wait for elevator to get to state
 			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
 				// Align to the reef side
-				((SwerveSubsystem.alignToReefSide(algaeToCollect.side, alliance) andThen wait(2.0)) raceWith
+				((SwerveSubsystem.alignToReefSide(algaeToCollect.side, alliance) andThen wait(1.5)) raceWith
 				// collect algae
 				GrabberSubsystem.intakeAlgaeCommand() finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
 				// Get back to the pose around the reef

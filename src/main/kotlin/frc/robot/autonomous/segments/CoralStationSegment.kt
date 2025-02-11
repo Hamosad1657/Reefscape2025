@@ -24,7 +24,7 @@ class CoralStationSegment(
 	endingSide: ReefSide,
 	isClockwise: Boolean,
 ): AutonomousSegment(startingSide, endingSide, isClockwise) {
-	override fun generateCommand(alliance: Alliance) = withName("Get to coral station ${if (coralStation == CoralStation.KL) "KL" else "CD"}") {
+	override fun generateCommand(alliance: Alliance) = withName("Get to coral station ${coralStation.name}") {
 		SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("${startingSide.name}-far to ${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station"),
 			alliance == Alliance.Red,
@@ -32,7 +32,7 @@ class CoralStationSegment(
 			SwerveSubsystem.alignToCoralStation(coralStation, alliance) alongWith
 			intakeCoralFromCoralStationCommand()
 		) andThen SwerveSubsystem.followPathCommand(
-			PathPlannerPath.fromPathFile("${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station to ${startingSide.name}-far"),
+			PathPlannerPath.fromPathFile("${coralStation.name} coral station to ${startingSide.name}-far"),
 			alliance == Alliance.Red,
 		)
 	}

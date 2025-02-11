@@ -41,21 +41,19 @@ class CoralScoreSegment(
 			},
 			true,
 		) raceWith (
-			// Wait for elevator to get to state
-			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
-				// Align to the pipe
-				SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
-				// Eject a coral
-				(GrabberSubsystem.ejectCommand(L4) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
-				// Get back to the pose around the reef
-				SwerveSubsystem.alignToPoseCommand(
-					{
-						val pose = FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]
-						if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
-					},
-					true,
-				)
-		)
-		) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+	// Wait for elevator to get to state
+	waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+	// Align to the pipe
+	SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
+	// Eject a coral
+	(GrabberSubsystem.ejectCommand(L4) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
+	// Get back to the pose around the reef
+	SwerveSubsystem.alignToPoseCommand(
+		{
+			val pose = FieldConstants.Poses.FAR_POSES[branchToScoreOn.pipe.side.number * 2]
+			if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
+		},
+		true,
+	))) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
 	}
 }

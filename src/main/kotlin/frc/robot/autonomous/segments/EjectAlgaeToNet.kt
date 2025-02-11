@@ -18,30 +18,27 @@ class EjectAlgaeToNet(
 	startingSide: ReefSide,
 	endingSide: ReefSide,
 	isClockwise: Boolean,
-	private val netPose: Int,
 ): AutonomousSegment(startingSide, endingSide, isClockwise) {
-	override fun generateCommand(alliance: Alliance) = withName("eject algae to net ") {
+	override fun generateCommand(alliance: Alliance) = withName("Eject algae to net") {
 		// Get to Net Position
 		SwerveSubsystem.followPathCommand(
-			PathPlannerPath.fromPathFile("${startingSide.name}-far to netPosition"),
+			PathPlannerPath.fromPathFile("${startingSide.name}-far to net position"),
 			alliance == Red,
-		)
-		//Tell elevator to be in state
-		ElevatorJointSubsystem.maintainElevatorJointStateCommand(
+		) andThen
+		// Tell elevator to be in state
+		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
 			ElevatorJointState.NET,
-			true
-		)
+			true,
+		) raceWith (
 		// Wait until elevator state is in tolerance
 		waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
-			//Eject in net
-			(GrabberSubsystem.ejectCommand(NET) withTimeout(2.0) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
-			// Get to the ending pose side
-			SwerveSubsystem.alignToPoseCommand(
-				{
-					val pose = FieldConstants.Poses.FAR_POSES[endingSide.number * 2]
-					if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
-				},
-				true,
-			)andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+		// Eject in net
+		(GrabberSubsystem.ejectCommand(NET) withTimeout(1.2) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED })
+		)) andThen // TODO: Check if robot doesn't flip
+		// Get back to reef
+		SwerveSubsystem.followPathCommand(
+			PathPlannerPath.fromPathFile("Net position to ${endingSide.name}-far"),
+			alliance == Red,
+		) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
 	}
 }
