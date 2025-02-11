@@ -21,6 +21,7 @@ import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
+import frc.robot.vision.CoralVision
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 
@@ -92,6 +93,32 @@ fun SwerveSubsystem.rotationSetpointDriveCommand(
 /** Locks to rotation while staying in place. */
 fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to $rotation") {
 	rotationSetpointDriveCommand({ 0.0 }, { 0.0 }, { rotation }, false)
+}
+
+fun SwerveSubsystem.rotateToCoralCommand(
+	lJoyYSupplier: () -> Double,
+	lJoyXSupplier: () -> Double,
+	isFieldRelative: Boolean,
+	isClosedLoop: () -> Boolean = { false },
+) = withName("rotateToCoral") {
+	run {
+		val lJoyY = lJoyYSupplier()
+		val lJoyX = lJoyXSupplier()
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+
+		val chassisSpeeds = ChassisSpeeds(
+			velocity.y,
+			-velocity.x,
+			SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0)
+		)
+
+		drive(
+			chassisSpeeds,
+			isFieldRelative,
+			flipForRed = true,
+			isClosedLoop(),
+		)
+	}
 }
 
 /**

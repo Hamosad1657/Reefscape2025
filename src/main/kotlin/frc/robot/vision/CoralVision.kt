@@ -9,10 +9,10 @@ import kotlin.math.absoluteValue
 
 
 object CoralVision {
-	var table: NetworkTable = NetworkTableInstance.getDefault().getTable("limelight")
-	val tx: NetworkTableEntry = table.getEntry("tx")
+	private var table: NetworkTable = NetworkTableInstance.getDefault().getTable("limelight")
+	private val tx: NetworkTableEntry = table.getEntry("tx")
 
-	val angleTolerance: Rotation2d = 5.0.degrees
+	private val angleTolerance: Rotation2d = 5.0.degrees
 	val isWithinTolerance get() = coralAngleToCenter.degrees.absoluteValue < angleTolerance.degrees
 	val coralAngleToCenter: Rotation2d get() = Rotation2d.fromDegrees(tx.getDouble(0.0))
 }
