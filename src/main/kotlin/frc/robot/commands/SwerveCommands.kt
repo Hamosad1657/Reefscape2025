@@ -206,11 +206,6 @@ fun SwerveSubsystem.alignToReefSide(reefSide: ReefSide, alliance: Alliance): Com
 		ReefSide.GH -> FieldConstants.Poses.AT_GH_CENTER
 		ReefSide.IJ -> FieldConstants.Poses.AT_IJ_CENTER
 		ReefSide.KL -> FieldConstants.Poses.AT_KL_CENTER
-		else -> Pose2d().also {
-			Alert("Invalid pipe alignment request.", ERROR).set(true)
-			DriverStation.reportError("reef side requested to align to of char $reefSide is not present on the field.", true)
-			return runOnce {  }
-		}
 	}
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
