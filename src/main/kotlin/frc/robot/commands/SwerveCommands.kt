@@ -175,8 +175,8 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 	}
 }
 
-fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
-	val targetPose = when (pipe) {
+fun SwerveSubsystem.alignToPipe(pipe: () -> Pipe, alliance: Alliance): Command {
+	val targetPose = when (pipe()) {
 		Pipe.A -> FieldConstants.Poses.AT_A
 		Pipe.B -> FieldConstants.Poses.AT_B
 		Pipe.C -> FieldConstants.Poses.AT_C
@@ -191,15 +191,15 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 		Pipe.L -> FieldConstants.Poses.AT_L
 		else -> Pose2d().also {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
-			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field.", true)
+			DriverStation.reportError("Pipe requested to align to of char ${pipe().letter} is not present on the field.", true)
 			return runOnce {  }
 		}
 	}
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
-fun SwerveSubsystem.alignToReefSide(reefSide: ReefSide, alliance: Alliance): Command {
-	val targetPose = when (reefSide) {
+fun SwerveSubsystem.alignToReefSide(reefSide: () -> ReefSide, alliance: Alliance): Command {
+	val targetPose = when (reefSide()) {
 		ReefSide.AB -> FieldConstants.Poses.AT_AB_CENTER
 		ReefSide.CD -> FieldConstants.Poses.AT_CD_CENTER
 		ReefSide.EF -> FieldConstants.Poses.AT_EF_CENTER
@@ -210,8 +210,8 @@ fun SwerveSubsystem.alignToReefSide(reefSide: ReefSide, alliance: Alliance): Com
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
-fun SwerveSubsystem.alignToCoralStation(coralStation: CoralStation, alliance: Alliance): Command {
-	val targetPose = when (coralStation) {
+fun SwerveSubsystem.alignToCoralStation(coralStation: () -> CoralStation, alliance: Alliance): Command {
+	val targetPose = when (coralStation()) {
 		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
 		CoralStation.CD -> FieldConstants.Poses.CD_CORAL_STATION
 	}

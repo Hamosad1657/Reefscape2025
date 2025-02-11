@@ -111,7 +111,7 @@ object FieldConstants {
 			IJ_KL_CLOSE,
 			KL_CLOSE,
 			KL_AB_CLOSE,
-			)
+		)
 		val FAR_POSES = listOf(
 			AB_FAR,
 			AB_CD_FAR,
