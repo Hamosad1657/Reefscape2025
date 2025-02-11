@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj.DriverStation
 class Pipe private constructor(val letter: Char) {
 	val side: ReefSide
 		get() = when (letter) {
-		'A', 'B' -> ReefSide.AB
-		'C', 'D' -> ReefSide.CD
-		'E', 'F' -> ReefSide.EF
-		'G', 'H' -> ReefSide.GH
-		'I', 'J' -> ReefSide.IJ
-		'K', 'L' -> ReefSide.KL
-		else -> ReefSide.AB.also {
-			DriverStation.reportError("Impossible pipe declared, unable to access reef side.", true)
+			'A', 'B' -> ReefSide.AB
+			'C', 'D' -> ReefSide.CD
+			'E', 'F' -> ReefSide.EF
+			'G', 'H' -> ReefSide.GH
+			'I', 'J' -> ReefSide.IJ
+			'K', 'L' -> ReefSide.KL
+			else -> ReefSide.AB.also {
+				DriverStation.reportError("Impossible pipe declared, unable to access reef side.", true)
+			}
 		}
-	}
 
 	companion object {
 		val A = Pipe('A')

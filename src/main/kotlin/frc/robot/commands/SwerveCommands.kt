@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.FieldConstants
+import frc.robot.field.CoralStation
+import frc.robot.field.Pipe
 import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
@@ -220,11 +222,6 @@ fun SwerveSubsystem.alignToCoralStation(coralStation: CoralStation, alliance: Al
 	val targetPose = when (coralStation) {
 		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
 		CoralStation.CD -> FieldConstants.Poses.CD_CORAL_STATION
-		else -> Pose2d().also {
-			Alert("Invalid coral station alignment request.", ERROR).set(true)
-			DriverStation.reportError("Coral station requested to align to is invalid.", true)
-			return runOnce { }
-		}
 	}
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
