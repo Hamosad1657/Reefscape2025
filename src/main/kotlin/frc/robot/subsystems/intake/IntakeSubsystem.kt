@@ -32,12 +32,14 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
-	private val canCoder = CANcoder(RobotMap.Intake.CANCODER_ID).apply {
+	private val canCoder = CANcoder(RobotMap.Intake.CAN_CODER_ID).apply {
 		configurator.apply(Constants.CAN_CODER_CONFIGS)
 	}
 
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 	private var angleSetpoint = Rotation2d()
+
+	private val beamBreak = DigitalInput(RobotMap.Intake.BEAM_BREAK_CHANNEL)
 
 	private val maxAngleLimitSwitch = DigitalInput(RobotMap.Intake.MAX_ANGLE_LIMIT_CHANNEL)
 	private val minAngleLimitSwitch = DigitalInput(RobotMap.Intake.MIN_ANGLE_LIMIT_CHANNEL)
@@ -51,6 +53,8 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	val currentAngle: Rotation2d get() = canCoder.absolutePosition.value.baseUnitMagnitude().rotations
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
+
+	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
 
 	val isMotorCurrentAboveThreshold: Boolean get() = Constants.CURRENT_THRESHOLD <= wheelMotor.outputCurrent
 
@@ -117,17 +121,21 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-		builder.addBooleanProperty("Is at max angle", { isAtMaxAngle }, null)
-		builder.addBooleanProperty("Is at min angle", { isAtMinAngle }, null)
+		with(builder) {
+			addBooleanProperty("Is at max angle", { isAtMaxAngle }, null)
+			addBooleanProperty("Is at min angle", { isAtMinAngle }, null)
 
-		builder.addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
-		builder.addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
-		builder.addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
+			addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
+			addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+			addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
 
-		builder.addBooleanProperty("Is current above threshold", { isMotorCurrentAboveThreshold }, null)
+			addBooleanProperty("Is beam break interfered", { isBeamBreakInterfered }, null)
 
-		 if (Robot.isTesting) {
-			 builder.addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
-		 }
+			addBooleanProperty("Is current above threshold", { isMotorCurrentAboveThreshold }, null)
+
+			if (Robot.isTesting) {
+				addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
+			}
+		}
 	}
 }
