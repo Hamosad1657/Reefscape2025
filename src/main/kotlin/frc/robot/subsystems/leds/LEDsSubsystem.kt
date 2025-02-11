@@ -36,7 +36,6 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 	}
 
 	private fun handleFlash() {
-		SmartDashboard.putNumber("Timer at HandleFlash", timer.get())
 		if (timer.hasElapsed(Constants.FLASH_TIMEOUT)) {
 			currentMode = DEFAULT
 			timer.reset()
@@ -47,14 +46,20 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 	private fun handleLEDs() {
 		when (currentMode) {
 			DEFAULT -> {
-				if (Robot.alliance == Blue) {
-					currentMode = BLUE_ALLIANCE
-				} else if ( Robot.alliance == Red) {
-					currentMode = RED_ALLIANCE
-				} else LEDPattern.kOff.applyTo(ledBuffer)
+				when (Robot.alliance) {
+					Blue -> {
+						currentMode = BLUE_ALLIANCE
+						LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+					}
+					Red -> {
+						currentMode = RED_ALLIANCE
+						LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+					}
+					else -> LEDPattern.kOff.applyTo(ledBuffer)
+				}
 			}
 
-			//for some reason Color.kGreen is Blue and the other way around so I swapped them
+			// For some reason Color.kGreen is Blue and the other way around so I swapped them
 			LOADING_FROM_CORAL_STATION -> {
 				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
 			}
@@ -62,7 +67,7 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
 			}
 			RED_ALLIANCE -> {
-				LEDPattern.solid(Color.kRed).applyTo(ledBuffer)
+				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
 			}
 
 			ACTION_FINISHED -> {
@@ -92,10 +97,10 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 				).applyTo(ledBuffer)
 			}
 
-			else -> {}
-
+			else -> {
+				currentMode = DEFAULT
+			}
 		}
-		SmartDashboard.putNumber("Timer at periodic", timer.get())
 	}
 
 	// --- Periodic ---
