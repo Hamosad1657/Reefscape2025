@@ -22,10 +22,15 @@ import edu.wpi.first.util.sendable.SendableRegistry
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
+import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Subsystem
 import frc.robot.Robot
+import frc.robot.field.FieldConstants.Poses
+import frc.robot.field.ReefSide
+import frc.robot.field.ReefSide.AB
+import frc.robot.field.ReefSide.CD
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 
@@ -68,6 +73,22 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	val currentRobotPitch: Rotation2d get() = Rotation2d.fromDegrees(pigeon.pitch.valueAsDouble)
 
 	val gyroAccel: MpsSquared get() = Translation2d(pigeon.accelerationX.value.baseUnitMagnitude(), pigeon.accelerationY.value.baseUnitMagnitude()).norm
+
+	val closestReefSide: ReefSide get() {
+		val position = currentPose.translation
+
+		var closestSide = AB
+		var shortestDistance = 0.0
+		for (i in 0..5) {
+			val targetSidePose = if (Robot.alliance == Red) Poses.mirrorPose(Poses.CLOSE_POSES[i*2]) else Poses.CLOSE_POSES[i*2]
+			val distance = targetSidePose.translation.getDistance(position)
+			if (distance <= shortestDistance || i == 0) {
+				shortestDistance = distance
+				closestSide = ReefSide.entries[i]
+			}
+		}
+		return closestSide
+	}
 
 	// --- Drive functions ---
 
