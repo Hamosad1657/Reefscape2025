@@ -43,7 +43,7 @@ private enum class IntakeState(val shouldExitState: () -> Boolean) {
 		IntakeSubsystem.isWithinAngleTolerance
 	}),
 	Intaking(shouldExitState = {
-		IntakeSubsystem.isMotorCurrentAboveThreshold
+		IntakeSubsystem.isBeamBreakInterfered
 	}),
 	Retracting(shouldExitState = {
 		false
