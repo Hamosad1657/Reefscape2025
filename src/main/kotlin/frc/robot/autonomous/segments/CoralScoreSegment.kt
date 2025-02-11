@@ -10,8 +10,8 @@ import frc.robot.field.FieldConstants
 import frc.robot.commands.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.field.Branch
-import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -29,20 +29,20 @@ class CoralScoreSegment(
 	isClockwise: Boolean,
 ): AutonomousSegment(branchToScoreOn.pipe.side, branchToScoreOn.pipe.side, isClockwise) {
 	override fun generateCommand(alliance: Alliance) = withName("Score coral on pipe ${branchToScoreOn.pipe.letter} level ${branchToScoreOn.level.number}") {
-		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
+		(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(
+			true,
 			when (branchToScoreOn.level.number) {
-				1 -> ElevatorJointState.L1
-				2 -> ElevatorJointState.L2
-				3 -> ElevatorJointState.L3
-				4 -> ElevatorJointState.L4
-				else -> ElevatorJointState(0.0.meters, Rotation2d()).also {
+				1 -> JointedElevatorState.L1
+				2 -> JointedElevatorState.L2
+				3 -> JointedElevatorState.L3
+				4 -> JointedElevatorState.L4
+				else -> JointedElevatorState(0.0.meters, Rotation2d()).also {
 					DriverStation.reportError("Invalid coral score segment", true)
 				}
 			},
-			true,
 		) raceWith (
 	// Wait for elevator to get to state
-	waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+	waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 	// Align to the pipe
 	SwerveSubsystem.alignToPipe(branchToScoreOn.pipe, alliance) andThen
 	// Eject a coral
@@ -54,6 +54,6 @@ class CoralScoreSegment(
 			if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
 		},
 		true,
-	))) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+	))) andThen waitUntil { JointedElevatorSubsystem.isWithinTolerance }
 	}
 }

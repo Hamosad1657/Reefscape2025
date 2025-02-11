@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.commands.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.field.ReefSide
-import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -20,9 +20,9 @@ class EjectAlgaeToProcessorSegment(
 	): AutonomousSegment(startingSide, endingSide, isClockwise) {
 		override fun generateCommand(alliance: Alliance) = withName("Eject algae in processor") {
 			// Set elevator state
-			(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
-				ElevatorJointState.PROCESSOR,
+			(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(
 				true,
+				JointedElevatorState.PROCESSOR,
 			) raceWith(
 			// Get to Processor
 			SwerveSubsystem.followPathCommand(
@@ -30,13 +30,13 @@ class EjectAlgaeToProcessorSegment(
 				alliance == Red,
 			) andThen (
 			// Wait until elevator state is in tolerance
-			waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+			waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 			// Eject in processor
 			(GrabberSubsystem.ejectCommand(PROCESSOR) withTimeout(1.5) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED })) andThen
 			// Get back to reef
 			SwerveSubsystem.followPathCommand(
 				PathPlannerPath.fromPathFile("Processor to ${endingSide.name}-far"),
 				alliance == Red,
-			))) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+			))) andThen waitUntil { JointedElevatorSubsystem.isWithinTolerance }
 		}
 	}

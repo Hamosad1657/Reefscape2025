@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.commands.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.field.ReefSide
-import frc.robot.subsystems.elevator.joint.ElevatorJointSubsystem
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -25,12 +25,12 @@ class EjectAlgaeToNet(
 			alliance == Red,
 		) andThen
 		// Tell elevator to be in state
-		(ElevatorJointSubsystem.maintainElevatorJointStateCommand(
-			ElevatorJointState.NET,
+		(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(
 			true,
+			JointedElevatorState.NET,
 		) raceWith (
 		// Wait until elevator state is in tolerance
-		waitUntil { ElevatorJointSubsystem.isWithinTolerance } andThen
+		waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 		// Eject in net
 		(GrabberSubsystem.ejectCommand(NET) withTimeout(1.2) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED })
 		)) andThen // TODO: Check if robot doesn't flip
@@ -38,6 +38,6 @@ class EjectAlgaeToNet(
 		SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("Net position to ${endingSide.name}-far"),
 			alliance == Red,
-		) andThen waitUntil { ElevatorJointSubsystem.isWithinTolerance }
+		) andThen waitUntil { JointedElevatorSubsystem.isWithinTolerance }
 	}
 }

@@ -1,6 +1,5 @@
 package frc.robot.autonomous
 
-import com.hamosad1657.lib.ReefSide
 import com.hamosad1657.lib.units.degrees
 import com.pathplanner.lib.path.GoalEndState
 import com.pathplanner.lib.path.IdealStartingState
@@ -10,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import frc.robot.field.FieldConstants
+import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 
 /**
