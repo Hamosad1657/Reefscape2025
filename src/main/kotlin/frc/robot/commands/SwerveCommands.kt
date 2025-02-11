@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.field.FieldConstants
 import frc.robot.field.CoralStation
 import frc.robot.field.Pipe
+import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
@@ -174,8 +175,8 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 	}
 }
 
-fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
-	val targetPose = when (pipe) {
+fun SwerveSubsystem.alignToPipeCommand(pipe: () -> Pipe, alliance: Alliance): Command {
+	val targetPose = when (pipe()) {
 		Pipe.A -> FieldConstants.Poses.AT_A
 		Pipe.B -> FieldConstants.Poses.AT_B
 		Pipe.C -> FieldConstants.Poses.AT_C
@@ -190,15 +191,27 @@ fun SwerveSubsystem.alignToPipe(pipe: Pipe, alliance: Alliance): Command {
 		Pipe.L -> FieldConstants.Poses.AT_L
 		else -> Pose2d().also {
 			Alert("Invalid pipe alignment request.", ERROR).set(true)
-			DriverStation.reportError("Pipe requested to align to of char ${pipe.letter} is not present on the field.", true)
+			DriverStation.reportError("Pipe requested to align to of char ${pipe().letter} is not present on the field.", true)
 			return runOnce {  }
 		}
 	}
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
-fun SwerveSubsystem.alignToCoralStation(coralStation: CoralStation, alliance: Alliance): Command {
-	val targetPose = when (coralStation) {
+fun SwerveSubsystem.alignToReefSideCommand(reefSide: () -> ReefSide, alliance: Alliance): Command {
+	val targetPose = when (reefSide()) {
+		ReefSide.AB -> FieldConstants.Poses.AT_AB_CENTER
+		ReefSide.CD -> FieldConstants.Poses.AT_CD_CENTER
+		ReefSide.EF -> FieldConstants.Poses.AT_EF_CENTER
+		ReefSide.GH -> FieldConstants.Poses.AT_GH_CENTER
+		ReefSide.IJ -> FieldConstants.Poses.AT_IJ_CENTER
+		ReefSide.KL -> FieldConstants.Poses.AT_KL_CENTER
+	}
+	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
+}
+
+fun SwerveSubsystem.alignToCoralStationCommand(coralStation: () -> CoralStation, alliance: Alliance): Command {
+	val targetPose = when (coralStation()) {
 		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
 		CoralStation.CD -> FieldConstants.Poses.CD_CORAL_STATION
 	}
