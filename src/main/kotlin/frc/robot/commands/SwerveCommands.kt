@@ -175,7 +175,7 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 	}
 }
 
-fun SwerveSubsystem.alignToPipe(pipe: () -> Pipe, alliance: Alliance): Command {
+fun SwerveSubsystem.alignToPipeCommand(pipe: () -> Pipe, alliance: Alliance): Command {
 	val targetPose = when (pipe()) {
 		Pipe.A -> FieldConstants.Poses.AT_A
 		Pipe.B -> FieldConstants.Poses.AT_B
@@ -198,7 +198,7 @@ fun SwerveSubsystem.alignToPipe(pipe: () -> Pipe, alliance: Alliance): Command {
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
-fun SwerveSubsystem.alignToReefSide(reefSide: () -> ReefSide, alliance: Alliance): Command {
+fun SwerveSubsystem.alignToReefSideCommand(reefSide: () -> ReefSide, alliance: Alliance): Command {
 	val targetPose = when (reefSide()) {
 		ReefSide.AB -> FieldConstants.Poses.AT_AB_CENTER
 		ReefSide.CD -> FieldConstants.Poses.AT_CD_CENTER
@@ -210,7 +210,7 @@ fun SwerveSubsystem.alignToReefSide(reefSide: () -> ReefSide, alliance: Alliance
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
-fun SwerveSubsystem.alignToCoralStation(coralStation: () -> CoralStation, alliance: Alliance): Command {
+fun SwerveSubsystem.alignToCoralStationCommand(coralStation: () -> CoralStation, alliance: Alliance): Command {
 	val targetPose = when (coralStation()) {
 		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
 		CoralStation.CD -> FieldConstants.Poses.CD_CORAL_STATION
