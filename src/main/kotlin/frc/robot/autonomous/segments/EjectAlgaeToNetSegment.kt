@@ -13,7 +13,7 @@ import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
-class EjectAlgaeToNet(
+class EjectAlgaeToNetSegment(
 	startingSide: ReefSide,
 	endingSide: ReefSide,
 	isClockwise: Boolean,

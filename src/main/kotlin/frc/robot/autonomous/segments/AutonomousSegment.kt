@@ -19,7 +19,7 @@ import frc.robot.field.ReefSide
 	JsonSubTypes.Type(value = CoralScoreSegment::class, name = "CoralScoreSegment"),
 	JsonSubTypes.Type(value = CoralStationSegment::class, name = "CoralStationSegment"),
 	JsonSubTypes.Type(value = CollectAlgaeSegment::class, name = "CollectAlgaeSegment"),
-	JsonSubTypes.Type(value = EjectAlgaeToNet::class, name = "EjectAlgaeToNetSegment"),
+	JsonSubTypes.Type(value = EjectAlgaeToNetSegment::class, name = "EjectAlgaeToNetSegment"),
 	JsonSubTypes.Type(value = EjectAlgaeToProcessorSegment::class, name = "EjectAlgaeToProcessorSegment"),
 )
 abstract class AutonomousSegment(

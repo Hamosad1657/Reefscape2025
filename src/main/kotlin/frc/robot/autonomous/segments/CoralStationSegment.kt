@@ -29,7 +29,7 @@ class CoralStationSegment(
 			PathPlannerPath.fromPathFile("${startingSide.name}-far to ${if (coralStation == CoralStation.KL) "KL" else "CD"} coral station"),
 			alliance == Alliance.Red,
 		) andThen (
-			SwerveSubsystem.alignToCoralStation(coralStation, alliance) alongWith
+			SwerveSubsystem.alignToCoralStation({ coralStation }, alliance) alongWith
 			intakeCoralFromCoralStationCommand()
 		) andThen SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("${coralStation.name} coral station to ${startingSide.name}-far"),
