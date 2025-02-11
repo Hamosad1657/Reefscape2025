@@ -3,7 +3,7 @@ package frc.robot.autonomous.segments
 import com.hamosad1657.lib.commands.*
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
-import frc.robot.FieldConstants
+import frc.robot.field.FieldConstants
 import frc.robot.commands.*
 import frc.robot.field.AlgaeHeight.HIGH
 import frc.robot.field.AlgaeHeight.LOW

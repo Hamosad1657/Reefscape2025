@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.FieldConstants
+import frc.robot.field.FieldConstants
 import frc.robot.field.CoralStation
 import frc.robot.field.Pipe
 import frc.robot.field.ReefSide

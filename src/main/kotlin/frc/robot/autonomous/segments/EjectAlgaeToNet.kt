@@ -4,7 +4,6 @@ import com.hamosad1657.lib.commands.*
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
-import frc.robot.FieldConstants
 import frc.robot.commands.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.field.ReefSide

@@ -7,10 +7,9 @@ import com.pathplanner.lib.path.IdealStartingState
 import com.pathplanner.lib.path.PathPlannerPath
 import com.pathplanner.lib.path.PointTowardsZone
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kError
-import frc.robot.FieldConstants
+import frc.robot.field.FieldConstants
 import frc.robot.subsystems.swerve.SwerveConstants
 
 /**

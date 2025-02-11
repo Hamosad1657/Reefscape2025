@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
-import frc.robot.FieldConstants
+import frc.robot.field.FieldConstants
 import frc.robot.commands.*
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.field.Branch
