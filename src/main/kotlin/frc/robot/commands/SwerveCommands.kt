@@ -110,14 +110,14 @@ fun SwerveSubsystem.rotateToCoralCommand(
 		val rJoyX = rJoyXSupplier()
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
 		var chassisSpeeds = ChassisSpeeds()
-		if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
-			chassisSpeeds = ChassisSpeeds(
+		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
+			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
 				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
 			)
 		} else {
-			chassisSpeeds = ChassisSpeeds(
+			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
 				-rJoyX
