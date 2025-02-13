@@ -35,7 +35,8 @@ object RobotMap {
 	}
 
 	object Climbing {
-		const val CLIMBING_MOTOR_ID = 0
-		const val LIMIT_SWITCH_ID = 0
+		const val WHEELS_MOTOR_ID = 0
+		const val ANGLE_MOTOR_ID = 0
+		const val CAN_CODER_ID = 0
 	}
 }
