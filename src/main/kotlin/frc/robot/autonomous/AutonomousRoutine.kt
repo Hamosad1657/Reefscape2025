@@ -3,9 +3,11 @@ package frc.robot.autonomous
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
+import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import frc.robot.autonomous.segments.AutonomousSegment
+import frc.robot.autonomous.segments.models.AutonomousRoutineModel
 import frc.robot.commands.*
 import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -82,9 +84,9 @@ class AutonomousRoutine(
 	companion object {
 		fun createFromJSON(name: String): AutonomousRoutine {
 			val objectMapper = ObjectMapper()
-			val file = File("/home/lvuser/deploy/autonomous/$name")
+			val file = File(Filesystem.getDeployDirectory(), "${name}.json")
 
-			return objectMapper.readValue(file, AutonomousRoutine::class.java)
+			return objectMapper.readValue(file, AutonomousRoutineModel::class.java).generateRoutine()
 		}
 	}
 }
