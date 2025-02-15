@@ -35,15 +35,15 @@ object RobotMap {
 	}
 
 	object JointedElevator {
-		const val MAIN_HEIGHT_MOTOR_ID = 0
-		const val SECONDARY_HEIGHT_MOTOR_ID = 0
-		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
-		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
-		const val HEIGHT_CAN_CODER_ID = 0
+		const val MAIN_HEIGHT_MOTOR_ID = 20
+		const val SECONDARY_HEIGHT_MOTOR_ID = 21
+		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 4
+		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 5
+		const val HEIGHT_CAN_CODER_ID = 2
 
-		const val ANGLE_MOTOR_ID = 0
-		const val ANGLE_ENCODER_CHANNEL = 0
-		const val MAX_ANGLE_LIMIT_CHANNEL = 0
-		const val MIN_ANGLE_LIMIT_CHANNEL = 0
+		const val ANGLE_MOTOR_ID = 23
+		const val ANGLE_ENCODER_CHANNEL = 6
+		const val MAX_ANGLE_LIMIT_CHANNEL = 2
+		const val MIN_ANGLE_LIMIT_CHANNEL = 3
 	}
 }
