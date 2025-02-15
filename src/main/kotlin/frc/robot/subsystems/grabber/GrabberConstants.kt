@@ -42,4 +42,6 @@ object GrabberConstants {
 
 	/** The voltage needed to eject an algae from the grabber to the net. */
 	const val EJECT_ALGAE_TO_NET_VOLTAGE: Volts = 0.0
+
+	const val BEAM_BREAK_THRESHOLD: Volts = 10.0
 }

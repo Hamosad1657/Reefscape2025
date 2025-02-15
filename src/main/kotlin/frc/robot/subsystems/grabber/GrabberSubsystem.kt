@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
-import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap as Map
@@ -24,13 +24,13 @@ object GrabberSubsystem: SubsystemBase() {
 		configure(Constants.MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
-	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
+	private val beamBreak = AnalogInput(Map.Grabber.BEAM_BREAK_CHANNEL)
 
 	private val PIDController = Constants.PID_GAINS.toPIDController()
 
 	// --- State getters ---
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
+	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
 	var isUsingPIDControl = false
 		private set
