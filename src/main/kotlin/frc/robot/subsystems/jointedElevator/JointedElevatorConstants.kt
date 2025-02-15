@@ -94,6 +94,9 @@ object JointedElevatorConstants {
 
 	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.0)
 
+
+	val PARALLEL_TO_FLOOR_ANGLE = Rotation2d.fromDegrees(-90.0)
+
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 	val MAX_ANGLE = Rotation2d.fromDegrees(0.0)
 
