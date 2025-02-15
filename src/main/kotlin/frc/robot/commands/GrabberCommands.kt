@@ -47,7 +47,7 @@ fun GrabberSubsystem.loadCoralCommand() = withName("Load coral") {
 
 /** Runs the motor inwards to intake an algae. Ends when the beam break is interfered. */
 fun GrabberSubsystem.intakeAlgaeCommand() = withName("Intake Algae") {
-	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } until { isBeamBreakInterfered } finallyDo {
+	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } finallyDo {
 		stopMotor()
 	}
 }
