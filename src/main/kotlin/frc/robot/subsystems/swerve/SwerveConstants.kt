@@ -148,7 +148,7 @@ object SwerveConstants {
 			.withDriveFrictionVoltage(DRIVE_FRICTION_VOLTAGE)
 
 	// Front Left
-	private val FRONT_LEFT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.3515625)
+	private val FRONT_LEFT_ENCODER_OFFSET: Angle = Units.Degrees.of(67.148)
 	private const val FRONT_LEFT_STEER_INVERTED = false
 	private const val FRONT_LEFT_ENCODER_INVERTED = false
 
@@ -156,7 +156,7 @@ object SwerveConstants {
 	private val FRONT_LEFT_Y_POS: Distance = Units.Inches.of(11.62)
 
 	// Front Right
-	private val FRONT_RIGHT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.498291015625)
+	private val FRONT_RIGHT_ENCODER_OFFSET: Angle = Units.Degrees.of(51.064)
 	private const val FRONT_RIGHT_STEER_INVERTED = false
 	private const val FRONT_RIGHT_ENCODER_INVERTED = false
 
@@ -164,7 +164,7 @@ object SwerveConstants {
 	private val FRONT_RIGHT_Y_POS: Distance = Units.Inches.of(-11.62)
 
 	// Back Left
-	private val BACK_LEFT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.48779296875)
+	private val BACK_LEFT_ENCODER_OFFSET: Angle = Units.Degrees.of(-121.113)
 	private const val BACK_LEFT_STEER_INVERTED = false
 	private const val BACK_LEFT_ENCODER_INVERTED = false
 
@@ -172,7 +172,7 @@ object SwerveConstants {
 	private val BACK_LEFT_Y_POS: Distance = Units.Inches.of(11.62)
 
 	// Back Right
-	private val BACK_RIGHT_ENCODER_OFFSET: Angle = Units.Rotations.of(0.231689453125)
+	private val BACK_RIGHT_ENCODER_OFFSET: Angle = Units.Degrees.of(-83.145)
 	private const val BACK_RIGHT_STEER_INVERTED = false
 	private const val BACK_RIGHT_ENCODER_INVERTED = false
 
