@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
+import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -39,7 +40,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 	private var angleSetpoint = Rotation2d()
 
-	private val beamBreak = DigitalInput(RobotMap.Intake.BEAM_BREAK_CHANNEL)
+	private val beamBreak = AnalogInput(RobotMap.Intake.BEAM_BREAK_CHANNEL)
 
 	private val maxAngleLimitSwitch = DigitalInput(RobotMap.Intake.MAX_ANGLE_LIMIT_CHANNEL)
 	private val minAngleLimitSwitch = DigitalInput(RobotMap.Intake.MIN_ANGLE_LIMIT_CHANNEL)
@@ -54,7 +55,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
+	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
 	val isMotorCurrentAboveThreshold: Boolean get() = Constants.CURRENT_THRESHOLD <= wheelMotor.outputCurrent
 

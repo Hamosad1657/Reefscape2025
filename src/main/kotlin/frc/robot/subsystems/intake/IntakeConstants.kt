@@ -31,6 +31,8 @@ object IntakeConstants {
 
 	const val CURRENT_THRESHOLD: Amps = 0
 
+	const val BEAM_BREAK_THRESHOLD: Volts = 10.0
+
 	const val INTAKING_VOLTAGE: Volts = 0.0
 
 	/** Works in radians. */
