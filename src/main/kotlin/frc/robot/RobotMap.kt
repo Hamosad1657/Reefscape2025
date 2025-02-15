@@ -42,7 +42,7 @@ object RobotMap {
 		const val HEIGHT_CAN_CODER_ID = 0
 
 		const val ANGLE_MOTOR_ID = 0
-		const val ANGLE_ENCODER_PWM_CHANNEL = 0
+		const val ANGLE_ENCODER_CHANNEL = 0
 		const val MAX_ANGLE_LIMIT_CHANNEL = 0
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
 	}

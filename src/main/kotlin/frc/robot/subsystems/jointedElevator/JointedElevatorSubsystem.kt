@@ -49,7 +49,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	private val angleMotor = HaSparkFlex(Map.JointedElevator.ANGLE_MOTOR_ID).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val angleEncoder = DutyCycleEncoder(Map.JointedElevator.ANGLE_ENCODER_PWM_CHANNEL).apply {
+	private val angleEncoder = DutyCycleEncoder(Map.JointedElevator.ANGLE_ENCODER_CHANNEL).apply {
 		setInverted(false)
 	}
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
