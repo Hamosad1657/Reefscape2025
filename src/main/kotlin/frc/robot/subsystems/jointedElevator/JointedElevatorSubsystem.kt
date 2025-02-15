@@ -91,7 +91,6 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	}
 
 	private var elevatorControlRequest = MotionMagicVoltage(0.0).apply {
-		FeedForward = (currentAngle.plus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ELEVATOR_HEIGHT_KG
 		Slot = 0
 	}
 	fun setHeight(newSetpoint: Length = heightError) {
@@ -104,6 +103,8 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 		with(elevatorControlRequest) {
 			LimitForwardMotion = isAtMaxHeightLimit
 			LimitReverseMotion = isAtMinHeightLimit
+
+			FeedForward = (currentAngle.plus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ELEVATOR_HEIGHT_KG
 
 			Position = heightSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 		}
