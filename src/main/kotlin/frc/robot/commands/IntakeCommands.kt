@@ -37,32 +37,44 @@ fun IntakeSubsystem.deployIntakeCommand() = withName("Deploy intake") {
 // --- Intake command ---
 
 private enum class IntakeState(val shouldExitState: () -> Boolean) {
-	Deploying(shouldExitState = {
+	DEPLOYING(shouldExitState = {
 		IntakeSubsystem.isWithinAngleTolerance
 	}),
-	Intaking(shouldExitState = {
+	INTAKING(shouldExitState = {
 		IntakeSubsystem.isBeamBreakInterfered
 	}),
-	Retracting(shouldExitState = {
+	RETRACTING(shouldExitState = {
+		IntakeSubsystem.isWithinAngleTolerance
+	}),
+	FEEDING(shouldExitState = {
 		false
 	}),
 }
 
 /** Intakes from ground, does not end automatically. */
 fun IntakeSubsystem.intakeCommand() = withName("Intake") {
-	var intakeState = Deploying
+	var intakeState = DEPLOYING
 	run {
 		when (intakeState) {
-			Deploying -> {
+			DEPLOYING -> {
 				setAngleToDeploy()
-				if (intakeState.shouldExitState()) intakeState = Intaking
+				if (intakeState.shouldExitState()) intakeState = INTAKING
 			}
-			Intaking -> {
+			INTAKING -> {
 				setAngleToDeploy()
 				runWheelMotor()
-				if (intakeState.shouldExitState()) intakeState = Retracting
+				if (intakeState.shouldExitState()) {
+					intakeState = RETRACTING
+					stopWheelMotor()
+				}
 			}
-			Retracting -> {
+			RETRACTING -> {
+				setAngleToRetracted()
+				if (intakeState.shouldExitState()) {
+					intakeState = FEEDING
+				}
+			}
+			FEEDING -> {
 				setAngleToRetracted()
 				runWheelMotor()
 			}
