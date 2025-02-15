@@ -1,6 +1,5 @@
 package frc.robot.subsystems.jointedElevator
 
-import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import com.hamosad1657.lib.motors.HaSparkFlex
@@ -10,7 +9,6 @@ import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
 import com.hamosad1657.lib.units.degrees
-import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import edu.wpi.first.math.geometry.Rotation2d
@@ -20,7 +18,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap as Map
@@ -35,10 +33,11 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 		configPID(Constants.ELEVATOR_HEIGHT_PID_GAINS)
 	}
 	private val secondaryElevatorMotor = HaTalonFX(Map.JointedElevator.SECONDARY_HEIGHT_MOTOR_ID).apply {
-		Follower(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID, true)
+		configurator.apply(Constants.MAIN_ELEVATOR_MOTOR_CONFIGS)
+		configPID(Constants.ELEVATOR_HEIGHT_PID_GAINS)
 	}
 	private val heightEncoder = CANcoder(Map.JointedElevator.HEIGHT_CAN_CODER_ID).apply {
-		configurator.apply(Constants.CAN_CODER_CONFIGS)
+		configurator.apply(Constants.HEIGHT_CAN_CODER_CONFIGS)
 	}
 
 	private val maxHeightLimitSwitch = DigitalInput(Map.JointedElevator.MAX_HEIGHT_LIMIT_SWITCH_CHANNEL)
@@ -49,8 +48,8 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	private val angleMotor = HaSparkFlex(Map.JointedElevator.ANGLE_MOTOR_ID).apply {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
-	private val angleEncoder = DutyCycleEncoder(Map.JointedElevator.ANGLE_ENCODER_CHANNEL).apply {
-		setInverted(false)
+	private val angleEncoder = CANcoder(Map.JointedElevator.ANGLE_CAN_CODER_ID).apply {
+		configurator.apply(Constants.ANGLE_CAN_CODER_CONFIGS)
 	}
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
 
@@ -63,8 +62,8 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 
 	private var heightSetpoint: Length = Length()
 
-	val isAtMinHeightLimit get() = minHeightLimitSwitch.get()
-	val isAtMaxHeightLimit get() = maxHeightLimitSwitch.get()
+	val isAtMinHeightLimit get() = !minHeightLimitSwitch.get()
+	val isAtMaxHeightLimit get() = !maxHeightLimitSwitch.get()
 
 	val currentHeight: Length get() = Length.fromMeters(mainElevatorMotor.position.value.magnitude() * Constants.LENGTH_PER_ROTATION.asMeters)
 	val heightError get() = heightSetpoint - currentHeight
@@ -73,10 +72,10 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 
 	private var angleSetpoint: Rotation2d = 0.0.degrees
 
-	val isAtMaxAngleLimit get() = maxAngleLimitSwitch.get()
-	val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
+	val isAtMaxAngleLimit get() = !maxAngleLimitSwitch.get()
+	val isAtMinAngleLimit get() = !minAngleLimitSwitch.get()
 
-	val currentAngle: Rotation2d get() = angleEncoder.get().rotations + Constants.ANGLE_ENCODER_OFFSET
+	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(angleEncoder.absolutePosition.value.magnitude())
 	val angleError: Rotation2d get() = angleSetpoint - currentAngle
 	val isWithinAngleTolerance get() = angleError.absoluteValue <= Constants.ANGLE_TOLERANCE
 
@@ -85,7 +84,10 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	// --- Functions ---
 
 	fun setElevatorMotorsVoltage(volts: Volts) {
-		mainElevatorMotor.setVoltage(volts)
+		if (volts !in 0.0..1.3) {
+			mainElevatorMotor.setVoltage(volts)
+			secondaryElevatorMotor.setVoltage(volts)
+		}
 	}
 
 	private var elevatorControlRequest = MotionMagicVoltage(0.0).apply {
@@ -106,12 +108,14 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 			Position = heightSetpoint.asMeters / Constants.LENGTH_PER_ROTATION.asMeters
 		}
 
-		mainElevatorMotor.setControl(elevatorControlRequest)
+		//secondaryElevatorMotor.setControl(elevatorControlRequest)
+		//mainElevatorMotor.setControl(elevatorControlRequest)
+
 	}
 
 
 	fun setAngleMotorVoltage(voltage: Volts) {
-		angleMotor.setVoltage(voltage)
+		if ((voltage >= 0.0 && !isAtMaxAngleLimit) || (voltage <= 0.0 && !isAtMinAngleLimit)) angleMotor.setVoltage(voltage)
 	}
 
 	fun stopAngleMotor() {

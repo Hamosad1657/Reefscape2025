@@ -34,7 +34,7 @@ object JointedElevatorConstants {
 	}
 
 	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromDegrees(0.0)
-	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
+	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
 			MagnetOffset = ELEVATOR_CAN_CODER_OFFSET.rotations
@@ -51,7 +51,7 @@ object JointedElevatorConstants {
 	val HEIGHT_TOLERANCE: Length = 0.02.meters
 
 	/** For every 1 rotation of the motor, the elevator moves [LENGTH_PER_ROTATION] meters. */
-	val LENGTH_PER_ROTATION: Length = 0.0.meters
+	val LENGTH_PER_ROTATION: Length = 1.0.meters
 
 	val MAX_HEIGHT: Length = 0.0.meters
 	val MIN_HEIGHT: Length = 0.0.meters
@@ -75,7 +75,14 @@ object JointedElevatorConstants {
 		idleMode(kCoast)
 		inverted(false)
 	}
-	val ANGLE_ENCODER_OFFSET = Rotation2d.fromDegrees(0.0)
+
+	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(0.0)
+	val ANGLE_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
+		with(MagnetSensor) {
+			SensorDirection = SensorDirectionValue.CounterClockwise_Positive
+			MagnetOffset = ANGLE_CAN_CODER_OFFSET.rotations
+		}
+	}
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
