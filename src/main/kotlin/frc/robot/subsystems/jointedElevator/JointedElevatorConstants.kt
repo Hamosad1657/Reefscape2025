@@ -52,7 +52,6 @@ object JointedElevatorConstants {
 
 	/** For every 1 rotation of the motor, the elevator moves [LENGTH_PER_ROTATION] meters. */
 	val LENGTH_PER_ROTATION: Length = 0.0.meters
-
 	val MAX_HEIGHT: Length = 0.0.meters
 	val MIN_HEIGHT: Length = 0.0.meters
 
@@ -86,6 +85,9 @@ object JointedElevatorConstants {
 	const val ANGLE_KG: Volts = 0.0
 
 	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.0)
+
+
+	val PARALLEL_TO_FLOOR_ANGLE = Rotation2d.fromDegrees(-90.0)
 
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 	val MAX_ANGLE = Rotation2d.fromDegrees(0.0)
