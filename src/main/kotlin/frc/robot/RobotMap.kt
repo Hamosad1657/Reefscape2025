@@ -35,7 +35,7 @@ object RobotMap {
 	}
 
 	object Grabber {
-		const val MOTOR_ID = 0
+		const val MOTOR_ID = 22
 		const val BEAM_BREAK_CHANNEL = 0
 	}
 }

@@ -3,6 +3,7 @@ package frc.robot.commands
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.commands.GrabberEjectMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
@@ -68,6 +69,7 @@ enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
 
 fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake command") {
 	var loadFromIntakeState: LoadFromIntakeState = Intaking
+	runOnce { loadFromIntakeState = Intaking } andThen
 	run {
 		when (loadFromIntakeState) {
 			Intaking -> {
@@ -78,7 +80,7 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 				setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) {
 					loadFromIntakeState = Holding
-					setMotorSetpoint(Length.fromCentimeters(-3))
+					setMotorSetpoint(Length.fromCentimeters(0))
 				}
 			}
 			Holding -> {
@@ -110,7 +112,7 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 				setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE)
 				if (loadFromCoralStationState.shouldExitState()) {
 					loadFromCoralStationState = LoadFromCoralStationState.Holding
-					setMotorSetpoint(Length.fromCentimeters(-3))
+					setMotorSetpoint(Length.fromCentimeters(0))
 				}
 			}
 			LoadFromCoralStationState.Holding -> {
@@ -124,6 +126,6 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 
 //--- Test commands ---
 
-fun GrabberSubsystem.test_setWheelsVoltageCommand(voltage: Volts) = withName("Set wheels voltage") {
-	run { setMotorVoltage(voltage) }
+fun GrabberSubsystem.test_setWheelsVoltageCommand(voltage: () -> Volts) = withName("Set wheels voltage") {
+	run { setMotorVoltage(voltage()); SmartDashboard.putNumber("Voltage", voltage()) }
 }

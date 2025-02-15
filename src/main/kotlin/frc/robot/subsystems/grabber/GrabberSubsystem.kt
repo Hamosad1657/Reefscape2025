@@ -38,8 +38,8 @@ object GrabberSubsystem: SubsystemBase() {
 	private var setpoint: Rotation2d = 0.0.degrees
 
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
-	val pidError: Rotation2d get() = setpoint - currentAngle
-	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.MOTOR_TOLERANCE
+	val pidError: Rotation2d get() = setpoint.minus(currentAngle)
+	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.ANGLE_TOLERANCE && isUsingPIDControl
 
 	// --- Functions ---
 
@@ -68,16 +68,18 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-		builder.addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
+		with(builder) {
+			addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
 
-		builder.addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
-		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
-		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
-		builder.addDoubleProperty("Angle error deg", { pidError.degrees }, null)
-		builder.addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
+			addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
+			addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+			addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+			addDoubleProperty("Angle error deg", { pidError.degrees }, null)
+			addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
 
-		if (Robot.isTesting) {
-			builder.addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
+			if (Robot.isTesting) {
+				addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
+			}
 		}
 	}
 }
