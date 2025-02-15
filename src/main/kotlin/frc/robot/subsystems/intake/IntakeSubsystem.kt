@@ -1,12 +1,10 @@
 package frc.robot.subsystems.intake
 
-import com.ctre.phoenix6.hardware.CANcoder
 import frc.robot.subsystems.intake.IntakeConstants as Constants
 import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
-import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
@@ -17,6 +15,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap
@@ -33,8 +32,8 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
-	private val canCoder = CANcoder(RobotMap.Intake.CAN_CODER_ID).apply {
-		configurator.apply(Constants.CAN_CODER_CONFIGS)
+	private val encoder = DutyCycleEncoder(RobotMap.Intake.ENCODER_CHANNEL).apply {
+		setInverted(false)
 	}
 
 	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
@@ -47,11 +46,11 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	// --- State getters ---
 
-	val isAtMinAngle: Boolean get() = minAngleLimitSwitch.get()
-	val isAtMaxAngle: Boolean get() =  maxAngleLimitSwitch.get()
+	val isAtMinAngle: Boolean get() = !minAngleLimitSwitch.get()
+	val isAtMaxAngle: Boolean get() =  !maxAngleLimitSwitch.get()
 
 	/** Angle is zero when fully horizontal. Angle increases when the intake retracts. */
-	val currentAngle: Rotation2d get() = canCoder.absolutePosition.value.baseUnitMagnitude().rotations
+	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(encoder.get() + Constants.ENCODER_OFFSET.rotations)
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
@@ -66,7 +65,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	}
 
 	private fun calculateAngleFF(): Volts {
-		return currentAngle.cos * Constants.ANGLE_KG
+		return (currentAngle.minus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ANGLE_KG
 	}
 
 	private fun isMovingTowardsLimits(output: Volts): Boolean = !(

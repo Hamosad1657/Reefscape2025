@@ -35,14 +35,14 @@ object RobotMap {
 	}
 
 	object Intake {
-		const val ANGLE_MOTOR_ID = 0
-		const val WHEEL_MOTOR_ID = 0
+		const val ANGLE_MOTOR_ID = 24
+		const val WHEEL_MOTOR_ID = 25
 
-		const val BEAM_BREAK_CHANNEL = 0
+		const val BEAM_BREAK_CHANNEL = 1
 
-		const val CAN_CODER_ID = 0
+		const val ENCODER_CHANNEL = 6
 
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
-		const val MAX_ANGLE_LIMIT_CHANNEL = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 1
 	}
 }

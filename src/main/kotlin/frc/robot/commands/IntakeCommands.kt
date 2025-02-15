@@ -85,11 +85,11 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 // --- Testing commands ---
 
 /** Use for testing. */
-fun IntakeSubsystem.test_openLoopRunWheelsCommand(voltage: Volts) = withName("Open loop run wheels") {
-	run { setWheelMotorVoltage(voltage) }
+fun IntakeSubsystem.test_openLoopRunWheelsCommand(voltage: () -> Volts) = withName("Open loop run wheels") {
+	run { setWheelMotorVoltage(voltage()) }
 }
 
 /** Use for testing. */
-fun IntakeSubsystem.test_openLoopRunAngleControlCommand(voltage: Volts) = withName("Open loop angle control") {
-	run { setAngleMotorVoltage(voltage) }
+fun IntakeSubsystem.test_openLoopRunAngleControlCommand(voltage: () -> Volts) = withName("Open loop angle control") {
+	run { setAngleMotorVoltage(voltage()) }
 }

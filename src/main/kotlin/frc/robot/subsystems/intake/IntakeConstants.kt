@@ -1,7 +1,5 @@
 package frc.robot.subsystems.intake
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration
-import com.ctre.phoenix6.signals.SensorDirectionValue.Clockwise_Positive
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Amps
 import com.hamosad1657.lib.units.Volts
@@ -21,17 +19,13 @@ object IntakeConstants {
 		inverted(false)
 	}
 
-	val CAN_CODER_OFFSET = Rotation2d()
-	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
-		with(MagnetSensor) {
-			MagnetOffset = CAN_CODER_OFFSET.rotations
-			SensorDirection = Clockwise_Positive
-		}
-	}
+	val ENCODER_OFFSET = Rotation2d.fromDegrees(-3.16)
+
+	val PARALLEL_TO_FLOOR_ANGLE = Rotation2d.fromDegrees(84.0)
 
 	const val CURRENT_THRESHOLD: Amps = 0
 
-	const val BEAM_BREAK_THRESHOLD: Volts = 10.0
+	const val BEAM_BREAK_THRESHOLD: Volts = 2.0
 
 	const val INTAKING_VOLTAGE: Volts = 0.0
 
