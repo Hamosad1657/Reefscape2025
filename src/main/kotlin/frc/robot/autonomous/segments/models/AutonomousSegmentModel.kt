@@ -13,6 +13,7 @@ import frc.robot.field.ReefSide.AB
 	JsonSubTypes.Type(value = CoralStationSegmentModel::class, name = "CoralStationSegment"),
 	JsonSubTypes.Type(value = MoveToSegmentModel::class, name = "MoveToSegment"),
 	JsonSubTypes.Type(value = CollectAlgaeSegmentModel::class, name = "CollectAlgaeSegment"),
+	JsonSubTypes.Type(value = EjectAlgaeToProcessorSegmentModel::class, name = "EjectAlgaeToProcessorSegment"),
 )
 abstract class AutonomousSegmentModel {
 	@set:JsonProperty("StartingSide")
