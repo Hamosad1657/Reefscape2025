@@ -27,12 +27,16 @@ object JointedElevatorConstants {
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
-			//FeedbackRemoteSensorID = RobotMap.JointedElevator.HEIGHT_CAN_CODER_ID
-			//FeedbackSensorSource = RemoteCANcoder
+			FeedbackRemoteSensorID = RobotMap.JointedElevator.HEIGHT_CAN_CODER_ID
+			FeedbackSensorSource = RemoteCANcoder
+		}
+		with(MotionMagic) {
+			MotionMagicAcceleration = 10.0
+			MotionMagicCruiseVelocity = 10.0
 		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(0.475586)
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.5224609375)
 	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			AbsoluteSensorDiscontinuityPoint = 1.0

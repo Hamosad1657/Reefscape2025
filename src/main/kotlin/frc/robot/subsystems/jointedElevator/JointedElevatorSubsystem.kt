@@ -1,6 +1,5 @@
 package frc.robot.subsystems.jointedElevator
 
-import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicVoltage
 import com.ctre.phoenix6.hardware.CANcoder
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType.kError
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap as Map
@@ -109,8 +107,8 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 
 			FeedForward = Constants.ELEVATOR_KG
 		}
+
 		mainElevatorMotor.setControl(elevatorControlRequest)
-		SmartDashboard.putNumber("Motor rotation", mainElevatorMotor.position.value.magnitude())
 		secondaryElevatorMotor.setControl(Follower(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID, false))
 	}
 
