@@ -73,7 +73,6 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake") {
 				if (intakeState.shouldExitState()) intakeState = INTAKING
 			}
 			INTAKING -> {
-				SmartDashboard.putString("Reached Intaking", "wawa")
 				stopAngleMotor()
 				runWheelMotor()
 				if (intakeState.shouldExitState()) {
