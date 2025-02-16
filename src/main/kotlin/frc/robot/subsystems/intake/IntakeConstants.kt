@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake
 
 import com.hamosad1657.lib.math.PIDGains
-import com.hamosad1657.lib.units.Amps
 import com.hamosad1657.lib.units.Volts
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkFlexConfig
@@ -19,29 +18,28 @@ object IntakeConstants {
 		inverted(false)
 	}
 
-	val ENCODER_OFFSET = Rotation2d.fromDegrees(-3.16)
+	val ENCODER_OFFSET = Rotation2d.fromDegrees(304.3)
 
-	val PARALLEL_TO_FLOOR_ANGLE = Rotation2d.fromDegrees(84.0)
-
-	const val CURRENT_THRESHOLD: Amps = 0
+	val PARALLEL_TO_FLOOR_ANGLE = Rotation2d.fromDegrees(103.0)
 
 	const val BEAM_BREAK_THRESHOLD: Volts = 2.0
 
-	const val INTAKING_VOLTAGE: Volts = 0.0
+	const val INTAKING_VOLTAGE: Volts = 12.0
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 0.0,
-		kI = 0.0,
+		kP = 2.5,
+		kI = 0.8,
 		kD = 0.0,
 	)
-	const val ANGLE_KG = 0.0
+	const val ANGLE_KG = 0.65
 
-	val ANGLE_TOLERANCE = Rotation2d()
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0)
 
-	val MAX_ANGLE = Rotation2d()
-	val MIN_ANGLE = Rotation2d()
+	val MAX_ANGLE = Rotation2d.fromDegrees(105.0)
+	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val RETRACTED_ANGLE = Rotation2d()
-	val DEPLOYED_ANGLE = Rotation2d()
+	val RETRACTED_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L1_ANGLE = Rotation2d.fromDegrees(46.0)
+	val DEPLOYED_ANGLE = Rotation2d.fromDegrees(105.0)
 }
