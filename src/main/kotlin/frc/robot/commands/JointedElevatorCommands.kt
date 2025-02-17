@@ -63,7 +63,6 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 		when (currentState) {
 			UP_RIGHTING -> {
 				updateAngleControl(JointedElevatorConstants.RESTING_ANGLE)
-
 				if (currentState.shouldExitState()) {
 					currentState = GETTING_TO_HEIGHT
 				}
@@ -71,7 +70,6 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 			GETTING_TO_HEIGHT -> {
 				updateAngleControl(JointedElevatorConstants.INTAKE_ANGLE)
 				setElevatorRotation(state().elevatorRotation)
-
 				if (currentState.shouldExitState()) {
 					currentState = GETTING_TO_ANGLE
 				}
@@ -79,7 +77,6 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 			GETTING_TO_ANGLE -> {
 				updateAngleControl(state().angle)
 				setElevatorRotation(state().elevatorRotation)
-
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
 					isMaintainingState = true
