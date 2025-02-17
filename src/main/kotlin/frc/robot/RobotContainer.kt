@@ -10,6 +10,8 @@ import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.RAINBOW_SCROLL
+import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 /**
@@ -25,14 +27,13 @@ import frc.robot.subsystems.swerve.SwerveSubsystem
  */
 object RobotContainer
 {
-    private const val JOYSTICK_DEADBAND = 0.06
+    private const val JOYSTICK_DEADBAND = 0.08
     private const val EJECT_TIMEOUT: Seconds = 2.0
 
     var elevatorJointState = JointedElevatorState.INTAKE
-    var grabberEjectMode = GrabberEjectMode.L1
+    var grabberEjectMode = GrabberVoltageMode.EJECT_TO_L1
 
     var shouldAlignToRightPipe = false
-
 
     private val controllerA = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_A_CONTROLLER_PORT)
 
@@ -48,13 +49,14 @@ object RobotContainer
             { controllerA.leftX },
             { controllerA.rightX },
             true,
+            { true },
         )
 
-        JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.INTAKE)
+        JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
 
-        GrabberSubsystem.defaultCommand = GrabberSubsystem.runOnce { GrabberSubsystem.stopMotor() }
+        GrabberSubsystem.defaultCommand = GrabberSubsystem.stopMotorCommand()
 
-        IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.RETRACTED_ANGLE }
+        IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.RESTING_ANGLE }
     }
 
     private fun configureBindings()
@@ -64,16 +66,20 @@ object RobotContainer
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
             R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { elevatorJointState })
-            R1().whileTrue(GrabberSubsystem.ejectCommand({ grabberEjectMode }, false) withTimeout(EJECT_TIMEOUT))
+            R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { grabberEjectMode } withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
                 intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralDriveCommand()
+            )
+            L2().toggleOnTrue(
+                IntakeSubsystem.intakeCommand(true)
             )
 
             triangle().toggleOnTrue(SwerveSubsystem.alignToPipeCommand(
                 { SwerveSubsystem.closestReefSide.let { if (shouldAlignToRightPipe) it.right else it.left } }, Robot.alliance)
             )
             square().toggleOnTrue(intakeCoralFromCoralStationCommand())
+            circle().toggleOnTrue(IntakeSubsystem.ejectToL1Command(true))
 
             // TODO: Pathfinding
         }
