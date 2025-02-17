@@ -4,12 +4,11 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue.RemoteCANcoder
 import com.ctre.phoenix6.signals.InvertedValue.Clockwise_Positive
-import com.ctre.phoenix6.signals.NeutralModeValue.Brake
+import com.ctre.phoenix6.signals.NeutralModeValue.Coast
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.hamosad1657.lib.math.PIDGains
-import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
-import com.hamosad1657.lib.units.meters
+import com.hamosad1657.lib.units.rotations
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kCoast
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
@@ -20,85 +19,97 @@ object JointedElevatorConstants {
 
 	val MAIN_ELEVATOR_MOTOR_CONFIGS = TalonFXConfiguration().apply {
 		with(MotorOutput) {
-			NeutralMode = Brake
+			NeutralMode = Coast
 			Inverted = Clockwise_Positive
 		}
 		with(CurrentLimits) {
-			SupplyCurrentLimit = 100.0
+			SupplyCurrentLimit = 300.0
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
 			FeedbackRemoteSensorID = RobotMap.JointedElevator.HEIGHT_CAN_CODER_ID
 			FeedbackSensorSource = RemoteCANcoder
 		}
+		with(MotionMagic) {
+			MotionMagicAcceleration = 10.0
+			MotionMagicCruiseVelocity = 10.0
+		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromDegrees(0.0)
-	val CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.5857)
+	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
+			AbsoluteSensorDiscontinuityPoint = 1.0
 			SensorDirection = SensorDirectionValue.Clockwise_Positive
 			MagnetOffset = ELEVATOR_CAN_CODER_OFFSET.rotations
 		}
 	}
 
-	val ELEVATOR_HEIGHT_PID_GAINS = PIDGains(
-		kP = 0.0,
+	val ELEVATOR_PID_GAINS = PIDGains(
+		kP = 8.4,
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val ELEVATOR_HEIGHT_KG: Volts = 0.0
+	const val ELEVATOR_KG: Volts = 0.95
 
-	val HEIGHT_TOLERANCE: Length = 0.02.meters
+	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
 
-	/** For every 1 rotation of the motor, the elevator moves [LENGTH_PER_ROTATION] meters. */
-	val LENGTH_PER_ROTATION: Length = 0.0.meters
+	val MAX_ELEVATOR_ROTATION = 2.6.rotations
+	val MIN_ELEVATOR_ROTATION = 0.0.rotations
 
-	val MAX_HEIGHT: Length = 0.0.meters
-	val MIN_HEIGHT: Length = 0.0.meters
+	val RESTING_ELEVATOR_ROTATION = 0.0.rotations
 
-	val L1_HEIGHT = 0.0.meters
-	val L2_HEIGHT = 0.0.meters
-	val L3_HEIGHT = 0.0.meters
-	val L4_HEIGHT = 0.0.meters
+	val L1_ELEVATOR_ROTATION = 0.1514.rotations
+	val L2_ELEVATOR_ROTATION = 0.7.rotations
+	val L3_ELEVATOR_ROTATION = 1.34.rotations
+	val L4_ELEVATOR_ROTATION = 2.556.rotations
 
-	val LOW_REEF_ALGAE_HEIGHT = 0.0.meters
-	val HIGH_REEF_ALGAE_HEIGHT = 0.0.meters
-	val PROCESSOR_HEIGHT = 0.0.meters
-	val NET_HEIGHT = 0.0.meters
+	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.9209.rotations
+	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 1.531.rotations
+	val PROCESSOR_ELEVATOR_ROTATION = 0.0.rotations
+	val NET_ELEVATOR_ROTATION = 0.0.rotations
 
-	val INTAKE_HEIGHT = 0.0.meters
-	val CORAL_STATION_HEIGHT = 0.0.meters
+	val INTAKE_ELEVATOR_ROTATION = 0.0.rotations
+	val CORAL_STATION_ELEVATOR_ROTATION = 0.440.rotations
 
 	// --- Grabber angle constants ---
 
 	val ANGLE_MOTOR_CONFIGS = SparkFlexConfig().apply {
 		idleMode(kCoast)
-		inverted(false)
+		inverted(true)
 	}
-	val ANGLE_ENCODER_OFFSET = Rotation2d.fromDegrees(0.0)
+
+	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(-38.8)
+	val ANGLE_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
+		with(MagnetSensor) {
+			SensorDirection = SensorDirectionValue.CounterClockwise_Positive
+			MagnetOffset = ANGLE_CAN_CODER_OFFSET.rotations
+		}
+	}
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 0.0,
-		kI = 0.0,
+		kP = 8.5,
+		kI = 4.5,
 		kD = 0.0,
 	)
-	const val ANGLE_KG: Volts = 0.0
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.0)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.6)
 
-	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
-	val MAX_ANGLE = Rotation2d.fromDegrees(0.0)
+	val MIN_ANGLE = Rotation2d.fromDegrees(-63.4)
+	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)
+
+	val RESTING_ANGLE = Rotation2d.fromDegrees(-15.0)
 
 	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L2_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L3_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L4_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L2_ANGLE = Rotation2d.fromDegrees(-34.5)
+	val L3_ANGLE = Rotation2d.fromDegrees(-34.5)
+	val L4_ANGLE = Rotation2d.fromDegrees(-62.5)
 
-	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-37.0)
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
 	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
 
 	val INTAKE_ANGLE = Rotation2d.fromDegrees(0.0)
-	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(0.0)
+	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(44.2)
 }
