@@ -7,6 +7,8 @@ import com.hamosad1657.lib.units.compareTo
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
 
@@ -34,7 +36,10 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from grou
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
 		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
-	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
+	} until { isBeamBreakInterfered } finallyDo {
+		stopWheelMotor()
+		if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
+	}
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
@@ -52,7 +57,9 @@ fun IntakeSubsystem.ejectToL1Command(useLEDs: Boolean) = withName("Eject to L1")
 		IntakeSubsystem.run {
 			stopAngleMotor()
 			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
-		} withTimeout(2.0)
+		} withTimeout(2.0) finallyDo {
+			if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
+		}
 	)
 }
 
