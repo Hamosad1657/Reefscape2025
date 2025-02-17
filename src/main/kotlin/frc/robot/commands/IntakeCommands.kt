@@ -10,16 +10,6 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
 
-/** Runs the wheel motor so that it will intake a coral and drive it towards the elevator. Doesn't end automatically. */
-fun IntakeSubsystem.runWheelMotorCommand() = withName("Run motor") {
-	run { runWheelMotor() } finallyDo { stopWheelMotor() }
-}
-
-/** Runs the wheel motor so that it will eject a coral. Doesn't end automatically. */
-fun IntakeSubsystem.runWheelMotorReverseCommand() = withName("Run motor reverse") {
-	run { runWheelMotorReverse() } finallyDo { stopWheelMotor() }
-}
-
 /** Stops the wheel motor. Ends instantly. */
 fun IntakeSubsystem.stopWheelMotorCommand() = withName("Stop motor") {
 	runOnce { stopWheelMotor() }
@@ -43,14 +33,14 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
 		stopAngleMotor()
-		runWheelMotor()
+		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
 	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 	run {
-		setAngle(IntakeConstants.RETRACTED_ANGLE)
-		if (isWithinAngleTolerance) runWheelMotor()
+		setAngle(IntakeConstants.FEEDING_ANGLE)
+		if (isWithinAngleTolerance) setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE) else stopWheelMotor()
 	} finallyDo { stopWheelMotor() }
 }
 
@@ -61,7 +51,7 @@ fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
 		IntakeSubsystem.run {
 			stopAngleMotor()
-			runWheelMotorReverse()
+			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
 		} withTimeout(2.0)
 	)
 }
