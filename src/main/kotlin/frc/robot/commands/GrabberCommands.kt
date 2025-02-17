@@ -7,6 +7,9 @@ import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
+import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.EJECTING
+import frc.robot.subsystems.leds.LEDsSubsystem
 
 enum class GrabberVoltageMode {
 	INTAKE_ALGAE,
@@ -17,11 +20,11 @@ enum class GrabberVoltageMode {
 	EJECT_TO_NET,
 }
 
-fun GrabberSubsystem.setVoltageCommand(mode: GrabberVoltageMode) = withName("Eject from grabber") {
-	setVoltageCommand { mode }
+fun GrabberSubsystem.setVoltageCommand(useLEDs: Boolean, mode: GrabberVoltageMode) = withName("Eject from grabber") {
+	setVoltageCommand(useLEDs) { mode }
 }
 
-fun GrabberSubsystem.setVoltageCommand(mode: () -> GrabberVoltageMode) = withName("Eject from grabber") {
+fun GrabberSubsystem.setVoltageCommand(useLEDs: Boolean, mode: () -> GrabberVoltageMode) = withName("Eject from grabber") {
 	run {
 		setMotorVoltage(
 			when (mode()) {
