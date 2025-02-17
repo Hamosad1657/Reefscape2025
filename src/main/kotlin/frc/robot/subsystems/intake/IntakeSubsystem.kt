@@ -75,7 +75,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 	}
 
 	private fun calculateAngleFF(): Volts {
-		return (-(currentAngle.minus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ANGLE_KG)
+		return -(currentAngle.minus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ANGLE_KG
 	}
 
 	private fun isMovingTowardsLimits(output: Volts): Boolean = !(
@@ -105,16 +105,6 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	fun setWheelMotorVoltage(voltage: Volts) {
 		wheelMotor.setVoltage(voltage)
-	}
-
-	/** Runs the intaking motor so that it will intake a coral and/or drive it towards the elevator. */
-	fun runWheelMotor() {
-		setWheelMotorVoltage(Constants.INTAKING_VOLTAGE)
-	}
-
-	/** Runs the intaking motor in reverse so that it will move a coral in it away from the elevator. */
-	fun runWheelMotorReverse() {
-		setWheelMotorVoltage(-Constants.INTAKING_VOLTAGE)
 	}
 
 	fun stopWheelMotor() {

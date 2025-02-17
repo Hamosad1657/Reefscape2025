@@ -7,20 +7,8 @@ import com.hamosad1657.lib.units.compareTo
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
-import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
-
-/** Runs the wheel motor so that it will intake a coral and drive it towards the elevator. Doesn't end automatically. */
-fun IntakeSubsystem.runWheelMotorCommand() = withName("Run motor") {
-	run { runWheelMotor() } finallyDo { stopWheelMotor() }
-}
-
-/** Runs the wheel motor so that it will eject a coral. Doesn't end automatically. */
-fun IntakeSubsystem.runWheelMotorReverseCommand() = withName("Run motor reverse") {
-	run { runWheelMotorReverse() } finallyDo { stopWheelMotor() }
-}
 
 /** Stops the wheel motor. Ends instantly. */
 fun IntakeSubsystem.stopWheelMotorCommand() = withName("Stop motor") {
@@ -45,17 +33,14 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from grou
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
 		stopAngleMotor()
-		runWheelMotor()
-	} until { isBeamBreakInterfered } finallyDo {
-		stopWheelMotor()
-		if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
-	}
+		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
+	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 	run {
-		setAngle(IntakeConstants.RETRACTED_ANGLE)
-		if (isWithinAngleTolerance) runWheelMotor()
+		setAngle(IntakeConstants.FEEDING_ANGLE)
+		if (isWithinAngleTolerance) setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE) else stopWheelMotor()
 	} finallyDo { stopWheelMotor() }
 }
 
@@ -66,8 +51,8 @@ fun IntakeSubsystem.ejectToL1Command(useLEDs: Boolean) = withName("Eject to L1")
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
 		IntakeSubsystem.run {
 			stopAngleMotor()
-			runWheelMotorReverse()
-		} withTimeout(2.0) finallyDo { if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED }
+			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
+		} withTimeout(2.0)
 	)
 }
 
