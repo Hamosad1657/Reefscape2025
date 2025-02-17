@@ -8,8 +8,8 @@ import frc.robot.vision.PhotonAprilTagCamera.AprilTagsStdDevs
 import kotlin.math.PI
 
 object AprilTagVision {
-	private val robotToCameraTranslation: Translation3d = Translation3d(-(0.375 - 0.12), 0.0, 0.0206)
-	private val robotToCameraRotation: Rotation3d = Rotation3d(0.0, 0.0, PI)
+	private val robotToCameraTranslation: Translation3d = Translation3d(0.17, 0.17725, -0.1975)
+	private val robotToCameraRotation: Rotation3d = Rotation3d(0.0, 0.0, 0.0)
 
 	private val stdDevs
 		get() = AprilTagsStdDevs(
