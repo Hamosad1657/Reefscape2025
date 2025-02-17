@@ -19,6 +19,8 @@ fun JointedElevatorSubsystem.maintainElevatorRotationCommand(rotation: () -> Rot
 /** Represents a state of the elevator and the grabber. */
 data class JointedElevatorState(val elevatorRotation: Rotation2d, val angle: Rotation2d) {
 	companion object {
+		val RESTING = JointedElevatorState(JointedElevatorConstants.RESTING_ELEVATOR_ROTATION, JointedElevatorConstants.RESTING_ANGLE)
+
 		val L1 = JointedElevatorState(JointedElevatorConstants.L1_ELEVATOR_ROTATION, JointedElevatorConstants.L1_ANGLE)
 		val L2 = JointedElevatorState(JointedElevatorConstants.L2_ELEVATOR_ROTATION, JointedElevatorConstants.L2_ANGLE)
 		val L3 = JointedElevatorState(JointedElevatorConstants.L3_ELEVATOR_ROTATION, JointedElevatorConstants.L3_ANGLE)
@@ -60,7 +62,7 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 	runOnce { currentState = UP_RIGHTING; isMaintainingState = false } andThen run {
 		when (currentState) {
 			UP_RIGHTING -> {
-				updateAngleControl(JointedElevatorConstants.REST_ANGLE)
+				updateAngleControl(JointedElevatorConstants.RESTING_ANGLE)
 
 				if (currentState.shouldExitState()) {
 					currentState = GETTING_TO_HEIGHT

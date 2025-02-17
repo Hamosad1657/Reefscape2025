@@ -31,10 +31,12 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	}
 
 	private val mainElevatorMotor = HaTalonFX(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID).apply {
+		restoreFactoryDefaults()
 		configurator.apply(Constants.MAIN_ELEVATOR_MOTOR_CONFIGS)
 		configPID(Constants.ELEVATOR_PID_GAINS)
 	}
 	private val secondaryElevatorMotor = HaTalonFX(Map.JointedElevator.SECONDARY_HEIGHT_MOTOR_ID).apply {
+		restoreFactoryDefaults()
 		configurator.apply(Constants.MAIN_ELEVATOR_MOTOR_CONFIGS)
 		configPID(Constants.ELEVATOR_PID_GAINS)
 	}
@@ -64,8 +66,8 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	val isAtMinHeightLimit get() = !minHeightLimitSwitch.get()
 	val isAtMaxHeightLimit get() = !maxHeightLimitSwitch.get()
 
-	val currentElevatorRotation: Rotation2d get() = Rotation2d.fromRotations(mainElevatorMotor.position.value.magnitude())
-	val ElevatorHeightError get() = elevatorRotationSetpoint - currentElevatorRotation
+	val currentElevatorRotation: Rotation2d get() = Rotation2d.fromRotations(elevatorRotationEncoder.position.value.magnitude())
+	val ElevatorHeightError get() = Rotation2d.fromRotations(elevatorRotationSetpoint.rotations - currentElevatorRotation.rotations)
 	val isElevatorWithinTolerance get() = ElevatorHeightError.absoluteValue <= Constants.ELEVATOR_ROTATION_TOLERANCE
 
 
@@ -105,7 +107,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 			LimitForwardMotion = isAtMaxHeightLimit
 			LimitReverseMotion = isAtMinHeightLimit
 
-			FeedForward = Constants.ELEVATOR_KG
+			FeedForward = if (elevatorRotationSetpoint >= currentElevatorRotation) Constants.ELEVATOR_KG else 0.0
 		}
 
 		mainElevatorMotor.setControl(elevatorControlRequest)
@@ -149,6 +151,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 			addDoubleProperty("Height error rotations", { ElevatorHeightError.rotations }, null)
 			addBooleanProperty("Is in height tolerance", { isElevatorWithinTolerance }, null)
 			addDoubleProperty("Elevator rotation rotations", { currentElevatorRotation.rotations }, null)
+			addDoubleProperty("Elevator absolute rotation rotations", { elevatorRotationEncoder.absolutePosition.value.magnitude() }, null)
 			addDoubleProperty("Elevator setpoint rotations", { elevatorRotationSetpoint.rotations }, null)
 
 			addDoubleProperty("Current angle deg", { currentAngle.degrees }, null)
