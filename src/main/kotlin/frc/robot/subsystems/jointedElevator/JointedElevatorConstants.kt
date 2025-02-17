@@ -54,23 +54,23 @@ object JointedElevatorConstants {
 
 	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
 
-	val MAX_ELEVATOR_ROTATION = 3.0.rotations
+	val MAX_ELEVATOR_ROTATION = 2.6.rotations
 	val MIN_ELEVATOR_ROTATION = 0.0.rotations
 
 	val RESTING_ELEVATOR_ROTATION = 0.0.rotations
 
-	val L1_ELEVATOR_ROTATION = 0.0.rotations
-	val L2_ELEVATOR_ROTATION = 0.0.rotations
-	val L3_ELEVATOR_ROTATION = 0.0.rotations
-	val L4_ELEVATOR_ROTATION = 0.0.rotations
+	val L1_ELEVATOR_ROTATION = 0.1514.rotations
+	val L2_ELEVATOR_ROTATION = 0.7.rotations
+	val L3_ELEVATOR_ROTATION = 1.34.rotations
+	val L4_ELEVATOR_ROTATION = 2.556.rotations
 
-	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.0.rotations
-	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 0.0.rotations
+	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.9209.rotations
+	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 1.531.rotations
 	val PROCESSOR_ELEVATOR_ROTATION = 0.0.rotations
 	val NET_ELEVATOR_ROTATION = 0.0.rotations
 
 	val INTAKE_ELEVATOR_ROTATION = 0.0.rotations
-	val CORAL_STATION_ELEVATOR_ROTATION = 0.0.rotations
+	val CORAL_STATION_ELEVATOR_ROTATION = 0.440.rotations
 
 	// --- Grabber angle constants ---
 
@@ -94,7 +94,7 @@ object JointedElevatorConstants {
 		kD = 0.0,
 	)
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.6)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.6)
 
 	val MIN_ANGLE = Rotation2d.fromDegrees(-63.4)
 	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)
@@ -102,14 +102,14 @@ object JointedElevatorConstants {
 	val RESTING_ANGLE = Rotation2d.fromDegrees(-15.0)
 
 	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L2_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L3_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L4_ANGLE = Rotation2d.fromDegrees(0.0)
+	val L2_ANGLE = Rotation2d.fromDegrees(-34.5)
+	val L3_ANGLE = Rotation2d.fromDegrees(-34.5)
+	val L4_ANGLE = Rotation2d.fromDegrees(-62.5)
 
-	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(0.0)
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-37.0)
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
 	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
 
 	val INTAKE_ANGLE = Rotation2d.fromDegrees(0.0)
-	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(0.0)
+	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(44.2)
 }
