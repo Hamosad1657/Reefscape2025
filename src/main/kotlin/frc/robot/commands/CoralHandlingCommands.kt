@@ -10,8 +10,9 @@ import frc.robot.subsystems.leds.LEDsSubsystem
 fun intakeCoralFromGroundCommand() = withName("Intake coral from ground") {
 	JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.INTAKE) raceWith
 		(waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
-		(IntakeSubsystem.intakeCommand(true) raceWith  GrabberSubsystem.loadFromIntakeCommand())) finallyDo
-		{ LEDsSubsystem.currentMode = ACTION_FINISHED }
+		(
+			IntakeSubsystem.intakeCommand(true) andThen (IntakeSubsystem.feedToGrabberCommand() raceWith  GrabberSubsystem.loadFromIntakeCommand())
+			)) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }
 }
 
 fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral station") {
@@ -19,6 +20,5 @@ fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral stati
 		(waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 			(GrabberSubsystem.loadFromCoralStationCommand() alongWith LEDsSubsystem.runOnce {
 			LEDsSubsystem.currentMode = LOADING_FROM_CORAL_STATION
-		})) finallyDo
-		{ LEDsSubsystem.currentMode = ACTION_FINISHED }
+		})) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }
 }

@@ -7,6 +7,7 @@ import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.*
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
@@ -53,7 +54,7 @@ object RobotContainer
 
         GrabberSubsystem.defaultCommand = GrabberSubsystem.runOnce { GrabberSubsystem.stopMotor() }
 
-        IntakeSubsystem.defaultCommand = IntakeSubsystem.retractIntakeCommand()
+        IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.RETRACTED_ANGLE }
     }
 
     private fun configureBindings()

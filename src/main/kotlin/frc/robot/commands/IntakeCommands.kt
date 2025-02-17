@@ -39,14 +39,17 @@ fun IntakeSubsystem.maintainAngleCommand(angle: () -> Rotation2d) = withName("Ma
 // --- Intaking commands ---
 
 /** Intakes from ground, does not end automatically. */
-fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
+fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from ground") {
 	run {
 		setAngle(IntakeConstants.DEPLOYED_ANGLE)
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
 		stopAngleMotor()
 		runWheelMotor()
-	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
+	} until { isBeamBreakInterfered } finallyDo {
+		stopWheelMotor()
+		if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
+	}
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
@@ -56,7 +59,7 @@ fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 	} finallyDo { stopWheelMotor() }
 }
 
-fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
+fun IntakeSubsystem.ejectToL1Command(useLEDs: Boolean) = withName("Eject to L1") {
 	IntakeSubsystem.run {
 		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
@@ -64,7 +67,7 @@ fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
 		IntakeSubsystem.run {
 			stopAngleMotor()
 			runWheelMotorReverse()
-		} withTimeout(2.0)
+		} withTimeout(2.0) finallyDo { if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED }
 	)
 }
 
