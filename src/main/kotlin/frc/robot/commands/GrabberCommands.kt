@@ -1,36 +1,34 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import frc.robot.commands.GrabberEjectMode.*
+import edu.wpi.first.math.geometry.Rotation2d
+import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 
-enum class GrabberEjectMode {
-	L1,
-	L2,
-	L3,
-	L4,
-	PROCESSOR,
-	NET,
+enum class GrabberVoltageMode {
+	INTAKE_ALGAE,
+	EJECT_TO_L1,
+	EJECT_TO_L2_AND_L3,
+	EJECT_TO_L4,
+	EJECT_TO_PROCESSOR,
+	EJECT_TO_NET,
 }
 
-/** Ejects a game piece from the grabber. Does not end automatically. */
-fun GrabberSubsystem.ejectCommand(mode: GrabberEjectMode) = withName("Eject from grabber") {
-	ejectCommand { mode }
+fun GrabberSubsystem.setVoltageCommand(mode: GrabberVoltageMode) = withName("Eject from grabber") {
+	setVoltageCommand { mode }
 }
 
-/** Ejects a game piece from the grabber. Does not end automatically. */
-fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode) = withName("Eject from grabber") {
+fun GrabberSubsystem.setVoltageCommand(mode: () -> GrabberVoltageMode) = withName("Eject from grabber") {
 	run {
 		setMotorVoltage(
 			when (mode()) {
-				L1, L2, L3, L4 -> GrabberConstants.CORAL_FORWARD_VOLTAGE
-				PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE
-				NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
+				INTAKE_ALGAE -> GrabberConstants.INTAKE_ALGAE_VOLTAGE
+				EJECT_TO_L1, EJECT_TO_L2_AND_L3, EJECT_TO_L4 -> GrabberConstants.EJECT_CORAL_VOLTAGE
+				EJECT_TO_PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE
+				EJECT_TO_NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE
 			}
 		)
 	} finallyDo {
@@ -38,18 +36,8 @@ fun GrabberSubsystem.ejectCommand(mode: () -> GrabberEjectMode) = withName("Ejec
 	}
 }
 
-/** Runs the grabber motor in a way that ejects a coral through it's back and intakes it through it's front. Doesn't end automatically. */
-fun GrabberSubsystem.loadCoralCommand() = withName("Load coral") {
-	run { setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE) } finallyDo {
-		stopMotor()
-	}
-}
-
-/** Runs the motor inwards to intake an algae. Ends when the beam break is interfered. */
-fun GrabberSubsystem.intakeAlgaeCommand() = withName("Intake Algae") {
-	run { setMotorVoltage(GrabberConstants.INTAKE_ALGAE_VOLTAGE) } finallyDo {
-		stopMotor()
-	}
+fun GrabberSubsystem.stopMotorCommand() = withName("Stop motor") {
+	run { stopMotor() }
 }
 
 enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
@@ -73,14 +61,14 @@ fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake comman
 	run {
 		when (loadFromIntakeState) {
 			Intaking -> {
-				setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE)
+				setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
 			}
 			Loading -> {
-				setMotorVoltage(GrabberConstants.CORAL_FORWARD_VOLTAGE)
+				setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
 				if (loadFromIntakeState.shouldExitState()) {
 					loadFromIntakeState = Holding
-					setMotorSetpoint(Length.fromCentimeters(0))
+					setMotorSetpoint(Rotation2d.fromRotations(-3.0))
 				}
 			}
 			Holding -> {
@@ -109,10 +97,10 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 	run {
 		when (loadFromCoralStationState) {
 			LoadFromCoralStationState.Loading -> {
-				setMotorVoltage(GrabberConstants.CORAL_BACKWARD_VOLTAGE)
+				setMotorVoltage(GrabberConstants.INTAKE_FROM_CORAL_STATION_VOLTAGE)
 				if (loadFromCoralStationState.shouldExitState()) {
 					loadFromCoralStationState = LoadFromCoralStationState.Holding
-					setMotorSetpoint(Length.fromCentimeters(0))
+					setMotorSetpoint(Rotation2d.fromRotations(-3.0))
 				}
 			}
 			LoadFromCoralStationState.Holding -> {
@@ -127,5 +115,5 @@ fun GrabberSubsystem.loadFromCoralStationCommand() = withName("Load from coral s
 //--- Test commands ---
 
 fun GrabberSubsystem.test_setWheelsVoltageCommand(voltage: () -> Volts) = withName("Set wheels voltage") {
-	run { setMotorVoltage(voltage()); SmartDashboard.putNumber("Voltage", voltage()) }
+	run { setMotorVoltage(voltage()) }
 }

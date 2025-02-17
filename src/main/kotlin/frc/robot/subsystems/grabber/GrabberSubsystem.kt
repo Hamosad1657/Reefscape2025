@@ -49,10 +49,10 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 
 	/** Sets the setpoint of the motor relative to where it is now. */
-	fun setMotorSetpoint(lengthSetpoint: Length) {
+	fun setMotorSetpoint(newSetpoint: Rotation2d = setpoint) {
 		isUsingPIDControl = true
 		setpoint = Rotation2d.fromRotations(
-			currentAngle.rotations + (lengthSetpoint.asMeters / Constants.LENGTH_FOR_EACH_ROTATION.asMeters)
+			currentAngle.rotations + newSetpoint.rotations
 		)
 	}
 
