@@ -2,7 +2,10 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
-import frc.robot.commands.IntakeState.*
+import com.hamosad1657.lib.units.absoluteValue
+import com.hamosad1657.lib.units.compareTo
+import edu.wpi.first.math.geometry.Rotation2d
+import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 import frc.robot.subsystems.leds.LEDsSubsystem
@@ -26,71 +29,53 @@ fun IntakeSubsystem.stopWheelMotorCommand() = withName("Stop motor") {
 
 // --- Angle commands ---
 
-/** Maintains a retracted angle. Does not end automatically. */
-fun IntakeSubsystem.retractIntakeCommand() = withName("Retract intake") {
-	run { setAngleToRetracted() }
+fun IntakeSubsystem.maintainAngleCommand(angle: () -> Rotation2d) = withName("Maintain angle") {
+	run {
+		setAngle(angle())
+		stopWheelMotor()
+	}
 }
 
-/** Sets the intake angle to the deployed angle. Ends instantly. */
-fun IntakeSubsystem.deployIntakeCommand() = withName("Deploy intake") {
-	run { setAngleToDeploy() }
-}
-
-// --- Intake command ---
-
-private enum class IntakeState(val shouldExitState: () -> Boolean) {
-	Deploying(shouldExitState = {
-		IntakeSubsystem.isWithinAngleTolerance
-	}),
-	Intaking(shouldExitState = {
-		IntakeSubsystem.isBeamBreakInterfered
-	}),
-	Retracting(shouldExitState = {
-		false
-	}),
-}
+// --- Intaking commands ---
 
 /** Intakes from ground, does not end automatically. */
-fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake") {
-	var intakeState = Deploying
+fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 	run {
-		when (intakeState) {
-			Deploying -> {
-				setAngleToDeploy()
-				if (intakeState.shouldExitState()) {
-					intakeState = Intaking
-					if (useLEDs) {
-						LEDsSubsystem.currentMode = REACHED_SETPOINT
-					}
-				}
-			}
-			Intaking -> {
-				setAngleToDeploy()
-				runWheelMotor()
-				if (intakeState.shouldExitState()) intakeState = Retracting
-			}
-			Retracting -> {
-				if (useLEDs) {
-					LEDsSubsystem.currentMode = REACHED_SETPOINT
-				}
-				setAngleToRetracted()
-				runWheelMotor()
-			}
-		}
-	} finallyDo {
+		setAngle(IntakeConstants.DEPLOYED_ANGLE)
 		stopWheelMotor()
-		LEDsSubsystem.currentMode = ACTION_FINISHED
-	}
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
+		stopAngleMotor()
+		runWheelMotor()
+	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
+}
+
+fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
+	run {
+		setAngle(IntakeConstants.RETRACTED_ANGLE)
+		if (isWithinAngleTolerance) runWheelMotor()
+	} finallyDo { stopWheelMotor() }
+}
+
+fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
+	IntakeSubsystem.run {
+		setAngle(IntakeConstants.L1_ANGLE)
+		stopWheelMotor()
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
+		IntakeSubsystem.run {
+			stopAngleMotor()
+			runWheelMotorReverse()
+		} withTimeout(2.0)
+	)
 }
 
 // --- Testing commands ---
 
 /** Use for testing. */
-fun IntakeSubsystem.test_openLoopRunWheelsCommand(voltage: Volts) = withName("Open loop run wheels") {
-	run { setWheelMotorVoltage(voltage) }
+fun IntakeSubsystem.test_openLoopRunWheelsCommand(voltage: () -> Volts) = withName("Open loop run wheels") {
+	run { setWheelMotorVoltage(voltage()) }
 }
 
 /** Use for testing. */
-fun IntakeSubsystem.test_openLoopRunAngleControlCommand(voltage: Volts) = withName("Open loop angle control") {
-	run { setAngleMotorVoltage(voltage) }
+fun IntakeSubsystem.test_openLoopRunAngleControlCommand(voltage: () -> Volts) = withName("Open loop angle control") {
+	run { setAngleMotorVoltage(voltage()) }
 }

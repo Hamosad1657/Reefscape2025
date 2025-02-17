@@ -1,12 +1,11 @@
 package frc.robot.subsystems.intake
 
-import com.ctre.phoenix6.hardware.CANcoder
 import frc.robot.subsystems.intake.IntakeConstants as Constants
 import com.hamosad1657.lib.motors.HaSparkFlex
 import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
-import com.hamosad1657.lib.units.rotations
+import com.hamosad1657.lib.units.degrees
 import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless
@@ -14,11 +13,16 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType.kWarning
+import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap
+import frc.robot.subsystems.intake.IntakeConstants
+import kotlin.math.PI
 
 object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
@@ -32,31 +36,33 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		configure(Constants.ANGLE_MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
-	private val canCoder = CANcoder(RobotMap.Intake.CAN_CODER_ID).apply {
-		configurator.apply(Constants.CAN_CODER_CONFIGS)
+	private val encoder = DutyCycleEncoder(RobotMap.Intake.ENCODER_CHANNEL, 360.0, IntakeConstants.ENCODER_OFFSET.degrees).apply {
+		setInverted(false)
 	}
 
-	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController()
+	private val anglePIDController = Constants.ANGLE_PID_GAINS.toPIDController().apply {
+		enableContinuousInput(0.0, 2 * PI)
+	}
 	private var angleSetpoint = Rotation2d()
 
-	private val beamBreak = DigitalInput(RobotMap.Intake.BEAM_BREAK_CHANNEL)
+	private val beamBreak = AnalogInput(RobotMap.Intake.BEAM_BREAK_CHANNEL)
 
 	private val maxAngleLimitSwitch = DigitalInput(RobotMap.Intake.MAX_ANGLE_LIMIT_CHANNEL)
 	private val minAngleLimitSwitch = DigitalInput(RobotMap.Intake.MIN_ANGLE_LIMIT_CHANNEL)
 
 	// --- State getters ---
 
-	val isAtMinAngle: Boolean get() = minAngleLimitSwitch.get()
-	val isAtMaxAngle: Boolean get() =  maxAngleLimitSwitch.get()
+	val isAtMinAngle: Boolean get() = !minAngleLimitSwitch.get()
+	val isAtMaxAngle: Boolean get() =  !maxAngleLimitSwitch.get()
 
-	/** Angle is zero when fully horizontal. Angle increases when the intake retracts. */
-	val currentAngle: Rotation2d get() = canCoder.absolutePosition.value.baseUnitMagnitude().rotations
+	/** Angle is zero when fully retracted. Angle increases when the intake extends. */
+	val currentAngle: Rotation2d get() = Rotation2d.fromDegrees(encoder.get())
+
+	val angleError: Rotation2d get() = angleSetpoint.minus(currentAngle)
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
-
-	val isMotorCurrentAboveThreshold: Boolean get() = Constants.CURRENT_THRESHOLD <= wheelMotor.outputCurrent
+	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
 	// --- Functions ---
 
@@ -64,8 +70,12 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		angleMotor.setVoltage(voltage)
 	}
 
+	fun stopAngleMotor() {
+		angleMotor.stopMotor()
+	}
+
 	private fun calculateAngleFF(): Volts {
-		return currentAngle.cos * Constants.ANGLE_KG
+		return (-(currentAngle.minus(Constants.PARALLEL_TO_FLOOR_ANGLE)).cos * Constants.ANGLE_KG)
 	}
 
 	private fun isMovingTowardsLimits(output: Volts): Boolean = !(
@@ -80,24 +90,17 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 			DriverStation.reportWarning("New angle setpoint ${newSetpoint.degrees} (degrees) is out of range.", true)
 		} else angleSetpoint = newSetpoint
 
-		val output = anglePIDController.calculate(currentAngle.rotations, angleSetpoint.rotations)
+		val output = anglePIDController.calculate(currentAngle.radians, angleSetpoint.radians)
 		if (!isMovingTowardsLimits(output)) {
 			angleMotor.setVoltage(output + calculateAngleFF())
+			SmartDashboard.putNumber("Voltage", output)
 		} else {
 			angleMotor.setVoltage(calculateAngleFF())
 		}
 	}
 
-	private fun setAngle(angle: Rotation2d) {
+	fun setAngle(angle: Rotation2d) {
 		updateAngleControl(angle)
-	}
-
-	fun setAngleToDeploy() {
-		setAngle(Constants.DEPLOYED_ANGLE)
-	}
-
-	fun setAngleToRetracted() {
-		setAngle(Constants.RETRACTED_ANGLE)
 	}
 
 	fun setWheelMotorVoltage(voltage: Volts) {
@@ -130,8 +133,6 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 			addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
 
 			addBooleanProperty("Is beam break interfered", { isBeamBreakInterfered }, null)
-
-			addBooleanProperty("Is current above threshold", { isMotorCurrentAboveThreshold }, null)
 
 			if (Robot.isTesting) {
 				addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
