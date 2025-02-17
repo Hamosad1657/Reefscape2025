@@ -99,20 +99,8 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		}
 	}
 
-	private fun setAngle(angle: Rotation2d) {
+	fun setAngle(angle: Rotation2d) {
 		updateAngleControl(angle)
-	}
-
-	fun setAngleToDeploy() {
-		setAngle(Constants.DEPLOYED_ANGLE)
-	}
-
-	fun setAngleToL1() {
-		setAngle(Constants.L1_ANGLE)
-	}
-
-	fun setAngleToRetracted() {
-		setAngle(Constants.RETRACTED_ANGLE)
 	}
 
 	fun setWheelMotorVoltage(voltage: Volts) {

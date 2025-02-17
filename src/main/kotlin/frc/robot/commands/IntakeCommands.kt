@@ -5,10 +5,7 @@ import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.commands.IntakeState.*
-import frc.robot.commands.IntakeState.DEPLOYING
+import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 
 // --- Wheels commands ---
@@ -30,74 +27,36 @@ fun IntakeSubsystem.stopWheelMotorCommand() = withName("Stop motor") {
 
 // --- Angle commands ---
 
-fun IntakeSubsystem.maintainL1AngleCommand(): Command = withName("Maintain L1 angle") {
-	run { maintainL1AngleCommand() }
+fun IntakeSubsystem.maintainAngleCommand(angle: () -> Rotation2d) = withName("Maintain angle") {
+	run {
+		setAngle(angle())
+		stopWheelMotor()
+	}
 }
 
-/** Maintains a retracted angle. Does not end automatically. */
-fun IntakeSubsystem.maintainIntakeRetractedCommand(): Command = withName("Retract intake") {
-	run { maintainIntakeRetractedCommand() }
-}
-
-/** Sets the intake angle to the deployed angle. Ends instantly. */
-fun IntakeSubsystem.maintainIntakeDeployedCommand(): Command = withName("Deploy intake") {
-	run { maintainIntakeDeployedCommand() }
-}
-
-// --- Intake command ---
-
-private enum class IntakeState(val shouldExitState: () -> Boolean) {
-	DEPLOYING(shouldExitState = {
-		IntakeSubsystem.angleError.absoluteValue <= Rotation2d.fromDegrees(25.0)
-	}),
-	INTAKING(shouldExitState = {
-		IntakeSubsystem.isBeamBreakInterfered
-	}),
-	RETRACTING(shouldExitState = {
-		IntakeSubsystem.isWithinAngleTolerance
-	}),
-	FEEDING(shouldExitState = {
-		false
-	}),
-}
+// --- Intaking commands ---
 
 /** Intakes from ground, does not end automatically. */
-fun IntakeSubsystem.intakeCommand() = withName("Intake") {
-	var intakeState = DEPLOYING
-	runOnce { intakeState = DEPLOYING } andThen
+fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 	run {
-		when (intakeState) {
-			DEPLOYING -> {
-				setAngleToDeploy()
-				stopWheelMotor()
-				if (intakeState.shouldExitState()) intakeState = INTAKING
-			}
-			INTAKING -> {
-				stopAngleMotor()
-				runWheelMotor()
-				if (intakeState.shouldExitState()) {
-					intakeState = RETRACTING
-					stopWheelMotor()
-				}
-			}
-			RETRACTING -> {
-				stopWheelMotor()
-				setAngleToRetracted()
-				if (intakeState.shouldExitState()) {
-					intakeState = FEEDING
-				}
-			}
-			FEEDING -> {
-				setAngleToRetracted()
-				runWheelMotor()
-			}
-		}
+		setAngle(IntakeConstants.DEPLOYED_ANGLE)
+		stopWheelMotor()
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
+		stopAngleMotor()
+		runWheelMotor()
+	} until { isBeamBreakInterfered } finallyDo { stopWheelMotor() }
+}
+
+fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
+	run {
+		setAngle(IntakeConstants.RETRACTED_ANGLE)
+		if (isWithinAngleTolerance) runWheelMotor()
 	} finallyDo { stopWheelMotor() }
 }
 
 fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
 	IntakeSubsystem.run {
-		setAngleToL1()
+		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
 		IntakeSubsystem.run {
