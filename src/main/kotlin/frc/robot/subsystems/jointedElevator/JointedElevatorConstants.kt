@@ -50,7 +50,7 @@ object JointedElevatorConstants {
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val ELEVATOR_KG: Volts = 0.8
+	const val ELEVATOR_KG: Volts = 0.95
 
 	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
 
