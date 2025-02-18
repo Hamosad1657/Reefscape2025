@@ -62,19 +62,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	private var isBeamBreakInterferedLastLoop: Boolean = false
-	val isBeamBreakInterfered: Boolean get() {
-		val isBeamBreakInterferedNow = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
-		if (isBeamBreakInterferedNow && !isBeamBreakInterferedLastLoop) {
-			isBeamBreakInterferedLastLoop = true
-			return false
-		} else if (isBeamBreakInterferedNow) {
-			return true
-		} else {
-			isBeamBreakInterferedLastLoop = false
-			return false
-		}
-	}
+	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
 	// --- Functions ---
 
@@ -105,7 +93,6 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 		val output = anglePIDController.calculate(currentAngle.radians, angleSetpoint.radians)
 		if (!isMovingTowardsLimits(output)) {
 			angleMotor.setVoltage(output + calculateAngleFF())
-			SmartDashboard.putNumber("Voltage", output)
 		} else {
 			angleMotor.setVoltage(calculateAngleFF())
 		}
@@ -132,6 +119,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 			addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
 			addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+			addDoubleProperty("Angle error deg", { angleError.absoluteValue.degrees }, null)
 			addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
 
 			addBooleanProperty("Is beam break interfered", { isBeamBreakInterfered }, null)
