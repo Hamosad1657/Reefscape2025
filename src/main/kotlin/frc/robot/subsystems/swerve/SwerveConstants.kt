@@ -63,8 +63,8 @@ object SwerveConstants {
 	// When using closed-loop control, the drive motor uses the control
 	// output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
 	private val DRIVE_PID_GAINS: Slot0Configs = Slot0Configs()
-		.withKP(0.02).withKI(0.0).withKD(0.0)
-		.withKS(0.0).withKV(0.119)
+		.withKP(0.027).withKI(0.0).withKD(0.0)
+		.withKS(0.0).withKV(0.149)
 
 	// The closed-loop output type to use for the steer motors
 	// This affects the PID/FF gains for the steer motors
