@@ -7,8 +7,6 @@ import com.hamosad1657.lib.units.compareTo
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
-import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
-import frc.robot.subsystems.leds.LEDsSubsystem
 
 // --- Wheels commands ---
 
@@ -35,8 +33,19 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from grou
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (run {
 		stopAngleMotor()
+		stopWheelMotor()
+	} until { isAtMaxAngle } andThen run {
+		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
 	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo { stopWheelMotor() }
+}
+
+/** Ejects a coral from the intake, while disabling the angle motor. */
+fun IntakeSubsystem.ejectFromIntake() = withName("Eject from intake") {
+	run {
+		setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
+		stopAngleMotor()
+	}
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
@@ -46,17 +55,17 @@ fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 	} finallyDo { stopWheelMotor() }
 }
 
-fun IntakeSubsystem.ejectToL1Command(useLEDs: Boolean) = withName("Eject to L1") {
-	IntakeSubsystem.run {
+fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
+	run {
 		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
-		IntakeSubsystem.run {
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen
+		run {
 			stopAngleMotor()
-			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
-		} withTimeout(2.0) finallyDo {
-			if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
-		}
+			stopWheelMotor()
+		} until { isWithinAngleTolerance } andThen ( run {
+			stopAngleMotor()
+			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE) } withTimeout(1.0)
 	)
 }
 

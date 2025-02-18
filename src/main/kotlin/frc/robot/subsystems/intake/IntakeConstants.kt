@@ -26,7 +26,7 @@ object IntakeConstants {
 
 	const val INTAKING_VOLTAGE: Volts = 3.0
 
-	const val EJECTING_VOLTAGE: Volts = -8.0
+	const val EJECTING_VOLTAGE: Volts = -5.0
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
@@ -36,7 +36,7 @@ object IntakeConstants {
 	)
 	const val ANGLE_KG = 0.65
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.0)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0)
 
 	val MAX_ANGLE = Rotation2d.fromDegrees(105.0)
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
