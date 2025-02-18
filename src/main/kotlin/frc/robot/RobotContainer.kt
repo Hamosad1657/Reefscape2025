@@ -4,6 +4,7 @@ import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.ScoringMode.*
 import frc.robot.commands.*
@@ -12,6 +13,7 @@ import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
+import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
 enum class ScoringMode(val elevatorJointState: JointedElevatorState, val grabberVoltageMode: GrabberVoltageMode) {
@@ -50,8 +52,17 @@ object RobotContainer
 
     init
     {
+        sendSubsystemInfo()
         configureDefaultCommands()
         configureBindings()
+    }
+
+    private fun sendSubsystemInfo() {
+        SmartDashboard.putData(GrabberSubsystem)
+        SmartDashboard.putData(IntakeSubsystem)
+        SmartDashboard.putData(JointedElevatorSubsystem)
+        SmartDashboard.putData(SwerveSubsystem)
+        SmartDashboard.putData(LEDsSubsystem)
     }
 
     private fun configureDefaultCommands() {
@@ -67,7 +78,7 @@ object RobotContainer
 
         GrabberSubsystem.defaultCommand = GrabberSubsystem.stopMotorCommand()
 
-        IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.RESTING_ANGLE }
+        IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE }
     }
 
     private fun configureBindings()
