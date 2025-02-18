@@ -33,6 +33,9 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 		stopWheelMotor()
 	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (run {
 		stopAngleMotor()
+		stopWheelMotor()
+	} until { isAtMaxAngle } andThen run {
+		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
 	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo { stopWheelMotor() }
 }
