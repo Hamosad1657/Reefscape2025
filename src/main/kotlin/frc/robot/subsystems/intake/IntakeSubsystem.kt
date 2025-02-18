@@ -62,7 +62,19 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
+	private var isBeamBreakInterferedLastLoop: Boolean = false
+	val isBeamBreakInterfered: Boolean get() {
+		val isBeamBreakInterferedNow = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
+		if (isBeamBreakInterferedNow && !isBeamBreakInterferedLastLoop) {
+			isBeamBreakInterferedLastLoop = true
+			return false
+		} else if (isBeamBreakInterferedNow) {
+			return true
+		} else {
+			isBeamBreakInterferedLastLoop = false
+			return false
+		}
+	}
 
 	// --- Functions ---
 
