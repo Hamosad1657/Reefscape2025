@@ -33,13 +33,10 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from grou
 	run {
 		setAngle(IntakeConstants.DEPLOYED_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen run {
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (run {
 		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
-	} until { isBeamBreakInterfered } finallyDo {
-		stopWheelMotor()
-		if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
-	}
+	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo { stopWheelMotor() }
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
