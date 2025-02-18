@@ -58,15 +58,15 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 					else -> LEDPattern.kOff.applyTo(ledBuffer)
 				}
 			}
-
-			LOADING_FROM_CORAL_STATION -> {
-				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
-			}
 			BLUE_ALLIANCE -> {
 				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
 			}
 			RED_ALLIANCE -> {
 				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+			}
+
+			INTAKING -> {
+				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
 			}
 
 			ACTION_FINISHED -> {
