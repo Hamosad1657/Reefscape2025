@@ -30,7 +30,7 @@ object IntakeConstants {
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 2.7,
+		kP = 2.2,
 		kI = 0.8,
 		kD = 0.0,
 	)
@@ -38,12 +38,12 @@ object IntakeConstants {
 
 	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0)
 
-	val FALLING_ANGLE_THRESHOLD = Rotation2d.fromDegrees(20.0)
+	val FALLING_ANGLE_THRESHOLD = Rotation2d.fromDegrees(15.0)
 
 	val MAX_ANGLE = Rotation2d.fromDegrees(105.0)
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val FEEDING_ANGLE = Rotation2d.fromDegrees(0.0)
+	val FEEDING_ANGLE = Rotation2d.fromDegrees(2.0)
 	val RESTING_ANGLE = Rotation2d.fromDegrees(35.0)
 	val L1_ANGLE = Rotation2d.fromDegrees(46.0)
 	val DEPLOYED_ANGLE = Rotation2d.fromDegrees(105.0)
