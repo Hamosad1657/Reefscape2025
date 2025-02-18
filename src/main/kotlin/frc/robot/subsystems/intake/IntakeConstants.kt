@@ -26,7 +26,7 @@ object IntakeConstants {
 
 	const val INTAKING_VOLTAGE: Volts = 3.0
 
-	const val EJECTING_VOLTAGE: Volts = -8.0
+	const val EJECTING_VOLTAGE: Volts = -5.0
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(

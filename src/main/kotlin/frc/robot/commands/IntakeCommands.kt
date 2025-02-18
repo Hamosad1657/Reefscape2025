@@ -37,6 +37,14 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo { stopWheelMotor() }
 }
 
+/** Ejects a coral from the intake, while disabling the angle motor. */
+fun IntakeSubsystem.ejectFromIntake() = withName("Eject from intake") {
+	run {
+		setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
+		stopAngleMotor()
+	}
+}
+
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 	run {
 		setAngle(IntakeConstants.FEEDING_ANGLE)
