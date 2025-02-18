@@ -41,7 +41,7 @@ object RobotContainer
     private const val JOYSTICK_DEADBAND = 0.08
     private const val EJECT_TIMEOUT: Seconds = 2.0
 
-    var currentScoringMode = ScoringMode.L1
+    var currentScoringMode = L1
 
     var shouldAlignToRightPipe = false
 
@@ -126,6 +126,14 @@ object RobotContainer
 
             povLeft().onTrue {
                 currentScoringMode = NET
+            }
+
+            R1().onTrue {
+                shouldAlignToRightPipe = true
+            }
+
+            L1().onTrue() {
+                shouldAlignToRightPipe = false
             }
         }
     }
