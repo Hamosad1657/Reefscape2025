@@ -30,7 +30,6 @@ import frc.robot.Robot
 import frc.robot.field.FieldConstants.Poses
 import frc.robot.field.ReefSide
 import frc.robot.field.ReefSide.AB
-import frc.robot.field.ReefSide.CD
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 
