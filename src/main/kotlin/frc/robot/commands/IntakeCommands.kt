@@ -26,6 +26,14 @@ fun IntakeSubsystem.maintainAngleCommand(angle: () -> Rotation2d) = withName("Ma
 
 // --- Intaking commands ---
 
+/** Ejects a coral from the intake, while disabling the angle motor. */
+fun IntakeSubsystem.ejectFromIntake() = withName("Eject from intake") {
+	run {
+		setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
+		stopAngleMotor()
+	}
+}
+
 /** Intakes from ground, does not end automatically. */
 fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 	run {
@@ -38,14 +46,6 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
 	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo { stopWheelMotor() }
-}
-
-/** Ejects a coral from the intake, while disabling the angle motor. */
-fun IntakeSubsystem.ejectFromIntake() = withName("Eject from intake") {
-	run {
-		setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
-		stopAngleMotor()
-	}
 }
 
 fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
@@ -63,7 +63,8 @@ fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
 		run {
 			stopAngleMotor()
 			stopWheelMotor()
-		} until { isWithinAngleTolerance } andThen ( run {
+		} until { isWithinAngleTolerance } finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED } andThen
+		( run {
 			stopAngleMotor()
 			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE) } withTimeout(1.0)
 	)
