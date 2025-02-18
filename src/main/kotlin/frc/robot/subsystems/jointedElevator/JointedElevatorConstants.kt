@@ -62,7 +62,7 @@ object JointedElevatorConstants {
 
 	val L1_ELEVATOR_ROTATION = 0.1514.rotations
 	val L2_ELEVATOR_ROTATION = 0.7.rotations
-	val L3_ELEVATOR_ROTATION = 1.34.rotations
+	val L3_ELEVATOR_ROTATION = 1.36.rotations
 	val L4_ELEVATOR_ROTATION = 2.556.rotations
 
 	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.9209.rotations
