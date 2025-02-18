@@ -13,7 +13,7 @@ fun JointedElevatorSubsystem.maintainGrabberAngleCommand(angle: () -> Rotation2d
 }
 
 fun JointedElevatorSubsystem.maintainElevatorRotationCommand(rotation: () -> Rotation2d) = withName("Maintain elevator rotation") {
-	run { setElevatorRotation(rotation()) }
+	run { updateElevatorRotationControl(rotation()) }
 }
 
 /** Represents a state of the elevator and the grabber. */
@@ -63,20 +63,21 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 		when (currentState) {
 			UP_RIGHTING -> {
 				updateAngleControl(JointedElevatorConstants.RESTING_ANGLE)
+				updateElevatorRotationControl()
 				if (currentState.shouldExitState()) {
 					currentState = GETTING_TO_HEIGHT
 				}
 			}
 			GETTING_TO_HEIGHT -> {
-				updateAngleControl(JointedElevatorConstants.INTAKE_ANGLE)
-				setElevatorRotation(state().elevatorRotation)
+				updateAngleControl(JointedElevatorConstants.RESTING_ANGLE)
+				updateElevatorRotationControl(state().elevatorRotation)
 				if (currentState.shouldExitState()) {
 					currentState = GETTING_TO_ANGLE
 				}
 			}
 			GETTING_TO_ANGLE -> {
 				updateAngleControl(state().angle)
-				setElevatorRotation(state().elevatorRotation)
+				updateElevatorRotationControl(state().elevatorRotation)
 				if (currentState.shouldExitState()) {
 					currentState = MAINTAINING_STATE
 					isMaintainingState = true
@@ -84,7 +85,7 @@ fun JointedElevatorSubsystem.maintainJointedElevatorStateCommand(state: () -> Jo
 			}
 			MAINTAINING_STATE -> {
 				updateAngleControl(state().angle)
-				setElevatorRotation(state().elevatorRotation)
+				updateElevatorRotationControl(state().elevatorRotation)
 			}
 		}
 	}

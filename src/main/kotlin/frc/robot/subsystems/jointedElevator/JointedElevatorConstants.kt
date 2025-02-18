@@ -23,7 +23,7 @@ object JointedElevatorConstants {
 			Inverted = Clockwise_Positive
 		}
 		with(CurrentLimits) {
-			SupplyCurrentLimit = 300.0
+			SupplyCurrentLimit = 40.0
 			SupplyCurrentLimitEnable = true
 		}
 		with(Feedback) {
@@ -50,7 +50,8 @@ object JointedElevatorConstants {
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val ELEVATOR_KG: Volts = 0.95
+	const val UP_ELEVATOR_KG: Volts = 1.20
+	const val DOWN_ELEVATOR_KG: Volts = 0.3
 
 	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
 
@@ -94,7 +95,7 @@ object JointedElevatorConstants {
 		kD = 0.0,
 	)
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(4.6)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.6)
 
 	val MIN_ANGLE = Rotation2d.fromDegrees(-63.4)
 	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)

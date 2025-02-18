@@ -94,7 +94,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	private var elevatorControlRequest = MotionMagicVoltage(0.0).apply {
 		Slot = 0
 	}
-	fun setElevatorRotation(newSetpoint: Rotation2d = elevatorRotationSetpoint) {
+	fun updateElevatorRotationControl(newSetpoint: Rotation2d = elevatorRotationSetpoint) {
 		if (newSetpoint.rotations in Constants.MIN_ELEVATOR_ROTATION.rotations..Constants.MAX_ELEVATOR_ROTATION.rotations) {
 			elevatorRotationSetpoint = newSetpoint
 		} else {
@@ -107,7 +107,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 			LimitForwardMotion = isAtMaxHeightLimit
 			LimitReverseMotion = isAtMinHeightLimit
 
-			FeedForward = if (elevatorRotationSetpoint >= currentElevatorRotation) Constants.ELEVATOR_KG else 0.0
+			FeedForward = if (elevatorRotationSetpoint >= currentElevatorRotation) Constants.UP_ELEVATOR_KG else Constants.DOWN_ELEVATOR_KG
 		}
 
 		mainElevatorMotor.setControl(elevatorControlRequest)
