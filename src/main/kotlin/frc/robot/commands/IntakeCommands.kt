@@ -56,14 +56,16 @@ fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 }
 
 fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
-	IntakeSubsystem.run {
+	run {
 		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (
-		IntakeSubsystem.run {
+	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen
+		run {
 			stopAngleMotor()
-			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE)
-		} withTimeout(2.0)
+			stopWheelMotor()
+		} until { isWithinAngleTolerance } andThen ( run {
+			stopAngleMotor()
+			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE) } withTimeout(1.0)
 	)
 }
 
