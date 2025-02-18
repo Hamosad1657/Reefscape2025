@@ -24,7 +24,7 @@ object IntakeConstants {
 
 	const val BEAM_BREAK_THRESHOLD: Volts = 1.0
 
-	const val INTAKING_VOLTAGE: Volts = 4.0
+	const val INTAKING_VOLTAGE: Volts = 3.0
 
 	const val EJECTING_VOLTAGE: Volts = 8.0
 
