@@ -31,7 +31,7 @@ fun IntakeSubsystem.intakeCommand() = withName("Intake from ground") {
 	run {
 		setAngle(IntakeConstants.DEPLOYED_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen (run {
+	} until { angleError.absoluteValue <= IntakeConstants.FALLING_ANGLE_THRESHOLD } andThen (run {
 		stopAngleMotor()
 		stopWheelMotor()
 	} until { isAtMaxAngle } andThen run {
@@ -59,7 +59,7 @@ fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
 	run {
 		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= Rotation2d.fromDegrees(25.0) } andThen
+	} until { angleError.absoluteValue <= IntakeConstants.FALLING_ANGLE_THRESHOLD } andThen
 		run {
 			stopAngleMotor()
 			stopWheelMotor()

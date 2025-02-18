@@ -38,6 +38,8 @@ object IntakeConstants {
 
 	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0)
 
+	val FALLING_ANGLE_THRESHOLD = Rotation2d.fromDegrees(20.0)
+
 	val MAX_ANGLE = Rotation2d.fromDegrees(105.0)
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 
