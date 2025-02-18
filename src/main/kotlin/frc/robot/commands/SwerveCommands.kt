@@ -157,6 +157,13 @@ fun SwerveSubsystem.aimTowardsCommand(target: Translation2d) = withName("Aim tow
 fun SwerveSubsystem.followPathCommand(path: PathPlannerPath, flip: Boolean) =
 	withName("Follow path ${path.name}") { AutoBuilder.followPath(if (flip) path.flipPath() else path) }
 
+/**
+ * Follows a pathplanner path. Resets pose to the start of the path before following.
+ *
+ * @param path - The path to follow.
+ * @param flip - Whether to flip the path (for following as red alliance). When set to true, the path
+ * is flipped across the x and y of the field, and rotation is rotated by 180 degrees.
+ */
 fun SwerveSubsystem.followInitialPathCommand(path: PathPlannerPath, flip: Boolean) =
 	withName("Follow initial path ${path.name}") {
 		val pathToFollow = if (flip) path.flipPath() else path
@@ -197,7 +204,7 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 		val chassisSpeeds = ChassisSpeeds(
 			driveVelocity.x,
 			driveVelocity.y,
-			SwerveConstants.CHASSIS_ANGLE_PID_CONTROLLER.calculate(currentHeading.radians, currentTargetPose.rotation.radians - PI),
+			SwerveConstants.CHASSIS_ANGLE_PID_CONTROLLER.calculate(currentHeading.radians, currentTargetPose.rotation.radians),
 		)
 
 		drive(
@@ -214,6 +221,9 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 	}
 }
 
+/**
+ * Aligns to a pipe on a reef.
+ */
 fun SwerveSubsystem.alignToPipeCommand(pipe: () -> Pipe, alliance: Alliance): Command {
 	val targetPose = when (pipe()) {
 		Pipe.A -> FieldConstants.Poses.AT_A
@@ -237,6 +247,9 @@ fun SwerveSubsystem.alignToPipeCommand(pipe: () -> Pipe, alliance: Alliance): Co
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
+/**
+ * Aligns to the center of a reef's side.
+ */
 fun SwerveSubsystem.alignToReefSideCommand(reefSide: () -> ReefSide, alliance: Alliance): Command {
 	val targetPose = when (reefSide()) {
 		ReefSide.AB -> FieldConstants.Poses.AT_AB_CENTER
@@ -249,6 +262,9 @@ fun SwerveSubsystem.alignToReefSideCommand(reefSide: () -> ReefSide, alliance: A
 	return alignToPoseCommand({ if (alliance == Blue) targetPose else FieldConstants.Poses.mirrorPose(targetPose) }, true)
 }
 
+/**
+ * Aligns to one of the coral stations.
+ */
 fun SwerveSubsystem.alignToCoralStationCommand(coralStation: () -> CoralStation, alliance: Alliance): Command {
 	val targetPose = when (coralStation()) {
 		CoralStation.KL -> FieldConstants.Poses.KL_CORAL_STATION
