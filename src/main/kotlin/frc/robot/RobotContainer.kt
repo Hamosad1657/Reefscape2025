@@ -103,6 +103,8 @@ object RobotContainer
             square().toggleOnTrue(intakeCoralFromCoralStationCommand())
             circle().toggleOnTrue(IntakeSubsystem.ejectToL1Command(true))
 
+            PS().whileTrue(IntakeSubsystem.ejectFromIntake())
+
             // TODO: Pathfinding
         }
 
