@@ -30,7 +30,7 @@ object IntakeConstants {
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 2.2,
+		kP = 3.0,
 		kI = 0.8,
 		kD = 0.0,
 	)
