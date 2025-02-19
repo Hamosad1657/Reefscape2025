@@ -6,6 +6,7 @@ import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
@@ -91,7 +92,7 @@ object RobotContainer
             R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
-                intakeCoralFromGroundCommand() // TODO: raceWith alignToCoralDriveCommand()
+                Commands.defer(::intakeCoralFromGroundCommand, setOf(JointedElevatorSubsystem, GrabberSubsystem, IntakeSubsystem)) // TODO: raceWith alignToCoralDriveCommand()
             )
             L2().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
