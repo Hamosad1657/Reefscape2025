@@ -74,7 +74,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	private var angleSetpoint: Rotation2d = 0.0.degrees
 
 	val isAtMaxAngleLimit get() = !maxAngleLimitSwitch.get()
-	val isAtMinAngleLimit get() = minAngleLimitSwitch.get()
+	val isAtMinAngleLimit get() = !minAngleLimitSwitch.get()
 
 	val currentAngle: Rotation2d get() = Rotation2d.fromRotations(angleEncoder.absolutePosition.value.magnitude())
 	val angleError: Rotation2d get() = angleSetpoint - currentAngle
