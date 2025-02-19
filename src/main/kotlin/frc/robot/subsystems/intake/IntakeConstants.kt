@@ -30,15 +30,15 @@ object IntakeConstants {
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 3.0,
-		kI = 0.8,
+		kP = 2.4,
+		kI = 0.0,
 		kD = 0.0,
 	)
 	const val ANGLE_KG = 0.65
 
 	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(3.0)
 
-	val FALLING_ANGLE_THRESHOLD = Rotation2d.fromDegrees(15.0)
+	val FALLING_ANGLE_THRESHOLD = Rotation2d.fromDegrees(13.0)
 
 	val MAX_ANGLE = Rotation2d.fromDegrees(105.0)
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
