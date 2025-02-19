@@ -73,8 +73,7 @@ fun IntakeSubsystem.ejectToL1Command(useLEDs: Boolean) = withName("Eject to L1")
 		( run {
 			stopAngleMotor()
 			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE) } withTimeout(1.0) finallyDo
-				{ if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED }
-	)
+				{ if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED })
 }
 
 // --- Testing commands ---
