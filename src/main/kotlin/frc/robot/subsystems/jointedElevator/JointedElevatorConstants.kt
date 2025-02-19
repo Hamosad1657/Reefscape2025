@@ -31,8 +31,8 @@ object JointedElevatorConstants {
 			FeedbackSensorSource = RemoteCANcoder
 		}
 		with(MotionMagic) {
-			MotionMagicAcceleration = 10.0
-			MotionMagicCruiseVelocity = 10.0
+			MotionMagicAcceleration = 16.0
+			MotionMagicCruiseVelocity = 16.0
 		}
 	}
 
@@ -46,11 +46,11 @@ object JointedElevatorConstants {
 	}
 
 	val ELEVATOR_PID_GAINS = PIDGains(
-		kP = 8.4,
+		kP = 8.6,
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val UP_ELEVATOR_KG: Volts = 1.20
+	const val UP_ELEVATOR_KG: Volts = 1.25
 	const val DOWN_ELEVATOR_KG: Volts = 0.3
 
 	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
