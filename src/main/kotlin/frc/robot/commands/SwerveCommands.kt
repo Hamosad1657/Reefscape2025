@@ -3,6 +3,8 @@ package frc.robot.commands
 import com.hamosad1657.lib.Alert
 import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.commands.*
+import com.hamosad1657.lib.controllers.powerProfile
+import com.hamosad1657.lib.units.powerProfile
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.controller.ProfiledPIDController
@@ -44,9 +46,9 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(2) * SwerveConstants.MAX_SPEED
 
-		val rJoyX = rJoyXSupplier()
+		val rJoyX = rJoyXSupplier().powerProfile(2)
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
