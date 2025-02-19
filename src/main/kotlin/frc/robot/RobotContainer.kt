@@ -76,7 +76,7 @@ object RobotContainer
 
         JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
 
-        GrabberSubsystem.defaultCommand = GrabberSubsystem.stopMotorCommand()
+        GrabberSubsystem.defaultCommand = GrabberSubsystem.holdInPlaceCommand()
 
         IntakeSubsystem.defaultCommand = IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE }
     }

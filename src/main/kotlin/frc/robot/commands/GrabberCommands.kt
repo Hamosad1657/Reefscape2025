@@ -2,6 +2,7 @@ package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.units.Volts
+import com.hamosad1657.lib.units.rotations
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.commands.LoadFromIntakeState.*
@@ -40,6 +41,12 @@ fun GrabberSubsystem.setVoltageCommand(useLEDs: Boolean, mode: () -> GrabberVolt
 	} finallyDo {
 		stopMotor()
 		LEDsSubsystem.currentMode = ACTION_FINISHED
+	}
+}
+
+fun GrabberSubsystem.holdInPlaceCommand() = withName("Hold algae") {
+	run {
+		setMotorSetpoint(0.0.rotations)
 	}
 }
 
