@@ -5,6 +5,7 @@ import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.absoluteValue
 import com.hamosad1657.lib.units.compareTo
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
 
@@ -56,14 +57,14 @@ fun IntakeSubsystem.feedToGrabberCommand() = withName("Feed to grabber") {
 }
 
 fun IntakeSubsystem.ejectToL1Command() = withName("Eject to L1") {
-	run {
+	(run {
 		setAngle(IntakeConstants.L1_ANGLE)
 		stopWheelMotor()
-	} until { angleError.absoluteValue <= IntakeConstants.FALLING_ANGLE_THRESHOLD } andThen
-		run {
+	} until { angleError.absoluteValue <= IntakeConstants.FALLING_ANGLE_THRESHOLD }) andThen
+		(run {
 			stopAngleMotor()
 			stopWheelMotor()
-		} until { isWithinAngleTolerance } finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED } andThen
+		} until { isWithinAngleTolerance }) andThen
 		( run {
 			stopAngleMotor()
 			setWheelMotorVoltage(IntakeConstants.EJECTING_VOLTAGE) } withTimeout(1.0)

@@ -23,6 +23,7 @@ import frc.robot.Robot
 import frc.robot.RobotMap
 import frc.robot.subsystems.intake.IntakeConstants
 import kotlin.math.PI
+import kotlin.math.absoluteValue
 
 object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
@@ -60,7 +61,7 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	val angleError: Rotation2d get() = angleSetpoint.minus(currentAngle)
 
-	val isWithinAngleTolerance: Boolean get() = currentAngle.absoluteValue <= Constants.ANGLE_TOLERANCE
+	val isWithinAngleTolerance: Boolean get() = angleError.rotations.absoluteValue <= Constants.ANGLE_TOLERANCE.rotations
 
 	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
