@@ -1,13 +1,8 @@
-package frc.robot.vision
+package com.hamosad1657.lib.vision.apriltags
 
-import com.ctre.phoenix6.hardware.Pigeon2
 import com.hamosad1657.lib.units.Length
-import com.hamosad1657.lib.units.degrees
-import com.hamosad1657.lib.vision.apriltags.RobotPoseStdDevs
 import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.apriltag.AprilTagFields.kDefaultField
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
@@ -21,8 +16,6 @@ import org.photonvision.PhotonUtils
 import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
 import kotlin.jvm.optionals.getOrNull
-import kotlin.math.absoluteValue
-
 
 
 class PhotonAprilTagCamera(

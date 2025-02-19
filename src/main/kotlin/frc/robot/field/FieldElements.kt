@@ -5,7 +5,20 @@ import frc.robot.field.AlgaeHeight.LOW
 import edu.wpi.first.wpilibj.DriverStation
 
 /** Represents a pipe on a reef. */
-class Pipe private constructor(val letter: Char) {
+enum class Pipe(val letter: Char) {
+	A('A'),
+	B('B'),
+	C('C'),
+	D('D'),
+	E('E'),
+	F('F'),
+	G('G'),
+	H('H'),
+	I('I'),
+	J('J'),
+	K('K'),
+	L('L');
+
 	val side: ReefSide
 		get() = when (letter) {
 			'A', 'B' -> ReefSide.AB
@@ -18,21 +31,6 @@ class Pipe private constructor(val letter: Char) {
 				DriverStation.reportError("Impossible pipe declared, unable to access reef side.", true)
 			}
 		}
-
-	companion object {
-		val A = Pipe('A')
-		val B = Pipe('B')
-		val C = Pipe('C')
-		val D = Pipe('D')
-		val E = Pipe('E')
-		val F = Pipe('F')
-		val G = Pipe('G')
-		val H = Pipe('H')
-		val I = Pipe('I')
-		val J = Pipe('J')
-		val K = Pipe('K')
-		val L = Pipe('L')
-	}
 }
 
 /** Represents one of the levels of a pipe (1->4). Use the companion object. */
