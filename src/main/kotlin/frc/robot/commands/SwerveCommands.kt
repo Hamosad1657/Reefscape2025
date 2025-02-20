@@ -215,12 +215,7 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 			flipForRed = false,
 			useClosedLoopDrive = true,
 		)
-	} until { endAutomatically && (
-		// TODO: Improve this part
-		(targetPose().x - currentPose.x).absoluteValue <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters &&
-			(targetPose().y - currentPose.y).absoluteValue <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters
-		)
-	}
+	} until { endAutomatically && (targetPose().translation.getDistance(currentPose.translation) <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters) }
 }
 
 /**
