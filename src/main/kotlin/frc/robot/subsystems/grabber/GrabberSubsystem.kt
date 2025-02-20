@@ -54,6 +54,7 @@ object GrabberSubsystem: SubsystemBase() {
 		setpoint = Rotation2d.fromRotations(
 			currentAngle.rotations + newSetpoint.rotations
 		)
+		updateMotorPIDControl()
 	}
 
 	fun updateMotorPIDControl() {

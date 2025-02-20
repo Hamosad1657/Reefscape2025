@@ -22,12 +22,15 @@ object GrabberConstants {
 		kD = 0.0,
 	)
 
-	val ANGLE_TOLERANCE: Rotation2d = Rotation2d.fromRotations(1.0)
+	val ANGLE_TOLERANCE: Rotation2d = Rotation2d.fromRotations(0.5)
 
 	/** The voltage needed to intake an algae on the reef. */
 	const val INTAKE_ALGAE_VOLTAGE: Volts = -12.0
 
 	const val LOAD_FROM_INTAKE_VOLTAGE: Volts = 8.0
+
+	/** The voltage needed to move the coral in the grabber slightly back to get into the beam break. */
+	const val CLOCK_CORAL_VOLTAGE: Volts = -2.4
 
 	/** The voltage needed to eject a coral to one of the branches of the reef. */
 	const val EJECT_CORAL_VOLTAGE: Volts = 12.0
