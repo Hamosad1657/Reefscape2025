@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
+import frc.robot.autonomous.AutonomousRoutine
+import frc.robot.autonomous.GL1ScoreRoutine
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.subsystems.grabber.GrabberSubsystem
@@ -152,9 +154,8 @@ object RobotContainer
         }
     }
 
-    fun getAutonomousCommand(): Command?
+    fun getAutonomousCommand(): Command
     {
-        // TODO: Implement properly
-        return null
+        return AutonomousRoutine.createFromJSON("shem").generateCommand(Robot.alliance) //AutonomousRoutine.createFromJSON("smalltest").generateCommand(Robot.alliance)
     }
 }
