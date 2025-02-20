@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.8520240127008154,
+        "y": 6.659863414590209
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4491657658654953,
+        "y": 5.833155916858403
+      },
+      "isLocked": true,
+      "linkedName": "LK-coralStationClose"
+    },
+    {
+      "anchor": {
+        "x": 3.65942,
+        "y": 5.46337
+      },
+      "prevControl": {
+        "x": 3.562940159261054,
+        "y": 5.694003129300601
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "LK-close"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "LK coral station",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 125.98900000000002
+  },
+  "useDefaultConstraints": true
+}

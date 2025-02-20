@@ -13,9 +13,9 @@ object AprilTagVision {
 
 	private val stdDevs
 		get() = AprilTagsStdDevs(
-			oneTag = RobotPoseStdDevs(0.9, 0.9, 0.95),
-			twoTagsAuto = RobotPoseStdDevs(0.5, 0.5, 0.95),
-			twoTagsTeleop = RobotPoseStdDevs(0.35, 0.35, 0.95),
+			oneTag = RobotPoseStdDevs(1.0, 1.15, 0.95),
+			twoTagsAuto = RobotPoseStdDevs(0.9, 1.0, 0.95),
+			twoTagsTeleop = RobotPoseStdDevs(0.9, 1.0, 0.95),
 		)
 
 	val photonAprilTagCamera = PhotonAprilTagCamera(

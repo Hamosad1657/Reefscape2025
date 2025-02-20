@@ -5,7 +5,6 @@ import com.hamosad1657.lib.units.Volts
 import com.hamosad1657.lib.units.rotations
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.commands.GrabberVoltageMode.*
-import frc.robot.commands.LoadFromIntakeState.*
 import frc.robot.subsystems.grabber.GrabberConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
@@ -54,44 +53,19 @@ fun GrabberSubsystem.stopMotorCommand() = withName("Stop motor") {
 	run { stopMotor() }
 }
 
-enum class LoadFromIntakeState(val shouldExitState: () -> Boolean) {
-	Intaking(shouldExitState = {
-		GrabberSubsystem.isBeamBreakInterfered
-	}),
-	Loading(shouldExitState = {
-		!GrabberSubsystem.isBeamBreakInterfered
-	}),
-	Holding(shouldExitState = {
-		GrabberSubsystem.isInTolerance
-	}),
-	Finished(shouldExitState = {
-		false
-	})
-}
-
 fun GrabberSubsystem.loadFromIntakeCommand() = withName("Load from intake command") {
-	var loadFromIntakeState: LoadFromIntakeState = Intaking
-	runOnce { loadFromIntakeState = Intaking } andThen
-	run {
-		when (loadFromIntakeState) {
-			Intaking -> {
-				setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
-				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Loading
-			}
-			Loading -> {
-				setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
-				if (loadFromIntakeState.shouldExitState()) {
-					loadFromIntakeState = Holding
-					setMotorSetpoint(Rotation2d.fromRotations(-3.0))
-				}
-			}
-			Holding -> {
-				updateMotorPIDControl()
-				if (loadFromIntakeState.shouldExitState()) loadFromIntakeState = Finished
-			}
-			Finished -> {}
-		}
-	} until { loadFromIntakeState == Finished } finallyDo { stopMotor() }
+	(run {
+		setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
+	} until { isBeamBreakInterfered }) andThen (
+		(run {
+			setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
+		} withTimeout(1.0)) andThen (run {
+			setMotorVoltage(GrabberConstants.LOAD_FROM_INTAKE_VOLTAGE)
+		} until { !isBeamBreakInterfered })) andThen (
+			run {
+				setMotorVoltage(GrabberConstants.CLOCK_CORAL_VOLTAGE)
+			} withTimeout(0.35)
+		)
 }
 
 enum class LoadFromCoralStationState(val shouldExitState: () -> Boolean) {

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.58032,
+        "y": 0.79242
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.337177357062084,
+        "y": 0.6654866758407576
+      },
+      "isLocked": false,
+      "linkedName": "position1"
+    },
+    {
+      "anchor": {
+        "x": 5.157236842105262,
+        "y": 2.9088815789473688
+      },
+      "prevControl": {
+        "x": 5.2034189964523945,
+        "y": 2.6560287116988817
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EFIntake"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 29.999999999999996
+  },
+  "reversed": false,
+  "folder": "Autonomous Preset Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

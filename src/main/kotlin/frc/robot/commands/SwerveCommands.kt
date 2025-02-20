@@ -1,7 +1,5 @@
 package frc.robot.commands
 
-import com.hamosad1657.lib.Alert
-import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.powerProfile
 import com.hamosad1657.lib.units.powerProfile
@@ -12,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
@@ -23,9 +20,6 @@ import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
-import frc.robot.vision.CoralVision
-import kotlin.math.PI
-import kotlin.math.absoluteValue
 
 // --- Controller driving command ---
 
@@ -46,9 +40,9 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(2) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(3) * SwerveConstants.MAX_SPEED * 0.7
 
-		val rJoyX = rJoyXSupplier().powerProfile(2)
+		val rJoyX = rJoyXSupplier().powerProfile(3) * 0.5
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
@@ -97,43 +91,43 @@ fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to 
 	rotationSetpointDriveCommand({ 0.0 }, { 0.0 }, { rotation }, false)
 }
 
-fun SwerveSubsystem.rotateToCoralCommand(
-	lJoyYSupplier: () -> Double,
-	lJoyXSupplier: () -> Double,
-	rJoyYSupplier: () -> Double,
-	rJoyXSupplier: () -> Double,
-	isFieldRelative: Boolean,
-	isClosedLoop: () -> Boolean = { false },
-) = withName("rotateToCoral") {
-	run {
-		val lJoyY = lJoyYSupplier()
-		val lJoyX = lJoyXSupplier()
-		val rJoyY = rJoyYSupplier()
-		val rJoyX = rJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
-		var chassisSpeeds = ChassisSpeeds()
-		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
-			ChassisSpeeds(
-				velocity.y,
-				-velocity.x,
-				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
-			)
-		} else {
-			ChassisSpeeds(
-				velocity.y,
-				-velocity.x,
-				-rJoyX
-			)
-		}
-
-		drive(
-			chassisSpeeds,
-			isFieldRelative,
-			flipForRed = true,
-			isClosedLoop(),
-		)
-	}
-}
+//fun SwerveSubsystem.rotateToCoralCommand(
+//	lJoyYSupplier: () -> Double,
+//	lJoyXSupplier: () -> Double,
+//	rJoyYSupplier: () -> Double,
+//	rJoyXSupplier: () -> Double,
+//	isFieldRelative: Boolean,
+//	isClosedLoop: () -> Boolean = { false },
+//) = withName("rotateToCoral") {
+//	run {
+//		val lJoyY = lJoyYSupplier()
+//		val lJoyX = lJoyXSupplier()
+//		val rJoyY = rJoyYSupplier()
+//		val rJoyX = rJoyXSupplier()
+//		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+//		var chassisSpeeds = ChassisSpeeds()
+//		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
+//			ChassisSpeeds(
+//				velocity.y,
+//				-velocity.x,
+//				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
+//			)
+//		} else {
+//			ChassisSpeeds(
+//				velocity.y,
+//				-velocity.x,
+//				-rJoyX
+//			)
+//		}
+//
+//		drive(
+//			chassisSpeeds,
+//			isFieldRelative,
+//			flipForRed = true,
+//			isClosedLoop(),
+//		)
+//	}
+//}
 
 /**
  * Aims towards a target on the field while staying in place.
@@ -215,12 +209,7 @@ fun SwerveSubsystem.alignToPoseCommand(targetPose: () -> Pose2d, endAutomaticall
 			flipForRed = false,
 			useClosedLoopDrive = true,
 		)
-	} until { endAutomatically && (
-		// TODO: Improve this part
-		(targetPose().x - currentPose.x).absoluteValue <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters &&
-			(targetPose().y - currentPose.y).absoluteValue <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters
-		)
-	}
+	} until { endAutomatically && (targetPose().translation.getDistance(currentPose.translation) <= SwerveConstants.POSE_ALIGNMENT_TOLERANCE.asMeters) }
 }
 
 /**

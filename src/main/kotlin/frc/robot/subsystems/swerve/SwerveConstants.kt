@@ -63,8 +63,8 @@ object SwerveConstants {
 	// When using closed-loop control, the drive motor uses the control
 	// output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
 	private val DRIVE_PID_GAINS: Slot0Configs = Slot0Configs()
-		.withKP(0.027).withKI(0.0).withKD(0.0)
-		.withKS(0.0).withKV(0.149)
+		.withKP(0.045).withKI(0.0).withKD(0.0)
+		.withKS(0.0).withKV(0.130)
 
 	// The closed-loop output type to use for the steer motors
 	// This affects the PID/FF gains for the steer motors
@@ -251,15 +251,15 @@ object SwerveConstants {
 	// --- Pose alignment ---
 
 	val POSE_ALIGNMENT_PID_GAINS = PIDGains(
-		kP = 0.65,
+		kP = 1.30,
 		kI = 0.0,
 		kD = 0.0,
 	)
 
-	val POSE_ALIGNMENT_TOLERANCE = 1.5.centimeters
+	val POSE_ALIGNMENT_TOLERANCE = 4.5.centimeters
 
-	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.5
-	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.5
+	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.6
+	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.6
 
 	val POSE_ALIGNMENT_CONSTRAINTS = TrapezoidProfile.Constraints(
 		MAX_POSE_ALIGNMENT_VELOCITY,
