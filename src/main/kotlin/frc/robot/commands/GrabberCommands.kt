@@ -39,7 +39,9 @@ fun GrabberSubsystem.setVoltageCommand(useLEDs: Boolean, mode: () -> GrabberVolt
 		}
 	} finallyDo {
 		stopMotor()
-		LEDsSubsystem.currentMode = ACTION_FINISHED
+		if (useLEDs) {
+			LEDsSubsystem.currentMode = ACTION_FINISHED
+		}
 	}
 }
 
