@@ -98,7 +98,7 @@ object RobotContainer
                 IntakeSubsystem.intakeCommand(true)
             )
 
-            triangle().toggleOnTrue(SwerveSubsystem.alignToPipeCommand(
+            triangle().whileTrue(SwerveSubsystem.alignToPipeCommand(
                 { SwerveSubsystem.closestReefSide.let { if (shouldAlignToRightPipe) it.right else it.left } }, Robot.alliance)
             )
             square().toggleOnTrue(intakeCoralFromCoralStationCommand())
