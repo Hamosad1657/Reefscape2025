@@ -40,9 +40,9 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(3) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(3) * SwerveConstants.MAX_SPEED * 0.7
 
-		val rJoyX = rJoyXSupplier().powerProfile(3)
+		val rJoyX = rJoyXSupplier().powerProfile(3) * 0.5
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
