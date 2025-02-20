@@ -251,12 +251,12 @@ object SwerveConstants {
 	// --- Pose alignment ---
 
 	val POSE_ALIGNMENT_PID_GAINS = PIDGains(
-		kP = 1.00,
+		kP = 1.30,
 		kI = 0.0,
 		kD = 0.0,
 	)
 
-	val POSE_ALIGNMENT_TOLERANCE = 2.5.centimeters
+	val POSE_ALIGNMENT_TOLERANCE = 4.5.centimeters
 
 	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.6
 	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.6
