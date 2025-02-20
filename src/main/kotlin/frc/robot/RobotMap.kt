@@ -35,41 +35,36 @@ object RobotMap {
 	}
 
 	object JointedElevator {
-		const val MAIN_HEIGHT_MOTOR_ID = 0
-		const val SECONDARY_HEIGHT_MOTOR_ID = 0
-		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
-		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 0
-		const val HEIGHT_CAN_CODER_ID = 0
+		const val MAIN_HEIGHT_MOTOR_ID = 20
+		const val SECONDARY_HEIGHT_MOTOR_ID = 21
+		const val MAX_HEIGHT_LIMIT_SWITCH_CHANNEL = 4
+		const val MIN_HEIGHT_LIMIT_SWITCH_CHANNEL = 5
+		const val HEIGHT_CAN_CODER_ID = 2
 
-		const val ANGLE_MOTOR_ID = 0
-		const val ANGLE_ENCODER_PWM_CHANNEL = 0
-		const val MAX_ANGLE_LIMIT_CHANNEL = 0
-		const val MIN_ANGLE_LIMIT_CHANNEL = 0
-	}
-
-	object Climbing {
-		const val CLIMBING_MOTOR_ID = 0
-		const val LIMIT_SWITCH_ID = 0
+		const val ANGLE_MOTOR_ID = 23
+		const val ANGLE_CAN_CODER_ID = 1
+		const val MAX_ANGLE_LIMIT_CHANNEL = 3
+		const val MIN_ANGLE_LIMIT_CHANNEL = 2
 	}
 
 	object Intake {
-		const val ANGLE_MOTOR_ID = 0
-		const val WHEEL_MOTOR_ID = 0
+		const val ANGLE_MOTOR_ID = 24
+		const val WHEEL_MOTOR_ID = 25
 
-		const val BEAM_BREAK_CHANNEL = 0
+		const val BEAM_BREAK_CHANNEL = 1
 
-		const val CAN_CODER_ID = 0
+		const val ENCODER_CHANNEL = 6
 
 		const val MIN_ANGLE_LIMIT_CHANNEL = 0
-		const val MAX_ANGLE_LIMIT_CHANNEL = 0
+		const val MAX_ANGLE_LIMIT_CHANNEL = 1
 	}
 
 	object Grabber {
-		const val MOTOR_ID = 0
+		const val MOTOR_ID = 22
 		const val BEAM_BREAK_CHANNEL = 0
 	}
 
 	object LEDs {
-		const val PWM_PORT = 9
+		const val PWM_PORT = 0
 	}
 }

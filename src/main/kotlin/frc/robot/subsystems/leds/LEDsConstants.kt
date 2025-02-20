@@ -17,10 +17,10 @@ object LEDsConstants {
 
 	enum class LEDsMode {
 		DEFAULT,
-
-		LOADING_FROM_CORAL_STATION, //yellow static
 		BLUE_ALLIANCE,
 		RED_ALLIANCE,
+
+		INTAKING, //yellow static
 
 		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
 		ACTION_FINISHED, //green flash

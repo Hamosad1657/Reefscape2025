@@ -63,8 +63,8 @@ object SwerveConstants {
 	// When using closed-loop control, the drive motor uses the control
 	// output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
 	private val DRIVE_PID_GAINS: Slot0Configs = Slot0Configs()
-		.withKP(0.02).withKI(0.0).withKD(0.0)
-		.withKS(0.0).withKV(0.119)
+		.withKP(0.027).withKI(0.0).withKD(0.0)
+		.withKS(0.0).withKV(0.149)
 
 	// The closed-loop output type to use for the steer motors
 	// This affects the PID/FF gains for the steer motors
@@ -148,7 +148,7 @@ object SwerveConstants {
 			.withDriveFrictionVoltage(DRIVE_FRICTION_VOLTAGE)
 
 	// Front Left
-	private val FRONT_LEFT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.3515625)
+	private val FRONT_LEFT_ENCODER_OFFSET: Angle = Units.Degrees.of(67.148)
 	private const val FRONT_LEFT_STEER_INVERTED = false
 	private const val FRONT_LEFT_ENCODER_INVERTED = false
 
@@ -156,7 +156,7 @@ object SwerveConstants {
 	private val FRONT_LEFT_Y_POS: Distance = Units.Inches.of(11.62)
 
 	// Front Right
-	private val FRONT_RIGHT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.498291015625)
+	private val FRONT_RIGHT_ENCODER_OFFSET: Angle = Units.Degrees.of(51.064)
 	private const val FRONT_RIGHT_STEER_INVERTED = false
 	private const val FRONT_RIGHT_ENCODER_INVERTED = false
 
@@ -164,7 +164,7 @@ object SwerveConstants {
 	private val FRONT_RIGHT_Y_POS: Distance = Units.Inches.of(-11.62)
 
 	// Back Left
-	private val BACK_LEFT_ENCODER_OFFSET: Angle = Units.Rotations.of(-0.48779296875)
+	private val BACK_LEFT_ENCODER_OFFSET: Angle = Units.Degrees.of(-121.113)
 	private const val BACK_LEFT_STEER_INVERTED = false
 	private const val BACK_LEFT_ENCODER_INVERTED = false
 
@@ -172,7 +172,7 @@ object SwerveConstants {
 	private val BACK_LEFT_Y_POS: Distance = Units.Inches.of(11.62)
 
 	// Back Right
-	private val BACK_RIGHT_ENCODER_OFFSET: Angle = Units.Rotations.of(0.231689453125)
+	private val BACK_RIGHT_ENCODER_OFFSET: Angle = Units.Degrees.of(-83.145)
 	private const val BACK_RIGHT_STEER_INVERTED = false
 	private const val BACK_RIGHT_ENCODER_INVERTED = false
 
@@ -251,12 +251,12 @@ object SwerveConstants {
 	// --- Pose alignment ---
 
 	val POSE_ALIGNMENT_PID_GAINS = PIDGains(
-		kP = 0.75,
-		kI = 0.3,
+		kP = 0.65,
+		kI = 0.0,
 		kD = 0.0,
 	)
 
-	val POSE_ALIGNMENT_TOLERANCE = 2.5.centimeters
+	val POSE_ALIGNMENT_TOLERANCE = 1.5.centimeters
 
 	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.5
 	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.5

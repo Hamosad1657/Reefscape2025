@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj.Timer
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
@@ -43,7 +42,8 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 		}
 	}
 
-	private fun handleLEDs() {
+	private fun handleLEDModes() {
+		// For some reason Color.kGreen is Blue and the other way around so they're swapped. (instead of RGB its RBG)
 		when (currentMode) {
 			DEFAULT -> {
 				when (Robot.alliance) {
@@ -58,16 +58,15 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 					else -> LEDPattern.kOff.applyTo(ledBuffer)
 				}
 			}
-
-			// For some reason Color.kGreen is Blue and the other way around so I swapped them
-			LOADING_FROM_CORAL_STATION -> {
-				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
-			}
 			BLUE_ALLIANCE -> {
 				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
 			}
 			RED_ALLIANCE -> {
 				LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+			}
+
+			INTAKING -> {
+				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
 			}
 
 			ACTION_FINISHED -> {
@@ -96,17 +95,13 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 					Meters.of(Constants.LED_SPACING.asMeters),
 				).applyTo(ledBuffer)
 			}
-
-			else -> {
-				currentMode = DEFAULT
-			}
 		}
 	}
 
 	// --- Periodic ---
 
 	override fun periodic() {
-		handleLEDs()
+		handleLEDModes()
 		ledStrip.setData(ledBuffer)
 	}
 }

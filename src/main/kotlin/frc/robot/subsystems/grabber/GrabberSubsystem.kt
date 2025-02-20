@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.PersistMode.kPersistParameters
 import com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.util.sendable.SendableBuilder
-import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj.AnalogInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap as Map
@@ -24,13 +24,13 @@ object GrabberSubsystem: SubsystemBase() {
 		configure(Constants.MOTOR_CONFIGS, kResetSafeParameters, kPersistParameters)
 	}
 
-	private val beamBreak = DigitalInput(Map.Grabber.BEAM_BREAK_CHANNEL)
+	private val beamBreak = AnalogInput(Map.Grabber.BEAM_BREAK_CHANNEL)
 
 	private val PIDController = Constants.PID_GAINS.toPIDController()
 
 	// --- State getters ---
 
-	val isBeamBreakInterfered: Boolean get() = beamBreak.get()
+	val isBeamBreakInterfered: Boolean get() = beamBreak.voltage >= Constants.BEAM_BREAK_THRESHOLD
 
 	var isUsingPIDControl = false
 		private set
@@ -38,8 +38,8 @@ object GrabberSubsystem: SubsystemBase() {
 	private var setpoint: Rotation2d = 0.0.degrees
 
 	val currentAngle: Rotation2d get() = motor.encoder.position.rotations
-	val pidError: Rotation2d get() = setpoint - currentAngle
-	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.MOTOR_TOLERANCE
+	val pidError: Rotation2d get() = setpoint.minus(currentAngle)
+	val isInTolerance: Boolean get() = pidError.absoluteValue <= Constants.ANGLE_TOLERANCE && isUsingPIDControl
 
 	// --- Functions ---
 
@@ -49,11 +49,12 @@ object GrabberSubsystem: SubsystemBase() {
 	}
 
 	/** Sets the setpoint of the motor relative to where it is now. */
-	fun setMotorSetpoint(lengthSetpoint: Length) {
+	fun setMotorSetpoint(newSetpoint: Rotation2d = setpoint) {
 		isUsingPIDControl = true
 		setpoint = Rotation2d.fromRotations(
-			currentAngle.rotations + (lengthSetpoint.asMeters / Constants.LENGTH_FOR_EACH_ROTATION.asMeters)
+			currentAngle.rotations + newSetpoint.rotations
 		)
+		updateMotorPIDControl()
 	}
 
 	fun updateMotorPIDControl() {
@@ -68,16 +69,18 @@ object GrabberSubsystem: SubsystemBase() {
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
-		builder.addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
+		with(builder) {
+			addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
 
-		builder.addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
-		builder.addDoubleProperty("Current angle", { currentAngle.degrees }, null)
-		builder.addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
-		builder.addDoubleProperty("Angle error deg", { pidError.degrees }, null)
-		builder.addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
+			addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
+			addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+			addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+			addDoubleProperty("Angle error deg", { pidError.degrees }, null)
+			addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
 
-		if (Robot.isTesting) {
-			builder.addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
+			if (Robot.isTesting) {
+				addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
+			}
 		}
 	}
 }

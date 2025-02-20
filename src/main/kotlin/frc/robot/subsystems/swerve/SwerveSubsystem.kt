@@ -30,7 +30,6 @@ import frc.robot.Robot
 import frc.robot.field.FieldConstants.Poses
 import frc.robot.field.ReefSide
 import frc.robot.field.ReefSide.AB
-import frc.robot.field.ReefSide.CD
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 
@@ -238,6 +237,8 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		builder.addDoubleProperty("Current heading deg", { currentHeading.degrees }, null)
 		builder.addDoubleArrayProperty("Desired", { state.ModuleTargets.toDoubleArray() }, null)
 		builder.addDoubleArrayProperty("Current", { state.ModuleStates.toDoubleArray() }, null)
+
+		builder.addStringProperty("Closest reef side", { closestReefSide.name }, null)
 	}
 
 	private fun Array<SwerveModuleState>.toDoubleArray(): DoubleArray {
