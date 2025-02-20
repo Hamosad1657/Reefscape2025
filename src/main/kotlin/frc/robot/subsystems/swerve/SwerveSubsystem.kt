@@ -239,6 +239,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		builder.addDoubleArrayProperty("Current", { state.ModuleStates.toDoubleArray() }, null)
 
 		builder.addStringProperty("Closest reef side", { closestReefSide.name }, null)
+		builder.addBooleanProperty("is robot autonomous", {Robot.isAutonomous}, null )
 	}
 
 	private fun Array<SwerveModuleState>.toDoubleArray(): DoubleArray {
