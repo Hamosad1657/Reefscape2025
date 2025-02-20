@@ -84,7 +84,7 @@ class AutonomousRoutine(
 	companion object {
 		fun createFromJSON(name: String): AutonomousRoutine {
 			val objectMapper = ObjectMapper()
-			val file = File(Filesystem.getDeployDirectory(), "${name}.json")
+			val file = File(Filesystem.getDeployDirectory(), "autonomous/${name}.json")
 
 			return objectMapper.readValue(file, AutonomousRoutineModel::class.java).generateRoutine()
 		}
