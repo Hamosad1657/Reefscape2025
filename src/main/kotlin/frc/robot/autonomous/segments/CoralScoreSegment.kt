@@ -42,10 +42,10 @@ class CoralScoreSegment(
 				}
 			},
 		) raceWith (
-	// Wait for elevator to get to state
-	waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 	// Align to the pipe
 	SwerveSubsystem.alignToPipeCommand({ branchToScoreOn.pipe} , alliance) andThen
+	// Wait for elevator to get to state
+	waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 	// Eject a coral
 	(GrabberSubsystem.setVoltageCommand(
 		true,
@@ -54,7 +54,7 @@ class CoralScoreSegment(
 			L2, L3 -> EJECT_TO_L2_AND_L3
 			L4 -> EJECT_TO_L4
 		},
-	) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
+	) withTimeout(2.0)) andThen
 	// Get back to the pose around the reef
 	SwerveSubsystem.alignToPoseCommand(
 		{
