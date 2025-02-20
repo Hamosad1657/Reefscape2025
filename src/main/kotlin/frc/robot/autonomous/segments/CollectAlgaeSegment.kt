@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.field.FieldConstants
 import frc.robot.commands.*
+import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.AlgaeHeight.HIGH
 import frc.robot.field.AlgaeHeight.LOW
 import frc.robot.subsystems.grabber.GrabberSubsystem
@@ -33,7 +34,7 @@ class CollectAlgaeSegment(
 				// Align to the reef side
 				((SwerveSubsystem.alignToReefSideCommand({ algaeToCollect.side }, alliance) andThen wait(1.5)) raceWith
 				// collect algae
-				GrabberSubsystem.intakeAlgaeCommand() finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED }) andThen
+				GrabberSubsystem.setVoltageCommand(true, INTAKE_ALGAE)) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand(
 					{

@@ -1,15 +1,16 @@
 package frc.robot.autonomous.segments
 
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.units.meters
+import com.hamosad1657.lib.units.rotations
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.field.FieldConstants
 import frc.robot.commands.*
-import frc.robot.commands.GrabberEjectMode.*
+import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.Branch
+import frc.robot.field.PipeLevel.*
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.ACTION_FINISHED
@@ -36,7 +37,7 @@ class CoralScoreSegment(
 				2 -> JointedElevatorState.L2
 				3 -> JointedElevatorState.L3
 				4 -> JointedElevatorState.L4
-				else -> JointedElevatorState(0.0.meters, Rotation2d()).also {
+				else -> JointedElevatorState(0.0.rotations, Rotation2d()).also {
 					DriverStation.reportError("Invalid coral score segment", true)
 				}
 			},
@@ -46,7 +47,14 @@ class CoralScoreSegment(
 	// Align to the pipe
 	SwerveSubsystem.alignToPipeCommand({ branchToScoreOn.pipe} , alliance) andThen
 	// Eject a coral
-	(GrabberSubsystem.ejectCommand(L4) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
+	(GrabberSubsystem.setVoltageCommand(
+		true,
+		when (branchToScoreOn.level) {
+			L1 -> EJECT_TO_L1
+			L2, L3 -> EJECT_TO_L2_AND_L3
+			L4 -> EJECT_TO_L4
+		},
+	) withTimeout(2.0) finallyDo {LEDsSubsystem.currentMode = ACTION_FINISHED}) andThen
 	// Get back to the pose around the reef
 	SwerveSubsystem.alignToPoseCommand(
 		{

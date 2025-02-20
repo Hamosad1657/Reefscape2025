@@ -5,7 +5,7 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import frc.robot.commands.*
-import frc.robot.commands.GrabberEjectMode.*
+import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.ReefSide
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
@@ -32,7 +32,7 @@ class EjectAlgaeToProcessorSegment(
 				// Wait until elevator state is in tolerance
 				waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 					// Eject in processor
-					(GrabberSubsystem.ejectCommand(PROCESSOR) withTimeout(1.5) finallyDo { LEDsSubsystem.currentMode = ACTION_FINISHED })) andThen
+					(GrabberSubsystem.setVoltageCommand(true, EJECT_TO_PROCESSOR) withTimeout(1.5))) andThen
 				// Get back to reef
 				SwerveSubsystem.followPathCommand(
 					PathPlannerPath.fromPathFile("Processor to ${endingSide.name}-far"),
