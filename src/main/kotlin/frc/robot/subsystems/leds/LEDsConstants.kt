@@ -21,6 +21,7 @@ object LEDsConstants {
 		RED_ALLIANCE,
 
 		INTAKING, //yellow static
+		CORAL_IN_GRABBER, // Purple static
 
 		// All flash modes stay on for [FLASH_TIMEOUT] before going back to default, with a 0.2 second period
 		ACTION_FINISHED, //green flash

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
 import frc.robot.RobotMap
+import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode
 import frc.robot.subsystems.leds.LEDsConstants as Constants
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
@@ -46,16 +47,21 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 		// For some reason Color.kGreen is Blue and the other way around so they're swapped. (instead of RGB its RBG)
 		when (currentMode) {
 			DEFAULT -> {
-				when (Robot.alliance) {
-					Blue -> {
-						currentMode = BLUE_ALLIANCE
-						LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+				if (Robot.isEnabled && GrabberSubsystem.isBeamBreakInterfered) {
+					currentMode = CORAL_IN_GRABBER
+					
+				} else {
+					when (Robot.alliance) {
+						Blue -> {
+							currentMode = BLUE_ALLIANCE
+							LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+						}
+						Red -> {
+							currentMode = RED_ALLIANCE
+							LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+						}
+						else -> LEDPattern.kOff.applyTo(ledBuffer)
 					}
-					Red -> {
-						currentMode = RED_ALLIANCE
-						LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
-					}
-					else -> LEDPattern.kOff.applyTo(ledBuffer)
 				}
 			}
 			BLUE_ALLIANCE -> {
@@ -67,6 +73,10 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 
 			INTAKING -> {
 				LEDPattern.solid(Color(0,0,255)).applyTo(ledBuffer)
+			}
+
+			CORAL_IN_GRABBER -> {
+				LEDPattern.solid(Color(255, 255, 0)).applyTo(ledBuffer)
 			}
 
 			ACTION_FINISHED -> {
