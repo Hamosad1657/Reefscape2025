@@ -103,7 +103,6 @@ fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to 
 fun SwerveSubsystem.rotateToCoralCommand(
 	lJoyYSupplier: () -> Double,
 	lJoyXSupplier: () -> Double,
-	rJoyYSupplier: () -> Double,
 	rJoyXSupplier: () -> Double,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
@@ -111,11 +110,10 @@ fun SwerveSubsystem.rotateToCoralCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val rJoyY = rJoyYSupplier()
-		val rJoyX = rJoyXSupplier()
+ 		val rJoyX = rJoyXSupplier()
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
 		val chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0) {
-			ChassisSpeeds(
+		ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
 				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
