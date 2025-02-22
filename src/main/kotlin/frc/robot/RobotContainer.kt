@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
+import frc.robot.field.FieldConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -106,7 +107,10 @@ object RobotContainer
 
             PS().whileTrue(IntakeSubsystem.ejectFromIntake())
 
-            // TODO: Pathfinding
+            povUp().whileTrue(Commands.defer(
+                { SwerveSubsystem.driveToPoseCommand(FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2]) },
+                setOf(SwerveSubsystem),
+            ))
         }
 
         with(controllerB) {
