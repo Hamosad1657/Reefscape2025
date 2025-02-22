@@ -160,6 +160,10 @@ object RobotContainer
             L1().onTrue() {
                 shouldAlignToRightPipe = false
             }
+
+            L2().onTrue(
+                loadCoralFromIntake()
+            )
         }
     }
 
