@@ -42,18 +42,20 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	rJoyXSupplier: () -> Double,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
+	rotationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with angular velocity control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(2) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
-		val rJoyX = rJoyXSupplier().powerProfile(2)
+		val rJoyX = rJoyXSupplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
 			-velocity.x,
-			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs,
+			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs * rotationMultiplier(),
 		)
 
 		drive(
@@ -71,11 +73,12 @@ fun SwerveSubsystem.rotationSetpointDriveCommand(
 	rotationSetpointSupplier: () -> Rotation2d,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with rotation setpoint control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
@@ -100,6 +103,7 @@ fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to 
 fun SwerveSubsystem.rotateToCoralCommand(
 	lJoyYSupplier: () -> Double,
 	lJoyXSupplier: () -> Double,
+	rJoyYSupplier: () -> Double,
 	rJoyXSupplier: () -> Double,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
@@ -107,10 +111,10 @@ fun SwerveSubsystem.rotateToCoralCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
+		val rJoyY = rJoyYSupplier()
 		val rJoyX = rJoyXSupplier()
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
-		var chassisSpeeds = ChassisSpeeds()
-		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0) {
+		val chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0) {
 			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
@@ -142,7 +146,8 @@ fun SwerveSubsystem.aimTowardsCommand(target: Translation2d) = withName("Aim tow
 	rotationSetpointDriveCommand({ 0.0 },
 		{ 0.0 },
 		{ getAngleBetweenTranslations(currentPose.translation, target) },
-		false)
+		false,
+	)
 }
 
 // --- Path following ---

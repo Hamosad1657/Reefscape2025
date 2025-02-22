@@ -44,13 +44,15 @@ object RobotContainer
 {
     private const val JOYSTICK_DEADBAND = 0.08
     private const val EJECT_TIMEOUT: Seconds = 2.0
+    private const val SWERVE_POWER_PROFILE = 3
+    private const val CLIMB_POWER_PROFILE = 2
 
     var currentScoringMode = L1
 
     var shouldAlignToRightPipe = false
 
-    private val controllerA = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_A_CONTROLLER_PORT)
-    private val controllerB = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_B_CONTROLLER_PORT)
+    private val controllerA = HaCommandPS4Controller(RobotMap.DRIVER_A_CONTROLLER_PORT, JOYSTICK_DEADBAND, SWERVE_POWER_PROFILE)
+    private val controllerB = HaCommandPS4Controller(RobotMap.DRIVER_B_CONTROLLER_PORT, JOYSTICK_DEADBAND, CLIMB_POWER_PROFILE)
 
     init
     {

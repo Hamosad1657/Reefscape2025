@@ -11,21 +11,21 @@ import kotlin.math.sign
 /**
  * Automatically flips y value of joysticks and applies deadband
  */
-class HaCommandPS4Controller(private val deadband: Double, port: Int) : CommandPS4Controller(port) {
+class HaCommandPS4Controller(port: Int, private val deadband: Double, private val power: Int = 1) : CommandPS4Controller(port) {
 	override fun getLeftX(): Double {
-		return continuousDeadband(super.getLeftX(), deadband)
+		return continuousDeadband(super.getLeftX(), deadband).powerProfile(power)
 	}
 
 	override fun getLeftY(): Double {
-		return -continuousDeadband(super.getLeftY(), deadband)
+		return -continuousDeadband(super.getLeftY(), deadband).powerProfile(power)
 	}
 
 	override fun getRightX(): Double {
-		return continuousDeadband(super.getRightX(), deadband)
+		return continuousDeadband(super.getRightX(), deadband).powerProfile(power)
 	}
 
 	override fun getRightY(): Double {
-		return -continuousDeadband(super.getRightY(), deadband)
+		return -continuousDeadband(super.getRightY(), deadband).powerProfile(power)
 	}
 
 	private fun joyStickToAngle(x: Double, y: Double): Rotation2d {
