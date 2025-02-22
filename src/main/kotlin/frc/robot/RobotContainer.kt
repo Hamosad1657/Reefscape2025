@@ -93,7 +93,12 @@ object RobotContainer
             R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
 
             L1().toggleOnTrue(
-                Commands.defer(::intakeCoralFromGroundCommand, setOf(JointedElevatorSubsystem, GrabberSubsystem, IntakeSubsystem)) // TODO: raceWith alignToCoralDriveCommand()
+                SwerveSubsystem.rotateToCoralCommand(
+                    { controllerA.leftY },
+                    { controllerA.leftX },
+                    { controllerA.rightX },
+                    true
+                )
             )
             L2().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
