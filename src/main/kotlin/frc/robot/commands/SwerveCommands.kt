@@ -1,8 +1,8 @@
 package frc.robot.commands
 
-import com.hamosad1657.lib.Alert
-import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.commands.*
+import com.hamosad1657.lib.controllers.powerProfile
+import com.hamosad1657.lib.units.powerProfile
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.controller.ProfiledPIDController
@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
@@ -22,8 +21,6 @@ import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
 import frc.robot.vision.CoralVision
-import kotlin.math.PI
-import kotlin.math.absoluteValue
 
 // --- Controller driving command ---
 
