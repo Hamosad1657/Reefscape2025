@@ -156,6 +156,6 @@ object RobotContainer
 
     fun getAutonomousCommand(): Command
     {
-        return AutonomousRoutine.createFromJSON("shem").generateCommand(Robot.alliance) //AutonomousRoutine.createFromJSON("smalltest").generateCommand(Robot.alliance)
+        return AutonomousRoutine.createFromJSON("shem").generateCommand(Robot.alliance)
     }
 }
