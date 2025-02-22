@@ -4,6 +4,8 @@ import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
+import edu.wpi.first.math.filter.SlewRateLimiter
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -11,6 +13,7 @@ import frc.robot.ScoringMode.*
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.FieldConstants
+import frc.robot.field.ReefSide.AB
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -47,6 +50,15 @@ object RobotContainer
     private const val SWERVE_POWER_PROFILE = 3
     private const val CLIMB_POWER_PROFILE = 2
 
+    private const val FREE_DRIVE_TRANSLATION_MULTIPLIER = 0.7
+    private const val FREE_DRIVE_ROTATION_MULTIPLIER = 0.5
+
+    private const val EXTENDED_DRIVE_TRANSLATION_MULTIPLIER = 0.3
+
+    private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
+
+    private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
+
     var currentScoringMode = L1
 
     var shouldAlignToRightPipe = false
@@ -74,8 +86,10 @@ object RobotContainer
             { controllerA.leftY },
             { controllerA.leftX },
             { controllerA.rightX },
-            true,
-            { true },
+            isFieldRelative =  true,
+            isClosedLoop =  { true },
+            { translationMultiplierSlewRateLimiter.calculate(FREE_DRIVE_TRANSLATION_MULTIPLIER) },
+            { rotationMultiplierSlewRateLimiter.calculate(FREE_DRIVE_ROTATION_MULTIPLIER) },
         )
 
         JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
@@ -91,19 +105,32 @@ object RobotContainer
             options().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.zeroGyro() })
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
-            R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
             R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
+            R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
+            R2().whileTrue(
+                SwerveSubsystem.rotationSetpointDriveCommand(
+                    { leftY },
+                    { leftX },
+                    {
+                        FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2].rotation
+                    },
+                    true,
+                    isClosedLoop = { true },
+                    translationMultiplier = { translationMultiplierSlewRateLimiter.calculate(EXTENDED_DRIVE_TRANSLATION_MULTIPLIER) },
+                )
+            )
 
             L1().toggleOnTrue(
+                IntakeSubsystem.intakeCommand(true)
+            )
+            L2().whileTrue(
                 SwerveSubsystem.rotateToCoralCommand(
                     { controllerA.leftY },
                     { controllerA.leftX },
                     { controllerA.rightX },
-                    true
+                    isFieldRelative =  true,
+                    isClosedLoop = { true },
                 )
-            )
-            L2().toggleOnTrue(
-                IntakeSubsystem.intakeCommand(true)
             )
 
             triangle().whileTrue(SwerveSubsystem.alignToPipeCommand(
@@ -157,7 +184,7 @@ object RobotContainer
                 shouldAlignToRightPipe = true
             }
 
-            L1().onTrue() {
+            L1().onTrue {
                 shouldAlignToRightPipe = false
             }
 
