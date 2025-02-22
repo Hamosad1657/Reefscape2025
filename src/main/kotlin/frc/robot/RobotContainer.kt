@@ -55,6 +55,9 @@ object RobotContainer
 
     private const val EXTENDED_DRIVE_TRANSLATION_MULTIPLIER = 0.3
 
+    private const val INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER = 0.5
+    private const val INTAKE_ALIGNMENT_ROTATION_MULTIPLIER = 0.3
+
     private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
 
     private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
@@ -130,6 +133,8 @@ object RobotContainer
                     { controllerA.rightX },
                     isFieldRelative =  true,
                     isClosedLoop = { true },
+                    { translationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER) },
+                    { rotationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_ROTATION_MULTIPLIER) },
                 )
             )
 
