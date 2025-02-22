@@ -251,15 +251,15 @@ object SwerveConstants {
 	// --- Pose alignment ---
 
 	val POSE_ALIGNMENT_PID_GAINS = PIDGains(
-		kP = 0.65,
-		kI = 0.0,
+		kP = 1.3,
+		kI = 0.25,
 		kD = 0.0,
 	)
 
-	val POSE_ALIGNMENT_TOLERANCE = 1.5.centimeters
+	val POSE_ALIGNMENT_TOLERANCE = 3.2.centimeters
 
-	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.5
-	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.5
+	private const val MAX_POSE_ALIGNMENT_VELOCITY: Mps = 0.6
+	private const val MAX_POSE_ALIGNMENT_ACCELERATION: MpsSquared = 0.6
 
 	val POSE_ALIGNMENT_CONSTRAINTS = TrapezoidProfile.Constraints(
 		MAX_POSE_ALIGNMENT_VELOCITY,

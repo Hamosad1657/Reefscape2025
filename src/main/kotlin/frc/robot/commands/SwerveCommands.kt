@@ -1,7 +1,5 @@
 package frc.robot.commands
 
-import com.hamosad1657.lib.Alert
-import com.hamosad1657.lib.Alert.AlertType.ERROR
 import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.powerProfile
 import com.hamosad1657.lib.units.powerProfile
@@ -12,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
@@ -24,8 +21,6 @@ import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
 import frc.robot.vision.CoralVision
-import kotlin.math.PI
-import kotlin.math.absoluteValue
 
 // --- Controller driving command ---
 
@@ -42,18 +37,20 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	rJoyXSupplier: () -> Double,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
+	rotationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with angular velocity control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(2) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
-		val rJoyX = rJoyXSupplier().powerProfile(2)
+		val rJoyX = rJoyXSupplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
 			-velocity.x,
-			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs,
+			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs * rotationMultiplier(),
 		)
 
 		drive(
@@ -71,11 +68,12 @@ fun SwerveSubsystem.rotationSetpointDriveCommand(
 	rotationSetpointSupplier: () -> Rotation2d,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with rotation setpoint control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
@@ -111,8 +109,7 @@ fun SwerveSubsystem.rotateToCoralCommand(
 		val rJoyY = rJoyYSupplier()
 		val rJoyX = rJoyXSupplier()
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
-		var chassisSpeeds = ChassisSpeeds()
-		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
+		val chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
 			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
@@ -144,7 +141,8 @@ fun SwerveSubsystem.aimTowardsCommand(target: Translation2d) = withName("Aim tow
 	rotationSetpointDriveCommand({ 0.0 },
 		{ 0.0 },
 		{ getAngleBetweenTranslations(currentPose.translation, target) },
-		false)
+		false,
+	)
 }
 
 // --- Path following ---
