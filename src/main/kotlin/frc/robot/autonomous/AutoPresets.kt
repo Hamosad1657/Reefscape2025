@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance
 import frc.robot.Robot
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
+import frc.robot.field.Pipe
+import frc.robot.field.ReefSide
 import frc.robot.subsystems.grabber.GrabberSubsystem
+import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 
@@ -18,6 +21,11 @@ fun scoreL1Routine(pipe: frc.robot.field.Pipe, position: Int) = withName("$posit
 	( SwerveSubsystem.followInitialPathCommand(PathPlannerPath.fromPathFile("Position${position}${pipe.letter}L1Score"), Robot.alliance == Alliance.Red) andThen
 	JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true, JointedElevatorState.L1) raceWith
 	(GrabberSubsystem.setVoltageCommand(true, EJECT_TO_L1) withTimeout(3.0)))
+}
+
+fun scoreL1Intake(reefSide: ReefSide, position: Int) = withName("Score L1 $reefSide from $position") {
+	SwerveSubsystem.followInitialPathCommand(PathPlannerPath.fromPathFile("Position${position}${reefSide}L1Intake"), Robot.alliance == Alliance.Red) andThen
+	IntakeSubsystem.ejectToL1Command(true)
 }
 
 fun HL1ScoreRoutine() = withName("L1 GH right routine") {
