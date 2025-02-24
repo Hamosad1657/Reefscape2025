@@ -69,12 +69,11 @@ object Robot : TimedRobot()
 
     override fun disabledPeriodic()
     {
-
+        if (autonomousCommand == null) autonomousCommand = RobotContainer.getAutonomousCommand()
     }
 
     override fun autonomousInit()
     {
-        autonomousCommand = RobotContainer.getAutonomousCommand()
         autonomousCommand?.schedule()
     }
 
