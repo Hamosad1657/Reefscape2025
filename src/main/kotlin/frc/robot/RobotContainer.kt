@@ -5,7 +5,6 @@ import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.math.filter.SlewRateLimiter
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -13,7 +12,6 @@ import frc.robot.ScoringMode.*
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.FieldConstants
-import frc.robot.field.ReefSide.AB
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -45,7 +43,7 @@ enum class ScoringMode(val elevatorJointState: JointedElevatorState, val grabber
  */
 object RobotContainer
 {
-    private const val JOYSTICK_DEADBAND = 0.08
+    private const val JOYSTICK_DEADBAND = 0.04
     private const val EJECT_TIMEOUT: Seconds = 2.0
     private const val SWERVE_POWER_PROFILE = 3
     private const val CLIMB_POWER_PROFILE = 2
@@ -58,9 +56,9 @@ object RobotContainer
     private const val INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER = 0.5
     private const val INTAKE_ALIGNMENT_ROTATION_MULTIPLIER = 0.3
 
-    private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
+    private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
 
-    private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, 0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
+    private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
 
     var currentScoringMode = L1
 
@@ -114,10 +112,8 @@ object RobotContainer
                 SwerveSubsystem.rotationSetpointDriveCommand(
                     { leftY },
                     { leftX },
-                    {
-                        FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2].rotation
-                    },
-                    true,
+                    { FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2].rotation },
+                    isFieldRelative = true,
                     isClosedLoop = { true },
                     translationMultiplier = { translationMultiplierSlewRateLimiter.calculate(EXTENDED_DRIVE_TRANSLATION_MULTIPLIER) },
                 )
@@ -193,7 +189,7 @@ object RobotContainer
                 shouldAlignToRightPipe = false
             }
 
-            L2().onTrue(
+            L2().toggleOnTrue(
                 loadCoralFromIntake()
             )
         }
