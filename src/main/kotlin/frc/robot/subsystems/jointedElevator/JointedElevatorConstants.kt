@@ -36,7 +36,7 @@ object JointedElevatorConstants {
 		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.6276855)//-0.5857)
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.7294921875)
 	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			AbsoluteSensorDiscontinuityPoint = 1.0
@@ -50,8 +50,8 @@ object JointedElevatorConstants {
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val UP_ELEVATOR_KG: Volts = 1.25
-	const val DOWN_ELEVATOR_KG: Volts = 0.3
+	const val UP_ELEVATOR_KG: Volts = 0.94
+	const val DOWN_ELEVATOR_KG: Volts = 0.2
 
 	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
 
@@ -80,7 +80,7 @@ object JointedElevatorConstants {
 		inverted(true)
 	}
 
-	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(-38.8)
+	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(-97.9)
 	val ANGLE_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.CounterClockwise_Positive
@@ -90,8 +90,8 @@ object JointedElevatorConstants {
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 8.5,
-		kI = 4.5,
+		kP = 7.5,
+		kI = 0.0,
 		kD = 0.0,
 	)
 
