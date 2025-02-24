@@ -1,6 +1,7 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
+import com.hamosad1657.lib.units.degrees
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.controller.ProfiledPIDController
@@ -8,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
 import edu.wpi.first.wpilibj2.command.Command
@@ -41,6 +43,7 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
+		DriverStation.reportWarning(translationMultiplier().toString(), false)
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
 		val rJoyX = rJoyXSupplier()
@@ -71,6 +74,7 @@ fun SwerveSubsystem.rotationSetpointDriveCommand(
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
+		DriverStation.reportWarning(translationMultiplier().toString(), false)
 		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
 		val chassisSpeeds = ChassisSpeeds(
@@ -111,7 +115,7 @@ fun SwerveSubsystem.rotateToCoralCommand(
 			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
-				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
+				SwerveConstants.CORAL_PID_CONTROLLER.calculate(CoralVision.coralAngleToCenter.radians, (-18.0).degrees.radians),
 			)
 		} else {
 			ChassisSpeeds(
