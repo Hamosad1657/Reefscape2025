@@ -49,7 +49,7 @@ object SwerveConstants {
 		}
 
 	/** Uses radians. */
-	val CORAL_PID_CONTROLLER = PIDController(2.5, 0.0, 0.0).apply {
+	val CORAL_PID_CONTROLLER = PIDController(3.5, 0.0, 0.0).apply {
 		setTolerance(2.0)
 	}
 
