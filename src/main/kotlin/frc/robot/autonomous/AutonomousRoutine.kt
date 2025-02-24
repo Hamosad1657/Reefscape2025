@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import frc.robot.Robot
 import frc.robot.autonomous.segments.AutonomousSegment
 import frc.robot.autonomous.segments.models.AutonomousRoutineModel
 import frc.robot.commands.*
@@ -25,13 +26,13 @@ class AutonomousRoutine(
 	private val startingReefSide: ReefSide,
 	private val segments: List<AutonomousSegment>,
 ) {
-	fun generateCommand(alliance: Alliance): Command {
+	fun generateCommand(): Command {
 		val command = SequentialCommandGroup()
 
 		command.addCommands(
 			SwerveSubsystem.followInitialPathCommand(
 				PathPlannerPath.fromPathFile("Position $startingPosition to ${startingReefSide.name}-far"),
-				alliance == Alliance.Red,
+				Robot.alliance == Alliance.Red,
 			)
 		)
 
@@ -51,7 +52,7 @@ class AutonomousRoutine(
 								useQuickest = false,
 								isClockwise = currentSegment.isClockwise,
 							),
-							alliance == Alliance.Red,
+							Robot.alliance == Alliance.Red,
 						)
 					)
 				}
@@ -68,14 +69,14 @@ class AutonomousRoutine(
 								useQuickest = false,
 								isClockwise = currentSegment.isClockwise,
 							),
-							alliance == Alliance.Red,
+							Robot.alliance == Alliance.Red,
 						)
 					)
 				}
 			}
 
 			// Add the segment's command.
-			command.addCommands(currentSegment.generateCommand(alliance))
+			command.addCommands(currentSegment.generateCommand(Robot.alliance))
 		}
 
 		return command
