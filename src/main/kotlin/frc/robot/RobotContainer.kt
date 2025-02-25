@@ -5,7 +5,6 @@ import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.math.filter.SlewRateLimiter
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -15,7 +14,6 @@ import frc.robot.autonomous.scoreL1Intake
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.FieldConstants
-import frc.robot.field.ReefSide.GH
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -112,16 +110,6 @@ object RobotContainer
 
             R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
             R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
-            R2().whileTrue(
-                SwerveSubsystem.rotationSetpointDriveCommand(
-                    { leftY },
-                    { leftX },
-                    { FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2].rotation },
-                    isFieldRelative = true,
-                    isClosedLoop = { true },
-                    translationMultiplier = { translationMultiplierSlewRateLimiter.calculate(EXTENDED_DRIVE_TRANSLATION_MULTIPLIER) },
-                )
-            )
 
             L1().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
