@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Robot
+import kotlin.math.absoluteValue
 import frc.robot.RobotMap as Map
 import frc.robot.subsystems.jointedElevator.JointedElevatorConstants as Constants
 
@@ -28,6 +29,7 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 
 	private val elevatorRotationEncoder = CANcoder(Map.JointedElevator.HEIGHT_CAN_CODER_ID).apply {
 		configurator.apply(Constants.HEIGHT_CAN_CODER_CONFIGS)
+		configurator.setPosition(0.0)
 	}
 
 	private val mainElevatorMotor = HaTalonFX(Map.JointedElevator.MAIN_HEIGHT_MOTOR_ID).apply {
@@ -140,6 +142,13 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 		} else {
 			angleMotor.stopMotor()
 		}
+	}
+
+	// --- Periodic ---
+
+	override fun periodic() {
+		if (isAtMinAngleLimit && currentElevatorRotation.rotations.absoluteValue >= 0.02)
+			elevatorRotationEncoder.configurator.setPosition(0.0)
 	}
 
 	// --- Telemetry ---

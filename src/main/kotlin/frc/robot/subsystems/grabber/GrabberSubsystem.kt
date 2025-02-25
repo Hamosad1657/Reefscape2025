@@ -80,6 +80,7 @@ object GrabberSubsystem: SubsystemBase() {
 
 			if (Robot.isTesting) {
 				addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
+				addDoubleProperty("Beambreak voltage", { beamBreak.voltage }, null)
 			}
 		}
 	}

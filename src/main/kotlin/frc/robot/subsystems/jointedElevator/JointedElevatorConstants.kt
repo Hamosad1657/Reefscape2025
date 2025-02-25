@@ -36,7 +36,7 @@ object JointedElevatorConstants {
 		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.7294921875)
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(0.0)//-0.05029296875)
 	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			AbsoluteSensorDiscontinuityPoint = 1.0
@@ -50,12 +50,12 @@ object JointedElevatorConstants {
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val UP_ELEVATOR_KG: Volts = 0.94
-	const val DOWN_ELEVATOR_KG: Volts = 0.2
+	const val UP_ELEVATOR_KG: Volts = 1.3
+	const val DOWN_ELEVATOR_KG: Volts = 0.4
 
-	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
+	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.09.rotations
 
-	val MAX_ELEVATOR_ROTATION = 2.601.rotations
+	val MAX_ELEVATOR_ROTATION = 2.7.rotations
 	val MIN_ELEVATOR_ROTATION = 0.0.rotations
 
 	val RESTING_ELEVATOR_ROTATION = 0.0.rotations
@@ -95,7 +95,7 @@ object JointedElevatorConstants {
 		kD = 0.0,
 	)
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.6)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.6)
 
 	val MIN_ANGLE = Rotation2d.fromDegrees(-63.4)
 	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)
@@ -107,7 +107,7 @@ object JointedElevatorConstants {
 	val L3_ANGLE = Rotation2d.fromDegrees(-36.0)
 	val L4_ANGLE = Rotation2d.fromDegrees(-45.3)
 
-	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-42.0)
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-60.0)
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
 	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
 
