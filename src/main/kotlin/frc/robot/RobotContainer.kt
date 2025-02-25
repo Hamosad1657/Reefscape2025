@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
-import frc.robot.autonomous.scoreL1Intake
+import frc.robot.autonomous.GL4ScoreRoutine
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.field.FieldConstants
@@ -187,8 +187,8 @@ object RobotContainer
 
     val routine = AutonomousRoutine.createFromJSON("test")
 
-    fun getAutonomousCommand(): Command?
+    fun getAutonomousCommand(): Command
     {
-        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
+        return GL4ScoreRoutine()
     }
 }
