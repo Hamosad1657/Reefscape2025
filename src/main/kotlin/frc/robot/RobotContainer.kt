@@ -5,6 +5,7 @@ import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.math.filter.SlewRateLimiter
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -187,8 +188,8 @@ object RobotContainer
 
     val routine = AutonomousRoutine.createFromJSON("test")
 
-    fun getAutonomousCommand(): Command
+    fun getAutonomousCommand(): Command?
     {
-        return GL4ScoreRoutine()
+        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
     }
 }
