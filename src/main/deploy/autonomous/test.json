@@ -1,0 +1,14 @@
+{
+  "StartingPosition": 3,
+  "StartingReefSide": 2,
+  "Segments": [
+    {
+      "Type": "CoralScoreSegment",
+      "PipeToScoreOn": 5,
+      "LevelToScoreOn": 3,
+      "IsClockwise": true,
+      "StartingSide": 2,
+      "EndingSide": 2
+    }
+  ]
+}

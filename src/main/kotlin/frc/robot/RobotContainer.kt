@@ -146,10 +146,8 @@ object RobotContainer
 
             PS().whileTrue(IntakeSubsystem.ejectFromIntake())
 
-            povUp().whileTrue(Commands.defer(
-                { SwerveSubsystem.driveToPoseCommand(FieldConstants.Poses.FAR_POSES[SwerveSubsystem.closestReefSide.number * 2]) },
-                setOf(SwerveSubsystem),
-            ))
+            povUp().whileTrue(GrabberSubsystem.setVoltageCommand(false, EJECT_TO_L1))
+            povDown().whileTrue(GrabberSubsystem.setVoltageCommand(false, INTAKE_ALGAE))
         }
 
         with(controllerB) {
