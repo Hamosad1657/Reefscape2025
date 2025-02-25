@@ -24,13 +24,13 @@ object IntakeConstants {
 
 	const val BEAM_BREAK_THRESHOLD: Volts = 1.0
 
-	const val INTAKING_VOLTAGE: Volts = 8.5
+	const val INTAKING_VOLTAGE: Volts = 6.7
 
 	const val EJECTING_VOLTAGE: Volts = -11.0
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 3.0,
+		kP = 2.7,
 		kI = 0.0,
 		kD = 0.0,
 	)
