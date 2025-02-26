@@ -38,7 +38,7 @@ fun IntakeSubsystem.ejectFromIntake() = withName("Eject from intake") {
 }
 
 /** Intakes from ground, does not end automatically. */
-fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from ground") {
+fun IntakeSubsystem.intakeCommand(useLEDs: Boolean, shouldIgnoreBeamBreak: () -> Boolean = { false }) = withName("Intake from ground") {
 	run {
 		setAngle(IntakeConstants.DEPLOYED_ANGLE)
 		stopWheelMotor()
@@ -49,7 +49,7 @@ fun IntakeSubsystem.intakeCommand(useLEDs: Boolean) = withName("Intake from grou
 		stopAngleMotor()
 		setWheelMotorVoltage(IntakeConstants.INTAKING_VOLTAGE)
 		if (useLEDs) LEDsSubsystem.currentMode = INTAKING
-	} until { isAtMaxAngle && isBeamBreakInterfered }) finallyDo {
+	} until { isAtMaxAngle && isBeamBreakInterfered && !shouldIgnoreBeamBreak() }) finallyDo {
 		stopWheelMotor()
 		if (useLEDs) LEDsSubsystem.currentMode = ACTION_FINISHED
 	}

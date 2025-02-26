@@ -66,6 +66,8 @@ object RobotContainer
 
     var shouldAlignToRightPipe = false
 
+    var shouldIgnoreBeamBreak = false
+
     private val controllerA = HaCommandPS4Controller(RobotMap.DRIVER_A_CONTROLLER_PORT, JOYSTICK_DEADBAND, SWERVE_POWER_PROFILE)
     private val controllerB = HaCommandPS4Controller(RobotMap.DRIVER_B_CONTROLLER_PORT, JOYSTICK_DEADBAND, CLIMB_POWER_PROFILE)
 
@@ -113,7 +115,7 @@ object RobotContainer
 
             L1().whileTrue(GrabberSubsystem.setVoltageCommand(true, true) { currentScoringMode.grabberVoltageMode })
             L2().toggleOnTrue(
-                IntakeSubsystem.intakeCommand(true)
+                IntakeSubsystem.intakeCommand(true) { shouldIgnoreBeamBreak }
             )
 //            L2().whileTrue(
 //                SwerveSubsystem.rotateToCoralCommand(
@@ -180,6 +182,10 @@ object RobotContainer
             L2().toggleOnTrue(
                 loadCoralFromIntake()
             )
+
+            PS().onTrue {
+                shouldIgnoreBeamBreak = !shouldIgnoreBeamBreak
+            }
         }
     }
 
