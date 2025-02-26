@@ -106,10 +106,11 @@ object RobotContainer
             options().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.zeroGyro() })
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
-            R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
+            R1().whileTrue(GrabberSubsystem.setVoltageCommand(true, false) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
             R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
 
-            L1().toggleOnTrue(
+            L1().whileTrue(GrabberSubsystem.setVoltageCommand(true, true) { currentScoringMode.grabberVoltageMode })
+            L2().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
             )
 //            L2().whileTrue(
@@ -131,9 +132,6 @@ object RobotContainer
             circle().toggleOnTrue(IntakeSubsystem.ejectToL1Command(true))
 
             PS().whileTrue(IntakeSubsystem.ejectFromIntake())
-
-            povUp().whileTrue(GrabberSubsystem.setVoltageCommand(false, EJECT_TO_L1))
-            povDown().whileTrue(GrabberSubsystem.setVoltageCommand(false, INTAKE_ALGAE))
         }
 
         with(controllerB) {

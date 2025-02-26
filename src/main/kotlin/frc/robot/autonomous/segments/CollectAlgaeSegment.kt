@@ -34,7 +34,7 @@ class CollectAlgaeSegment(
 				// Align to the reef side
 				((SwerveSubsystem.alignToReefSideCommand({ algaeToCollect.side }, alliance) andThen wait(1.5)) raceWith
 				// collect algae
-				GrabberSubsystem.setVoltageCommand(true, INTAKE_ALGAE)) andThen
+				GrabberSubsystem.setVoltageCommand(true, false, INTAKE_ALGAE)) andThen
 				// Get back to the pose around the reef
 				SwerveSubsystem.alignToPoseCommand(
 					{

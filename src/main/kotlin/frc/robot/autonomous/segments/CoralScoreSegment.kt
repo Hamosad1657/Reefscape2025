@@ -48,7 +48,8 @@ class CoralScoreSegment(
 	waitUntil { JointedElevatorSubsystem.isWithinTolerance }) withTimeout(5.0)) andThen
 	// Eject a coral
 	(GrabberSubsystem.setVoltageCommand(
-		true,
+		useLEDs = true,
+		invert = false,
 		when (branchToScoreOn.level) {
 			L1 -> EJECT_TO_L1
 			L2, L3 -> EJECT_TO_L2_AND_L3

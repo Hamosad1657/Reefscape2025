@@ -32,7 +32,7 @@ class EjectAlgaeToProcessorSegment(
 				// Wait until elevator state is in tolerance
 				waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 					// Eject in processor
-					(GrabberSubsystem.setVoltageCommand(true, EJECT_TO_PROCESSOR) withTimeout(1.5))) andThen
+					(GrabberSubsystem.setVoltageCommand(true, false, EJECT_TO_PROCESSOR) withTimeout(1.5))) andThen
 				// Get back to reef
 				SwerveSubsystem.followPathCommand(
 					PathPlannerPath.fromPathFile("Processor to ${endingSide.name}-far"),
