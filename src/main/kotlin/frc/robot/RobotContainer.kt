@@ -8,13 +8,10 @@ import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
-import frc.robot.autonomous.GL4ScoreRoutine
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
-import frc.robot.field.FieldConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -115,17 +112,17 @@ object RobotContainer
             L1().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
             )
-            L2().whileTrue(
-                SwerveSubsystem.rotateToCoralCommand(
-                    { controllerA.leftY },
-                    { controllerA.leftX },
-                    { controllerA.rightX },
-                    isFieldRelative =  true,
-                    isClosedLoop = { true },
-                    { translationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER) },
-                    { rotationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_ROTATION_MULTIPLIER) },
-                )
-            )
+//            L2().whileTrue(
+//                SwerveSubsystem.rotateToCoralCommand(
+//                    { controllerA.leftY },
+//                    { controllerA.leftX },
+//                    { controllerA.rightX },
+//                    isFieldRelative =  true,
+//                    isClosedLoop = { true },
+//                    { translationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER) },
+//                    { rotationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_ROTATION_MULTIPLIER) },
+//                )
+//            )
 
             triangle().whileTrue(SwerveSubsystem.alignToPipeCommand(
                 { SwerveSubsystem.closestReefSide.let { if (shouldAlignToRightPipe) it.right else it.left } }, Robot.alliance)
