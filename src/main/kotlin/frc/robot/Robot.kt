@@ -35,8 +35,8 @@ object Robot : TimedRobot()
         }
     }
 
-    const val isTesting = true
-    const val isCompetition = false
+    const val isTesting = false
+    const val isCompetition = true
 
     private var autonomousCommand: Command? = null
 
