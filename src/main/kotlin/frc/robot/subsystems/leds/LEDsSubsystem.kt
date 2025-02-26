@@ -53,7 +53,7 @@ object LEDsSubsystem: SubsystemBase("LEDs") {
 					}
 					Red -> {
 						currentMode = RED_ALLIANCE
-						LEDPattern.solid(Color(0,255,0)).applyTo(ledBuffer)
+						LEDPattern.solid(Color(255,0,0)).applyTo(ledBuffer)
 					}
 					else -> LEDPattern.kOff.applyTo(ledBuffer)
 				}
