@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
+import frc.robot.autonomous.scoreL1Intake
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
+import frc.robot.field.ReefSide.GH
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -181,10 +183,10 @@ object RobotContainer
         }
     }
 
-    val routine = AutonomousRoutine.createFromJSON("test")
+    private val routine = AutonomousRoutine.createFromJSON("practice")
 
     fun getAutonomousCommand(): Command?
     {
-        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
+        return if (DriverStation.getAlliance().isPresent) scoreL1Intake(GH, 3) else null
     }
 }
