@@ -144,13 +144,6 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 		}
 	}
 
-	// --- Periodic ---
-
-	override fun periodic() {
-		if (isAtMinAngleLimit && currentElevatorRotation.rotations.absoluteValue >= 0.02)
-			elevatorRotationEncoder.configurator.setPosition(0.0)
-	}
-
 	// --- Telemetry ---
 
 	override fun initSendable(builder: SendableBuilder) {
