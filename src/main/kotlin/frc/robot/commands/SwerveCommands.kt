@@ -1,8 +1,7 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
-import com.hamosad1657.lib.controllers.powerProfile
-import com.hamosad1657.lib.units.powerProfile
+import com.hamosad1657.lib.units.degrees
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.controller.ProfiledPIDController
@@ -20,6 +19,7 @@ import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.subsystems.swerve.getAngleBetweenTranslations
+import frc.robot.vision.CoralVision
 
 // --- Controller driving command ---
 
@@ -36,18 +36,20 @@ fun SwerveSubsystem.angularVelocityDriveCommand(
 	rJoyXSupplier: () -> Double,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
+	rotationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with angular velocity control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY).powerProfile(3) * SwerveConstants.MAX_SPEED * 0.7
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
-		val rJoyX = rJoyXSupplier().powerProfile(3) * 0.5
+		val rJoyX = rJoyXSupplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
 			-velocity.x,
-			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs,
+			-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs * rotationMultiplier(),
 		)
 
 		drive(
@@ -65,11 +67,12 @@ fun SwerveSubsystem.rotationSetpointDriveCommand(
 	rotationSetpointSupplier: () -> Rotation2d,
 	isFieldRelative: Boolean,
 	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
 ) = withName("Drive with rotation setpoint control") {
 	run {
 		val lJoyY = lJoyYSupplier()
 		val lJoyX = lJoyXSupplier()
-		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
+		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED * translationMultiplier()
 
 		val chassisSpeeds = ChassisSpeeds(
 			velocity.y,
@@ -91,43 +94,42 @@ fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to 
 	rotationSetpointDriveCommand({ 0.0 }, { 0.0 }, { rotation }, false)
 }
 
-//fun SwerveSubsystem.rotateToCoralCommand(
-//	lJoyYSupplier: () -> Double,
-//	lJoyXSupplier: () -> Double,
-//	rJoyYSupplier: () -> Double,
-//	rJoyXSupplier: () -> Double,
-//	isFieldRelative: Boolean,
-//	isClosedLoop: () -> Boolean = { false },
-//) = withName("rotateToCoral") {
-//	run {
-//		val lJoyY = lJoyYSupplier()
-//		val lJoyX = lJoyXSupplier()
-//		val rJoyY = rJoyYSupplier()
-//		val rJoyX = rJoyXSupplier()
-//		val velocity = Translation2d(lJoyX, lJoyY) * SwerveConstants.MAX_SPEED
-//		var chassisSpeeds = ChassisSpeeds()
-//		chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0 && rJoyY == 0.0) {
-//			ChassisSpeeds(
-//				velocity.y,
-//				-velocity.x,
-//				SwerveConstants.CORAL_PID_CONTROLLER.calculate(-CoralVision.coralAngleToCenter.radians, 0.0),
-//			)
-//		} else {
-//			ChassisSpeeds(
-//				velocity.y,
-//				-velocity.x,
-//				-rJoyX
-//			)
-//		}
-//
-//		drive(
-//			chassisSpeeds,
-//			isFieldRelative,
-//			flipForRed = true,
-//			isClosedLoop(),
-//		)
-//	}
-//}
+fun SwerveSubsystem.rotateToCoralCommand(
+	lJoyYSupplier: () -> Double,
+	lJoyXSupplier: () -> Double,
+	rJoyXSupplier: () -> Double,
+	isFieldRelative: Boolean,
+	isClosedLoop: () -> Boolean = { false },
+	translationMultiplier: () -> Double = { 1.0 },
+	rotationMultiplier: () -> Double = { 1.0 },
+) = withName("Rotate to coral") {
+	run {
+		val lJoyY = lJoyYSupplier()
+		val lJoyX = lJoyXSupplier()
+		val rJoyX = rJoyXSupplier()
+		val velocity = Translation2d(lJoyX, lJoyY) * translationMultiplier() * SwerveConstants.MAX_SPEED
+		val chassisSpeeds = if (CoralVision.coralAngleToCenter.radians != 0.0 && rJoyX == 0.0) {
+			ChassisSpeeds(
+				velocity.y,
+				-velocity.x,
+				SwerveConstants.CORAL_PID_CONTROLLER.calculate(CoralVision.coralAngleToCenter.radians, (-18.0).degrees.radians),
+			)
+		} else {
+			ChassisSpeeds(
+				velocity.y,
+				-velocity.x,
+				-rJoyX * SwerveConstants.MAX_ANGULAR_VELOCITY.asRadPs * rotationMultiplier(),
+			)
+		}
+
+		drive(
+			chassisSpeeds,
+			isFieldRelative,
+			flipForRed = true,
+			isClosedLoop(),
+		)
+	}
+}
 
 /**
  * Aims towards a target on the field while staying in place.
@@ -138,7 +140,8 @@ fun SwerveSubsystem.aimTowardsCommand(target: Translation2d) = withName("Aim tow
 	rotationSetpointDriveCommand({ 0.0 },
 		{ 0.0 },
 		{ getAngleBetweenTranslations(currentPose.translation, target) },
-		false)
+		false,
+	)
 }
 
 // --- Path following ---

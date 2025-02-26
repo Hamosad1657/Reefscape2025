@@ -36,7 +36,7 @@ object JointedElevatorConstants {
 		}
 	}
 
-	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(-0.6276855)//-0.5857)
+	private val ELEVATOR_CAN_CODER_OFFSET = Rotation2d.fromRotations(0.0)//-0.05029296875)
 	val HEIGHT_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			AbsoluteSensorDiscontinuityPoint = 1.0
@@ -50,23 +50,23 @@ object JointedElevatorConstants {
 		kI = 0.0,
 		kD = 0.0,
 	)
-	const val UP_ELEVATOR_KG: Volts = 1.25
-	const val DOWN_ELEVATOR_KG: Volts = 0.3
+	const val UP_ELEVATOR_KG: Volts = 1.3
+	const val DOWN_ELEVATOR_KG: Volts = 0.4
 
-	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.05.rotations
+	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.09.rotations
 
-	val MAX_ELEVATOR_ROTATION = 2.601.rotations
+	val MAX_ELEVATOR_ROTATION = 2.7.rotations
 	val MIN_ELEVATOR_ROTATION = 0.0.rotations
 
 	val RESTING_ELEVATOR_ROTATION = 0.0.rotations
 
 	val L1_ELEVATOR_ROTATION = 0.1514.rotations
-	val L2_ELEVATOR_ROTATION = 0.768.rotations
-	val L3_ELEVATOR_ROTATION = 1.445.rotations
-	val L4_ELEVATOR_ROTATION = 2.482.rotations
+	val L2_ELEVATOR_ROTATION = 0.742.rotations
+	val L3_ELEVATOR_ROTATION = 1.375.rotations
+	val L4_ELEVATOR_ROTATION = 2.41333.rotations
 
-	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.831.rotations
-	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 1.531.rotations
+	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.982.rotations
+	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 1.565.rotations
 	val PROCESSOR_ELEVATOR_ROTATION = 0.0.rotations
 	val NET_ELEVATOR_ROTATION = 0.0.rotations
 
@@ -80,7 +80,7 @@ object JointedElevatorConstants {
 		inverted(true)
 	}
 
-	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(-38.8)
+	private val ANGLE_CAN_CODER_OFFSET = Rotation2d.fromDegrees(-97.9)
 	val ANGLE_CAN_CODER_CONFIGS = CANcoderConfiguration().apply {
 		with(MagnetSensor) {
 			SensorDirection = SensorDirectionValue.CounterClockwise_Positive
@@ -90,24 +90,24 @@ object JointedElevatorConstants {
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 8.5,
-		kI = 4.5,
+		kP = 7.5,
+		kI = 0.0,
 		kD = 0.0,
 	)
 
-	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(1.6)
+	val ANGLE_TOLERANCE = Rotation2d.fromDegrees(2.6)
 
-	val MIN_ANGLE = Rotation2d.fromDegrees(-63.4)
+	val MIN_ANGLE = Rotation2d.fromDegrees(-69.0)
 	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)
 
 	val RESTING_ANGLE = Rotation2d.fromDegrees(-15.0)
 
 	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L2_ANGLE = Rotation2d.fromDegrees(-39.0)
-	val L3_ANGLE = Rotation2d.fromDegrees(-36.0)
-	val L4_ANGLE = Rotation2d.fromDegrees(-33.1)
+	val L2_ANGLE = Rotation2d.fromDegrees(-35.7)
+	val L3_ANGLE = Rotation2d.fromDegrees(-36.8)
+	val L4_ANGLE = Rotation2d.fromDegrees(-35.5)
 
-	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-42.0)
+	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-66.0)
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
 	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
 

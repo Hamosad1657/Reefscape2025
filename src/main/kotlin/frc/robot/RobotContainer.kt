@@ -4,14 +4,17 @@ import com.hamosad1657.lib.commands.*
 import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
+import edu.wpi.first.math.filter.SlewRateLimiter
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
-import frc.robot.autonomous.GL1ScoreRoutine
+import frc.robot.autonomous.GL4ScoreRoutine
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
+import frc.robot.field.FieldConstants
 import frc.robot.subsystems.grabber.GrabberSubsystem
 import frc.robot.subsystems.intake.IntakeConstants
 import frc.robot.subsystems.intake.IntakeSubsystem
@@ -43,15 +46,29 @@ enum class ScoringMode(val elevatorJointState: JointedElevatorState, val grabber
  */
 object RobotContainer
 {
-    private const val JOYSTICK_DEADBAND = 0.08
+    private const val JOYSTICK_DEADBAND = 0.04
     private const val EJECT_TIMEOUT: Seconds = 2.0
+    private const val SWERVE_POWER_PROFILE = 3
+    private const val CLIMB_POWER_PROFILE = 2
+
+    private const val FREE_DRIVE_TRANSLATION_MULTIPLIER = 0.7
+    private const val FREE_DRIVE_ROTATION_MULTIPLIER = 0.5
+
+    private const val EXTENDED_DRIVE_TRANSLATION_MULTIPLIER = 0.3
+
+    private const val INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER = 0.5
+    private const val INTAKE_ALIGNMENT_ROTATION_MULTIPLIER = 0.3
+
+    private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
+
+    private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
 
     var currentScoringMode = L1
 
     var shouldAlignToRightPipe = false
 
-    private val controllerA = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_A_CONTROLLER_PORT)
-    private val controllerB = HaCommandPS4Controller(JOYSTICK_DEADBAND, RobotMap.DRIVER_B_CONTROLLER_PORT)
+    private val controllerA = HaCommandPS4Controller(RobotMap.DRIVER_A_CONTROLLER_PORT, JOYSTICK_DEADBAND, SWERVE_POWER_PROFILE)
+    private val controllerB = HaCommandPS4Controller(RobotMap.DRIVER_B_CONTROLLER_PORT, JOYSTICK_DEADBAND, CLIMB_POWER_PROFILE)
 
     init
     {
@@ -73,8 +90,10 @@ object RobotContainer
             { controllerA.leftY },
             { controllerA.leftX },
             { controllerA.rightX },
-            true,
-            { true },
+            isFieldRelative =  true,
+            isClosedLoop =  { true },
+            { translationMultiplierSlewRateLimiter.calculate(FREE_DRIVE_TRANSLATION_MULTIPLIER) },
+            { rotationMultiplierSlewRateLimiter.calculate(FREE_DRIVE_ROTATION_MULTIPLIER) },
         )
 
         JointedElevatorSubsystem.defaultCommand = JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
@@ -90,14 +109,22 @@ object RobotContainer
             options().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.zeroGyro() })
             share().onTrue(SwerveSubsystem.runOnce { SwerveSubsystem.setGyro(180.degrees) })
 
-            R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
             R1().whileTrue(GrabberSubsystem.setVoltageCommand(true) { currentScoringMode.grabberVoltageMode } withTimeout(EJECT_TIMEOUT))
+            R2().whileTrue(JointedElevatorSubsystem.maintainJointedElevatorStateCommand(true) { currentScoringMode.elevatorJointState })
 
             L1().toggleOnTrue(
-                Commands.defer(::intakeCoralFromGroundCommand, setOf(JointedElevatorSubsystem, GrabberSubsystem, IntakeSubsystem)) // TODO: raceWith alignToCoralDriveCommand()
-            )
-            L2().toggleOnTrue(
                 IntakeSubsystem.intakeCommand(true)
+            )
+            L2().whileTrue(
+                SwerveSubsystem.rotateToCoralCommand(
+                    { controllerA.leftY },
+                    { controllerA.leftX },
+                    { controllerA.rightX },
+                    isFieldRelative =  true,
+                    isClosedLoop = { true },
+                    { translationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER) },
+                    { rotationMultiplierSlewRateLimiter.calculate(INTAKE_ALIGNMENT_ROTATION_MULTIPLIER) },
+                )
             )
 
             triangle().whileTrue(SwerveSubsystem.alignToPipeCommand(
@@ -108,7 +135,8 @@ object RobotContainer
 
             PS().whileTrue(IntakeSubsystem.ejectFromIntake())
 
-            // TODO: Pathfinding
+            povUp().whileTrue(GrabberSubsystem.setVoltageCommand(false, EJECT_TO_L1))
+            povDown().whileTrue(GrabberSubsystem.setVoltageCommand(false, INTAKE_ALGAE))
         }
 
         with(controllerB) {
@@ -148,14 +176,20 @@ object RobotContainer
                 shouldAlignToRightPipe = true
             }
 
-            L1().onTrue() {
+            L1().onTrue {
                 shouldAlignToRightPipe = false
             }
+
+            L2().toggleOnTrue(
+                loadCoralFromIntake()
+            )
         }
     }
 
-    fun getAutonomousCommand(): Command
+    val routine = AutonomousRoutine.createFromJSON("test")
+
+    fun getAutonomousCommand(): Command?
     {
-        return AutonomousRoutine.createFromJSON("shem").generateCommand(Robot.alliance) //AutonomousRoutine.createFromJSON("smalltest").generateCommand(Robot.alliance)
+        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
     }
 }
