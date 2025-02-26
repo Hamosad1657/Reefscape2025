@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically
@@ -75,6 +76,7 @@ object Robot : TimedRobot()
     override fun autonomousInit()
     {
         autonomousCommand?.schedule()
+        JointedElevatorSubsystem.elevatorRotationEncoder.setPosition(0.0)
     }
 
     override fun autonomousPeriodic()

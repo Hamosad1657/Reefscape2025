@@ -27,7 +27,7 @@ import frc.robot.subsystems.jointedElevator.JointedElevatorConstants as Constant
 object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 	// --- Elevator Components ---
 
-	private val elevatorRotationEncoder = CANcoder(Map.JointedElevator.HEIGHT_CAN_CODER_ID).apply {
+	val elevatorRotationEncoder = CANcoder(Map.JointedElevator.HEIGHT_CAN_CODER_ID).apply {
 		configurator.apply(Constants.HEIGHT_CAN_CODER_CONFIGS)
 		configurator.setPosition(0.0)
 	}
