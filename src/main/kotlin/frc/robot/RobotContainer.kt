@@ -189,10 +189,10 @@ object RobotContainer
         }
     }
 
-    private val routine = AutonomousRoutine.createFromJSON("practice")
+    val routine = AutonomousRoutine.createFromJSON("test")
 
     fun getAutonomousCommand(): Command?
     {
-        return if (DriverStation.getAlliance().isPresent) scoreL1Intake(GH, 3) else null
+        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
     }
 }

@@ -5,7 +5,7 @@
     {
       "Type": "CoralScoreSegment",
       "PipeToScoreOn": 5,
-      "LevelToScoreOn": 3,
+      "LevelToScoreOn": 1,
       "IsClockwise": true,
       "StartingSide": 2,
       "EndingSide": 2
