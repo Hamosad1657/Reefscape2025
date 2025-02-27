@@ -223,7 +223,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		}
 		if (useVisionPoseEstimation) addVisionMeasurement()
 
-		posesPublisher.set(arrayOf<Pose2d>(currentPose, visionFieldWidget.robotPose))
+		//posesPublisher.set(arrayOf<Pose2d>(currentPose, visionFieldWidget.robotPose))
 	}
 
 	// --- Telemetry ---
@@ -234,12 +234,14 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		builder.setSmartDashboardType("Subsystem")
 		builder.addStringProperty("Active command", { currentCommand?.name ?: "none" }, null)
 
-		builder.addDoubleProperty("Current heading deg", { currentHeading.degrees }, null)
-		builder.addDoubleArrayProperty("Desired", { state.ModuleTargets.toDoubleArray() }, null)
-		builder.addDoubleArrayProperty("Current", { state.ModuleStates.toDoubleArray() }, null)
+		if (Robot.isTesting) {
+			builder.addDoubleProperty("Current heading deg", { currentHeading.degrees }, null)
+			builder.addDoubleArrayProperty("Desired", { state.ModuleTargets.toDoubleArray() }, null)
+			builder.addDoubleArrayProperty("Current", { state.ModuleStates.toDoubleArray() }, null)
 
-		builder.addStringProperty("Closest reef side", { closestReefSide.name }, null)
-		builder.addBooleanProperty("is robot autonomous", {Robot.isAutonomous}, null )
+			builder.addStringProperty("Closest reef side", { closestReefSide.name }, null)
+			builder.addBooleanProperty("is robot autonomous", { Robot.isAutonomous }, null)
+		}
 	}
 
 	private fun Array<SwerveModuleState>.toDoubleArray(): DoubleArray {

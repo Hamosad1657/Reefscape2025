@@ -115,17 +115,16 @@ object IntakeSubsystem: SubsystemBase("Intake subsystem") {
 
 	override fun initSendable(builder: SendableBuilder) {
 		with(builder) {
-			addBooleanProperty("Is at max angle", { isAtMaxAngle }, null)
-			addBooleanProperty("Is at min angle", { isAtMinAngle }, null)
-
-			addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
-			addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
-			addDoubleProperty("Angle error deg", { angleError.absoluteValue.degrees }, null)
-			addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
-
-			addBooleanProperty("Is beam break interfered", { isBeamBreakInterfered }, null)
-
 			if (Robot.isTesting) {
+				addBooleanProperty("Is at max angle", { isAtMaxAngle }, null)
+				addBooleanProperty("Is at min angle", { isAtMinAngle }, null)
+
+				addDoubleProperty("Angle deg", { currentAngle.degrees }, null)
+				addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+				addDoubleProperty("Angle error deg", { angleError.absoluteValue.degrees }, null)
+				addBooleanProperty("Is angle withing tolerance", { isWithinAngleTolerance }, null)
+
+				addBooleanProperty("Is beam break interfered", { isBeamBreakInterfered }, null)
 				addDoubleProperty("Wheel motor current Amps", { wheelMotor.outputCurrent }, null)
 			}
 		}

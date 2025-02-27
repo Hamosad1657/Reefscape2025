@@ -70,15 +70,15 @@ object GrabberSubsystem: SubsystemBase() {
 
 	override fun initSendable(builder: SendableBuilder) {
 		with(builder) {
-			addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
-
-			addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
-			addDoubleProperty("Current angle", { currentAngle.degrees }, null)
-			addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
-			addDoubleProperty("Angle error deg", { pidError.degrees }, null)
-			addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
-
 			if (Robot.isTesting) {
+				addBooleanProperty("Is coral in beam break", { isBeamBreakInterfered }, null)
+
+				addBooleanProperty("Is using PID control", { isUsingPIDControl }, null)
+				addDoubleProperty("Current angle", { currentAngle.degrees }, null)
+				addDoubleProperty("Setpoint deg", { setpoint.degrees }, null)
+				addDoubleProperty("Angle error deg", { pidError.degrees }, null)
+				addBooleanProperty("Is in setpoint tolerance", { isInTolerance }, null)
+
 				addDoubleProperty("Motor current Amps", { motor.outputCurrent }, null)
 				addDoubleProperty("Beambreak voltage", { beamBreak.voltage }, null)
 			}

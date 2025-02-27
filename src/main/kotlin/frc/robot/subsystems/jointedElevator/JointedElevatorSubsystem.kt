@@ -148,24 +148,28 @@ object  JointedElevatorSubsystem: SubsystemBase("Jointed elevator") {
 
 	override fun initSendable(builder: SendableBuilder) {
 		with(builder) {
-			addBooleanProperty("Is at min height", { isAtMinHeightLimit }, null)
-			addBooleanProperty("Is at max height", { isAtMaxHeightLimit }, null)
-			addDoubleProperty("Height error rotations", { ElevatorHeightError.rotations }, null)
-			addBooleanProperty("Is in height tolerance", { isElevatorWithinTolerance }, null)
-			addDoubleProperty("Elevator rotation rotations", { currentElevatorRotation.rotations }, null)
-			addDoubleProperty("Elevator absolute rotation rotations", { elevatorRotationEncoder.absolutePosition.value.magnitude() }, null)
-			addDoubleProperty("Elevator setpoint rotations", { elevatorRotationSetpoint.rotations }, null)
-
-			addDoubleProperty("Current angle deg", { currentAngle.degrees }, null)
-			addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
-			addDoubleProperty("Angle error deg", { angleError.degrees }, null)
-			addBooleanProperty("Is angle within tolerance", { isWithinAngleTolerance }, null)
-			addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
-			addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
-
-			addBooleanProperty("Is within Tolerance", { isWithinTolerance }, null)
-
 			if (Robot.isTesting) {
+				addBooleanProperty("Is at min height", { isAtMinHeightLimit }, null)
+				addBooleanProperty("Is at max height", { isAtMaxHeightLimit }, null)
+				addDoubleProperty("Height error rotations", { ElevatorHeightError.rotations }, null)
+				addBooleanProperty("Is in height tolerance", { isElevatorWithinTolerance }, null)
+				addDoubleProperty("Elevator rotation rotations", { currentElevatorRotation.rotations }, null)
+				addDoubleProperty(
+					"Elevator absolute rotation rotations",
+					{ elevatorRotationEncoder.absolutePosition.value.magnitude() },
+					null,
+				)
+				addDoubleProperty("Elevator setpoint rotations", { elevatorRotationSetpoint.rotations }, null)
+
+				addDoubleProperty("Current angle deg", { currentAngle.degrees }, null)
+				addDoubleProperty("Angle setpoint deg", { angleSetpoint.degrees }, null)
+				addDoubleProperty("Angle error deg", { angleError.degrees }, null)
+				addBooleanProperty("Is angle within tolerance", { isWithinAngleTolerance }, null)
+				addBooleanProperty("Is at max angle limit", { isAtMaxAngleLimit }, null)
+				addBooleanProperty("Is at min angle limit", { isAtMinAngleLimit }, null)
+
+				addBooleanProperty("Is within Tolerance", { isWithinTolerance }, null)
+
 				addDoubleProperty("Elevator Motor current Amps", { mainElevatorMotor.supplyCurrent.value.baseUnitMagnitude() }, null)
 
 				addDoubleProperty("Angle motor current Amps", { angleMotor.outputCurrent }, null)
