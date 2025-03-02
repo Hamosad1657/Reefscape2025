@@ -11,7 +11,7 @@ object IntakeConstants {
 	val WHEEL_MOTOR_CONFIGS = SparkFlexConfig().apply {
 		IdleMode.kBrake
 		inverted(false)
-		smartCurrentLimit(150)
+		smartCurrentLimit(40)
 	}
 	val ANGLE_MOTOR_CONFIGS = SparkFlexConfig().apply {
 		IdleMode.kCoast
@@ -24,13 +24,13 @@ object IntakeConstants {
 
 	const val BEAM_BREAK_THRESHOLD: Volts = 1.0
 
-	const val INTAKING_VOLTAGE: Volts = 6.7
+	const val INTAKING_VOLTAGE: Volts = 8.0
 
 	const val EJECTING_VOLTAGE: Volts = -12.0
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
-		kP = 2.7,
+		kP = 2.9,
 		kI = 0.0,
 		kD = 0.0,
 	)
@@ -44,7 +44,6 @@ object IntakeConstants {
 	val MIN_ANGLE = Rotation2d.fromDegrees(0.0)
 
 	val FEEDING_ANGLE = Rotation2d.fromDegrees(2.0)
-	val RESTING_ANGLE = Rotation2d.fromDegrees(35.0)
 	val L1_ANGLE = Rotation2d.fromDegrees(46.0)
 	val DEPLOYED_ANGLE = Rotation2d.fromDegrees(105.0)
 }
