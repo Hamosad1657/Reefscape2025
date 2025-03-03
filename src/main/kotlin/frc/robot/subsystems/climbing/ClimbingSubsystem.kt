@@ -14,18 +14,11 @@ import frc.robot.subsystems.climbing.ClimbingConstants as Constants
 object ClimbingSubsystem: SubsystemBase() {
 	// --- Motors ---
 
-	private val climbingMotor = HaSparkFlex(RobotMap.Climbing.WHEELS_MOTOR_ID).apply {
-		IdleMode.kBrake
-	}
-
 	private val angleMotor = HaSparkFlex(RobotMap.Climbing.ANGLE_MOTOR_ID).apply {
 		IdleMode.kBrake
 	}
 
 	// --- Functions ---
-	fun setClimbingMotorVoltage(voltage: Volts) {
-		climbingMotor.setVoltage(voltage)
-	}
 
 	fun setAngleMotorVoltage(voltage: Volts) {
 		angleMotor.setVoltage(voltage)
