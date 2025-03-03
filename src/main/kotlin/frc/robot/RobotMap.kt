@@ -67,4 +67,7 @@ object RobotMap {
 	object LEDs {
 		const val PWM_PORT = 0
 	}
+	object Climbing {
+		const val ANGLE_MOTOR_ID = 0
+	}
 }
