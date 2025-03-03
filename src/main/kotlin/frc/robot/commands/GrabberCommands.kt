@@ -29,7 +29,8 @@ fun GrabberSubsystem.setVoltageCommand(useLEDs: Boolean, invert: Boolean, mode: 
 		setMotorVoltage(
 			when (mode()) {
 				INTAKE_ALGAE -> GrabberConstants.INTAKE_ALGAE_VOLTAGE * (if (invert) -1 else 1)
-				EJECT_TO_L1, EJECT_TO_L2_AND_L3, EJECT_TO_L4 -> GrabberConstants.EJECT_CORAL_VOLTAGE * (if (invert) -1 else 1)
+				EJECT_TO_L1, EJECT_TO_L2_AND_L3 -> GrabberConstants.EJECT_CORAL_VOLTAGE * (if (invert) -1 else 1)
+				EJECT_TO_L4 -> GrabberConstants.EJECT_CORAL_TO_L4_VOLTAGE * (if (invert) -1 else 1)
 				EJECT_TO_PROCESSOR -> GrabberConstants.EJECT_ALGAE_TO_PROCESSOR_VOLTAGE * (if (invert) -1 else 1)
 				EJECT_TO_NET -> GrabberConstants.EJECT_ALGAE_TO_NET_VOLTAGE * (if (invert) -1 else 1)
 			}
