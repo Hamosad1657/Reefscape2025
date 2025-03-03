@@ -223,7 +223,7 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 		}
 		if (useVisionPoseEstimation) addVisionMeasurement()
 
-		//posesPublisher.set(arrayOf<Pose2d>(currentPose, visionFieldWidget.robotPose))
+		posesPublisher.set(arrayOf<Pose2d>(currentPose, visionFieldWidget.robotPose))
 	}
 
 	// --- Telemetry ---
