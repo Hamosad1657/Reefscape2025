@@ -5,6 +5,7 @@ import com.hamosad1657.lib.units.Volts
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
+import kotlin.time.Duration.Companion.seconds
 
 object IntakeConstants {
 
@@ -27,6 +28,8 @@ object IntakeConstants {
 	const val INTAKING_VOLTAGE: Volts = 8.5
 
 	const val EJECTING_VOLTAGE: Volts = -11.0
+
+	val EXTENDING_INTAKE_TO_CLIMB_TIMEOUT = 3.0.seconds
 
 	/** Works in radians. */
 	val ANGLE_PID_GAINS = PIDGains(
