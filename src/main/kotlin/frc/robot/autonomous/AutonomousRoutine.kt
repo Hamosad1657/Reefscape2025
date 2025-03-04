@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import frc.robot.Robot
 import frc.robot.autonomous.segments.AutonomousSegment
+import frc.robot.autonomous.segments.CoralScoreSegment
 import frc.robot.autonomous.segments.models.AutonomousRoutineModel
 import frc.robot.commands.*
+import frc.robot.field.Branch
 import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import java.io.File
@@ -88,6 +90,13 @@ class AutonomousRoutine(
 			val file = File(Filesystem.getDeployDirectory(), "autonomous/${name}.json")
 
 			return objectMapper.readValue(file, AutonomousRoutineModel::class.java).generateRoutine()
+		}
+		fun createFromBranch(startingPosition: Int, startingReefSide: ReefSide, branchToScoreOn: Branch): AutonomousRoutine {
+			return AutonomousRoutine(
+				startingPosition,
+				startingReefSide,
+				listOf(CoralScoreSegment(branchToScoreOn, findQuickestDirection(startingReefSide, branchToScoreOn.pipe.side))),
+			)
 		}
 	}
 }
