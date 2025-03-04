@@ -111,9 +111,9 @@ fun generatePathAroundReef(
 		listOf(),
 		constraints,
 		IdealStartingState(0.0, poses[0].rotation +
-			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) 90.0.degrees else (-90.0).degrees),
+			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) (-90.0).degrees else 90.0.degrees),
 		GoalEndState(0.0, poses.last().rotation +
-			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) 90.0.degrees else (-90.0).degrees),
+			if ((useQuickest && isClockwiseQuickest) || (!useQuickest && isClockwise)) (-90.0).degrees else 90.0.degrees),
 		false,
 	)
 }
