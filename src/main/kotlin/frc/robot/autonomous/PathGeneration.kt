@@ -13,6 +13,14 @@ import frc.robot.field.ReefSide
 import frc.robot.subsystems.swerve.SwerveConstants
 
 /**
+ * Returns true if it is quicker to get to [endSide] from [startSide] by going clockwise.
+ */
+fun findQuickestDirection(startSide: ReefSide, endSide: ReefSide): Boolean {
+	val delta = if (endSide.number >= startSide.number) endSide.number - startSide.number else startSide.number - endSide.number
+	 return if (endSide.number >= startSide.number) delta >= 3 else delta <= 3
+}
+
+/**
  * Creates a list of poses for creating a path between two sides of the reef.
  *
  * @param startSide - The side of the reef the list should start from.
@@ -29,7 +37,7 @@ fun findPosesBetweenReefSides(startSide: ReefSide, endSide: ReefSide, far: Boole
 	}
 
 	val delta = if (endSide.number >= startSide.number) endSide.number - startSide.number else startSide.number - endSide.number
-	val isClockwiseQuickest = if (endSide.number >= startSide.number) delta >= 3 else delta <= 3
+	val isClockwiseQuickest = findQuickestDirection(startSide, endSide)
 
 	val numberOfSteps = if (delta > 3) 6-delta else delta
 
