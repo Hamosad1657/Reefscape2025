@@ -37,6 +37,10 @@ deploy {
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
                 }
 
+                frcClearStaticDeploy(getArtifactTypeClass('CommandArtifact')) {
+                    command = 'rm -rf /home/lvuser/deploy/autonomous'
+                }
+
                 // Static files artifact
                 frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
                     files = project.fileTree('src/main/deploy')
