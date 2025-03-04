@@ -94,15 +94,15 @@ object RobotContainer
             when(name) {
                 GO_FORWARD_ROUTINE_NAME -> goForwardRoutine()
 
-                POSITION_1_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition1Routine()
-                POSITION_2_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition2Routine()
-                POSITION_3_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition3Routine()
-                POSITION_4_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition4Routine()
-                POSITION_5_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition5Routine()
-                POSITION_6_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition6Routine()
+                POSITION_1_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition1Routine()
+                POSITION_2_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition2Routine()
+                POSITION_3_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition3Routine()
+                POSITION_4_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition4Routine()
+                POSITION_5_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition5Routine()
+                POSITION_6_L1_INTAKE_ROUTINE_NAME -> generatedAutoCommand = scoreL1IntakePosition6Routine()
 
                 else -> {
-                    AutonomousRoutine.createFromJSON(name).generateCommand()
+                    generatedAutoCommand = AutonomousRoutine.createFromJSON(name).generateCommand()
                 }
             }
         }
