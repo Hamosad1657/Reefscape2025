@@ -61,9 +61,9 @@ object JointedElevatorConstants {
 	val RESTING_ELEVATOR_ROTATION = 0.0.rotations
 
 	val L1_ELEVATOR_ROTATION = 0.1514.rotations
-	val L2_ELEVATOR_ROTATION = 0.742.rotations
-	val L3_ELEVATOR_ROTATION = 1.375.rotations
-	val L4_ELEVATOR_ROTATION = 2.41333.rotations
+	val L2_ELEVATOR_ROTATION = 0.8498.rotations
+	val L3_ELEVATOR_ROTATION = 1.6044.rotations
+	val L4_ELEVATOR_ROTATION = 2.5937.rotations
 
 	val LOW_REEF_ALGAE_ELEVATOR_ROTATION = 0.982.rotations
 	val HIGH_REEF_ALGAE_ELEVATOR_ROTATION = 1.565.rotations
@@ -103,9 +103,9 @@ object JointedElevatorConstants {
 	val RESTING_ANGLE = Rotation2d.fromDegrees(-15.0)
 
 	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
-	val L2_ANGLE = Rotation2d.fromDegrees(-35.7)
-	val L3_ANGLE = Rotation2d.fromDegrees(-36.8)
-	val L4_ANGLE = Rotation2d.fromDegrees(-35.5)
+	val L2_ANGLE = Rotation2d.fromDegrees(-43.15)
+	val L3_ANGLE = Rotation2d.fromDegrees(-43.15)
+	val L4_ANGLE = Rotation2d.fromDegrees(-38.32)
 
 	val REEF_ALGAE_ANGLE = Rotation2d.fromDegrees(-66.0)
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)

@@ -1,9 +1,7 @@
 package frc.robot.subsystems.grabber
 
 import com.hamosad1657.lib.math.PIDGains
-import com.hamosad1657.lib.units.Length
 import com.hamosad1657.lib.units.Volts
-import com.hamosad1657.lib.units.centimeters
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.kBrake
 import com.revrobotics.spark.config.SparkFlexConfig
 import edu.wpi.first.math.geometry.Rotation2d
@@ -27,13 +25,14 @@ object GrabberConstants {
 	/** The voltage needed to intake an algae on the reef. */
 	const val INTAKE_ALGAE_VOLTAGE: Volts = -12.0
 
-	const val LOAD_FROM_INTAKE_VOLTAGE: Volts = 8.0
+	const val LOAD_FROM_INTAKE_VOLTAGE: Volts = 2.0
 
 	/** The voltage needed to move the coral in the grabber slightly back to get into the beam break. */
-	const val CLOCK_CORAL_VOLTAGE: Volts = -2.4
+	const val CLOCK_CORAL_VOLTAGE: Volts = -0.9
 
 	/** The voltage needed to eject a coral to one of the branches of the reef. */
 	const val EJECT_CORAL_VOLTAGE: Volts = 12.0
+	const val EJECT_CORAL_TO_L4_VOLTAGE: Volts = 8.0
 
 	/** The voltage needed to intake a coral from the coral station. */
 	const val INTAKE_FROM_CORAL_STATION_VOLTAGE: Volts = -12.0

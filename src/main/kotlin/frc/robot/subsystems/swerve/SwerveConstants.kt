@@ -8,9 +8,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue.UseClosedLoopSign
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants
 import com.ctre.phoenix6.swerve.SwerveModuleConstants
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.*
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType.Voltage
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType.FusedCANcoder
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory
 import com.hamosad1657.lib.math.PIDGains
 import com.hamosad1657.lib.units.Mps
@@ -251,7 +252,7 @@ object SwerveConstants {
 	// --- Pose alignment ---
 
 	val POSE_ALIGNMENT_PID_GAINS = PIDGains(
-		kP = 0.6,
+		kP = 1.0,
 		kI = 0.1,
 		kD = 0.0,
 	)
