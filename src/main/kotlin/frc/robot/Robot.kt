@@ -36,8 +36,8 @@ object Robot : TimedRobot()
         }
     }
 
-    const val isTesting = false
-    const val isCompetition = true
+    const val isTesting = true
+    const val isCompetition = false
 
     private var autonomousCommand: Command? = null
 
@@ -70,13 +70,14 @@ object Robot : TimedRobot()
 
     override fun disabledPeriodic()
     {
-        if (autonomousCommand == null) autonomousCommand = RobotContainer.getAutonomousCommand()
+
     }
 
     override fun autonomousInit()
     {
-        autonomousCommand?.schedule()
         JointedElevatorSubsystem.elevatorRotationEncoder.setPosition(0.0)
+        autonomousCommand = RobotContainer.getAutonomousCommand()
+        autonomousCommand?.schedule()
     }
 
     override fun autonomousPeriodic()

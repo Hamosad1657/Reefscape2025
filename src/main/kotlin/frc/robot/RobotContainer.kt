@@ -5,11 +5,19 @@ import com.hamosad1657.lib.controllers.HaCommandPS4Controller
 import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import edu.wpi.first.math.filter.SlewRateLimiter
-import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.Filesystem
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
+import frc.robot.autonomous.goForwardRoutine
+import frc.robot.autonomous.scoreL1IntakePosition1Routine
+import frc.robot.autonomous.scoreL1IntakePosition2Routine
+import frc.robot.autonomous.scoreL1IntakePosition3Routine
+import frc.robot.autonomous.scoreL1IntakePosition4Routine
+import frc.robot.autonomous.scoreL1IntakePosition5Routine
+import frc.robot.autonomous.scoreL1IntakePosition6Routine
 import frc.robot.commands.*
 import frc.robot.commands.GrabberVoltageMode.*
 import frc.robot.subsystems.grabber.GrabberSubsystem
@@ -18,6 +26,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
+import java.io.File
 
 enum class ScoringMode(val elevatorJointState: JointedElevatorState, val grabberVoltageMode: GrabberVoltageMode) {
     L1(JointedElevatorState.L1, EJECT_TO_L1),
@@ -56,6 +65,49 @@ object RobotContainer
     private const val INTAKE_ALIGNMENT_TRANSLATION_MULTIPLIER = 0.5
     private const val INTAKE_ALIGNMENT_ROTATION_MULTIPLIER = 0.3
 
+    private const val GO_FORWARD_ROUTINE_NAME = "Go forward"
+
+    private const val POSITION_1_L1_INTAKE_ROUTINE_NAME = "Position 1 intake"
+    private const val POSITION_2_L1_INTAKE_ROUTINE_NAME = "Position 2 intake"
+    private const val POSITION_3_L1_INTAKE_ROUTINE_NAME = "Position 3 intake"
+    private const val POSITION_4_L1_INTAKE_ROUTINE_NAME = "Position 4 intake"
+    private const val POSITION_5_L1_INTAKE_ROUTINE_NAME = "Position 5 intake"
+    private const val POSITION_6_L1_INTAKE_ROUTINE_NAME = "Position 6 intake"
+
+    private var generatedAutoCommand: Command? = null
+
+    private val autonomousChooser = SendableChooser<String>().apply {
+        setDefaultOption("Go forward", GO_FORWARD_ROUTINE_NAME)
+
+        addOption("Position 1 L1 intake", POSITION_1_L1_INTAKE_ROUTINE_NAME)
+        addOption("Position 2 L1 intake", POSITION_2_L1_INTAKE_ROUTINE_NAME)
+        addOption("Position 3 L1 intake", POSITION_3_L1_INTAKE_ROUTINE_NAME)
+        addOption("Position 4 L1 intake", POSITION_4_L1_INTAKE_ROUTINE_NAME)
+        addOption("Position 5 L1 intake", POSITION_5_L1_INTAKE_ROUTINE_NAME)
+        addOption("Position 6 L1 intake", POSITION_6_L1_INTAKE_ROUTINE_NAME)
+
+        for (fileName in File(Filesystem.getDeployDirectory(), "autonomous").list()?: emptyArray()) {
+            addOption("Modular autonomous ${fileName.substringBeforeLast('.')}", fileName.substringBeforeLast('.'))
+        }
+
+        onChange { name: String ->
+            when(name) {
+                GO_FORWARD_ROUTINE_NAME -> goForwardRoutine()
+
+                POSITION_1_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition1Routine()
+                POSITION_2_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition2Routine()
+                POSITION_3_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition3Routine()
+                POSITION_4_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition4Routine()
+                POSITION_5_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition5Routine()
+                POSITION_6_L1_INTAKE_ROUTINE_NAME -> scoreL1IntakePosition6Routine()
+
+                else -> {
+                    AutonomousRoutine.createFromJSON(name).generateCommand()
+                }
+            }
+        }
+    }
+
     private val translationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_TRANSLATION_MULTIPLIER)
 
     private val rotationMultiplierSlewRateLimiter = SlewRateLimiter(0.5, -0.5, FREE_DRIVE_ROTATION_MULTIPLIER)
@@ -77,6 +129,8 @@ object RobotContainer
     }
 
     private fun sendSubsystemInfo() {
+        SmartDashboard.putData(autonomousChooser)
+
         SmartDashboard.putData(GrabberSubsystem)
         SmartDashboard.putData(IntakeSubsystem)
         SmartDashboard.putData(JointedElevatorSubsystem)
@@ -187,10 +241,8 @@ object RobotContainer
         }
     }
 
-    val routine = AutonomousRoutine.createFromJSON("test")
-
-    fun getAutonomousCommand(): Command?
+    fun getAutonomousCommand(): Command
     {
-        return if (DriverStation.getAlliance().isPresent) routine.generateCommand() else null
+        return generatedAutoCommand?: goForwardRoutine()
     }
 }
