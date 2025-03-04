@@ -32,18 +32,17 @@ class CollectAlgaeSegment(
 			// Wait for elevator to get to state
 			waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen
 				// Align to the reef side
-				((SwerveSubsystem.alignToReefSideCommand({ algaeToCollect.side }, alliance) andThen wait(1.5)) raceWith
+				((SwerveSubsystem.alignToReefSideCommand({ algaeToCollect.side }, alliance) withTimeout(2.6)) raceWith
 				// collect algae
-				GrabberSubsystem.setVoltageCommand(true, false, INTAKE_ALGAE)) andThen
-				// Get back to the pose around the reef
-				SwerveSubsystem.alignToPoseCommand(
-					{
-						val pose = FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2]
-						if (alliance == Red) FieldConstants.Poses.mirrorPose(pose) else pose
-					},
-					true,
-				)
+				GrabberSubsystem.setVoltageCommand(true, false, INTAKE_ALGAE))
 			)
-			) andThen waitUntil { JointedElevatorSubsystem.isWithinTolerance }
+			) andThen
+			// Get back to the pose around the reef
+			SwerveSubsystem.driveToPoseCommand(
+				if (alliance == Red)
+					FieldConstants.Poses.mirrorPose(FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2])
+				else
+					FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2]
+			)
 	}
 }
