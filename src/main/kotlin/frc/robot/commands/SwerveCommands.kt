@@ -1,16 +1,20 @@
 package frc.robot.commands
 
 import com.hamosad1657.lib.commands.*
+import com.hamosad1657.lib.units.AngularVelocity
+import com.hamosad1657.lib.units.Seconds
 import com.hamosad1657.lib.units.degrees
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.field.FieldConstants
 import frc.robot.field.CoralStation
@@ -278,6 +282,29 @@ fun SwerveSubsystem.alignToCoralStationCommand(coralStation: () -> CoralStation,
 }
 
 // --- Other ---
+
+/**
+ * Oscillates the chassis rotation at a constant rate (rotates counter-clockwise, then clockwise, and so on)
+ *
+ * @param angularVelocity - The angular velocity at which the chassis should oscillate
+ * @param period - The period of time that passes until the chassis gets to the same rotation in the oscillation pattern.
+ */
+fun SwerveSubsystem.oscillateCommand(
+	angularVelocity: AngularVelocity,
+	period: Seconds,
+) = withName("Oscillate") {
+	val timer = Timer()
+	var omega = angularVelocity.asRadPs
+	val slewRateLimiter = SlewRateLimiter(6.5)
+	runOnce { timer.restart(); omega = angularVelocity.asRadPs; slewRateLimiter.reset(0.0) } andThen run {
+		setChassisSpeeds(ChassisSpeeds(0.0, 0.0, slewRateLimiter.calculate(omega)))
+
+		if (timer.hasElapsed(period/2.0)) {
+			omega = -omega
+			timer.restart()
+		}
+	}
+}
 
 /**
  * Cross locks wheels. Does not end automatically.
