@@ -31,6 +31,7 @@ import frc.robot.field.FieldConstants.Poses
 import frc.robot.field.ReefSide
 import frc.robot.field.ReefSide.AB
 import frc.robot.vision.AprilTagVision.photonAprilTagCamera
+import frc.robot.vision.CoralVision
 import frc.robot.subsystems.swerve.SwerveConstants as Constants
 
 object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
