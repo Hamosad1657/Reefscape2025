@@ -19,7 +19,7 @@ object AprilTagVision {
 		)
 
 	val photonAprilTagCamera = PhotonAprilTagCamera(
-		"OrangePi-Cam",
+		"AprilTag-Camera",
 		robotToCameraTranslation,
 		robotToCameraRotation,
 		5.0.meters,
