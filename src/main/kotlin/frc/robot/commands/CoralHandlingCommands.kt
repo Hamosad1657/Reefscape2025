@@ -49,10 +49,13 @@ fun autoIntakeCoralFromGroundCommand() = withName("Auto intake coral from ground
 		autoIntakeFromGroundScanPeriod,
 	) until { CoralVision.hasTargets }) andThen
 		((SwerveSubsystem.rotateToCoralUntilLockedCommand()) andThen
-			(intakeCoralFromGroundCommand() alongWith (SwerveSubsystem.run { SwerveSubsystem.setChassisSpeeds(
-			ChassisSpeeds(0.0, autoIntakeFromGroundVelocity, 0.0)
-			)
-			} withTimeout(1.7) )))
+			(intakeCoralFromGroundCommand() alongWith (wait(0.25) andThen SwerveSubsystem.run {
+				SwerveSubsystem.setChassisSpeeds(
+					ChassisSpeeds(0.0, autoIntakeFromGroundVelocity, 0.0)
+				)
+			} until { !CoralVision.hasTargets } andThen wait(0.1) andThen SwerveSubsystem.runOnce {
+				SwerveSubsystem.setChassisSpeeds(ChassisSpeeds())
+			} )))
 }
 
 fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral station") {
