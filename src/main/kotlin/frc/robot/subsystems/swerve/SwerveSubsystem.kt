@@ -217,9 +217,13 @@ object SwerveSubsystem: SwerveDrivetrain<TalonFX, TalonFX, CANcoder>(
 	// --- Periodic ---
 
 	override fun periodic() {
-		val allUnreadResults = photonAprilTagCamera.camera.allUnreadResults
-		if (allUnreadResults.isNotEmpty()) {
-			photonAprilTagCamera.result = allUnreadResults.first()
+		val aprilTagAllUnreadResults = photonAprilTagCamera.camera.allUnreadResults
+		val coralAllUnreadResults = CoralVision.coralCamera.allUnreadResults
+		if (aprilTagAllUnreadResults.isNotEmpty()) {
+			photonAprilTagCamera.result = aprilTagAllUnreadResults.first()
+		}
+		if (coralAllUnreadResults.isNotEmpty()) {
+			CoralVision.result = coralAllUnreadResults.first()
 		}
 		if (useVisionPoseEstimation) addVisionMeasurement()
 

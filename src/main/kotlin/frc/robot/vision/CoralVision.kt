@@ -8,18 +8,18 @@ import org.photonvision.targeting.PhotonTrackedTarget
 import kotlin.math.absoluteValue
 
 object CoralVision {
-	val CORAL_INTAKING_YAW = Rotation2d.fromDegrees(0.0)
-	val CORAL_INTAKING_YAW_TOLERANCE = Rotation2d.fromDegrees(0.0)
+	val CORAL_INTAKING_YAW = Rotation2d.fromDegrees(-13.6)
+	val CORAL_INTAKING_YAW_TOLERANCE = Rotation2d.fromDegrees(3.5)
 
 	val coralCamera = HaPhotonCamera("Coral-Camera")
 
-	private var result: PhotonPipelineResult? = null
+	var result: PhotonPipelineResult? = null
 
 	private val allTargets get() = result?.targets
 	val hasTargets get() = result?.hasTargets() ?: false
 	val bestTarget: PhotonTrackedTarget? get() = result?.bestTarget
 
-	val coralYaw: Rotation2d get() = Rotation2d.fromDegrees((bestTarget?.getYaw() ?: 0.0.degrees) as Double)
+	val coralYaw: Rotation2d get() = Rotation2d.fromDegrees((bestTarget?.getYaw() ?: 0.0))
 	val isCoralYawWithinTolerance: Boolean get() = (CORAL_INTAKING_YAW.degrees - coralYaw.degrees).absoluteValue.let {
 		it < CORAL_INTAKING_YAW_TOLERANCE.degrees && it != 0.0
 	}
