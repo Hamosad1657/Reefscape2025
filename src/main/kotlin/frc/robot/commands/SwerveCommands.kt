@@ -100,7 +100,7 @@ fun SwerveSubsystem.rotateToCommand(rotation: Rotation2d) = withName("Rotate to 
 	rotationSetpointDriveCommand({ 0.0 }, { 0.0 }, { rotation }, false)
 }
 
-fun SwerveSubsystem.rotateToCoralCommand(
+fun SwerveSubsystem.rotateToCoralDriveCommand(
 	lJoyYSupplier: () -> Double,
 	lJoyXSupplier: () -> Double,
 	rJoyXSupplier: () -> Double,
@@ -118,7 +118,10 @@ fun SwerveSubsystem.rotateToCoralCommand(
 			ChassisSpeeds(
 				velocity.y,
 				-velocity.x,
-				SwerveConstants.CORAL_PID_CONTROLLER.calculate(CoralVision.coralYaw.radians, (-18.0).degrees.radians),
+				SwerveConstants.CORAL_PID_CONTROLLER.calculate(
+					CoralVision.coralYaw.radians,
+					CoralVision.CORAL_INTAKING_YAW.radians,
+				),
 			)
 		} else {
 			ChassisSpeeds(
@@ -135,6 +138,42 @@ fun SwerveSubsystem.rotateToCoralCommand(
 			isClosedLoop(),
 		)
 	}
+}
+
+/**
+ * Locks Chassis rotation to the coral with the option of adding robot relative speeds.
+ */
+fun SwerveSubsystem.lockToCoralCommand(optionalRobotRelVelocity: Translation2d = Translation2d()) = withName("Lock to coral") {
+	run {
+		setChassisSpeeds(
+			ChassisSpeeds(
+				optionalRobotRelVelocity.x,
+				optionalRobotRelVelocity.y,
+				SwerveConstants.CORAL_PID_CONTROLLER.calculate(
+					CoralVision.coralYaw.radians,
+					0.0,
+				)
+			)
+		)
+	}
+}
+
+/**
+ * Rotates to a coral, ends when within tolerance.
+ */
+fun SwerveSubsystem.rotateToCoralUntilLockedCommand() = withName("Rotate to coral") {
+	run {
+		setChassisSpeeds(
+			ChassisSpeeds(
+				0.0,
+				0.0,
+				SwerveConstants.CORAL_PID_CONTROLLER.calculate(
+					CoralVision.coralYaw.radians,
+					CoralVision.CORAL_INTAKING_YAW.radians,
+				)
+			)
+		)
+	} until { CoralVision.isCoralYawWithinTolerance }
 }
 
 /**
