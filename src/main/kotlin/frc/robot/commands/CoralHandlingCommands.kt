@@ -14,6 +14,7 @@ import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 import frc.robot.subsystems.leds.LEDsSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
+import frc.robot.vision.CoralVision
 
 fun loadCoralFromIntake() = withName("Load coral from intake") {
 	((IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE } until { IntakeSubsystem.isWithinAngleTolerance }) andThen
@@ -46,12 +47,12 @@ fun autoIntakeCoralFromGroundCommand() = withName("Auto intake coral from ground
 	(SwerveSubsystem.oscillateCommand(
 		autoIntakeFromGroundScanAngularVelocity,
 		autoIntakeFromGroundScanPeriod,
-	) until { false /* coral detected */ }) andThen
-		((SwerveSubsystem.rotateToCommand(Rotation2d.fromDegrees(0.0)) withTimeout(2.0)) andThen
+	) until { CoralVision.hasTargets }) andThen
+		((SwerveSubsystem.rotateToCoralUntilLockedCommand()) andThen
 			(intakeCoralFromGroundCommand() alongWith (SwerveSubsystem.run { SwerveSubsystem.setChassisSpeeds(
 			ChassisSpeeds(0.0, autoIntakeFromGroundVelocity, 0.0)
 			)
-			} withTimeout(2.7) )))
+			} withTimeout(1.7) )))
 }
 
 fun intakeCoralFromCoralStationCommand() = withName("Load coral from coral station") {
