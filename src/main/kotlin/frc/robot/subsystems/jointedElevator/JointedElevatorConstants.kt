@@ -100,7 +100,7 @@ object JointedElevatorConstants {
 	val MIN_ANGLE = Rotation2d.fromDegrees(-69.0)
 	val MAX_ANGLE = Rotation2d.fromDegrees(62.0)
 
-	val RESTING_ANGLE = Rotation2d.fromDegrees(-15.0)
+	val RESTING_ANGLE = Rotation2d.fromDegrees(-30.0)
 
 	val L1_ANGLE = Rotation2d.fromDegrees(0.0)
 	val L2_ANGLE = Rotation2d.fromDegrees(-43.15)
