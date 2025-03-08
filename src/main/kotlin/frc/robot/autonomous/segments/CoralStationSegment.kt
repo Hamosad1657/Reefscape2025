@@ -33,9 +33,9 @@ class CoralStationSegment(
 			alliance == Alliance.Red,
 		) andThen (
 			autoIntakeCoralFromGroundCommand()
-		) andThen SwerveSubsystem.followPathCommand(
+		) andThen (SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("${coralStation.name} coral station to ${startingSide.name}-far"),
 			alliance == Alliance.Red,
-		)
+		))
 	}
 }
