@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9276131827402136,
-        "y": 1.6667418990645502
+        "x": 3.5603483606575965,
+        "y": 2.176
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.957808423213516,
-        "y": 2.247168337725656
+        "x": 3.8749798604486605,
+        "y": 2.2366798648203847
       },
       "isLocked": true,
       "linkedName": "CD-coralStationClose"
+    },
+    {
+      "anchor": {
+        "x": 4.569418456468846,
+        "y": 2.3426946926236836
+      },
+      "prevControl": {
+        "x": 4.173563924676568,
+        "y": 2.38780508621801
+      },
+      "nextControl": {
+        "x": 4.8178108227807215,
+        "y": 2.3143886445422774
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,11 +36,11 @@
         "y": 2.9088815789473688
       },
       "prevControl": {
-        "x": 3.6136755306298527,
-        "y": 2.0148632182916306
+        "x": 5.280660481548148,
+        "y": 3.1262904224350994
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "EF-close"
     }
   ],
@@ -48,7 +64,7 @@
   "folder": "CD coral station",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.98900000000002
+    "rotation": 140.0
   },
   "useDefaultConstraints": true
 }

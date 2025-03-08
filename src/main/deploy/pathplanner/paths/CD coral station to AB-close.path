@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9276131827402136,
-        "y": 1.6667418990645502
+        "x": 3.5603483606575965,
+        "y": 2.176
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.020367924634245,
-        "y": 2.784380678863001
+        "x": 3.3473662443423335,
+        "y": 3.424215809592571
       },
       "isLocked": true,
       "linkedName": "CD-coralStationClose"
@@ -20,8 +20,8 @@
         "y": 4.02592
       },
       "prevControl": {
-        "x": 2.337606541936478,
-        "y": 2.707526758480915
+        "x": 2.945699893444537,
+        "y": 2.6267919368856028
       },
       "nextControl": null,
       "isLocked": true,
@@ -48,7 +48,7 @@
   "folder": "CD coral station",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.98900000000002
+    "rotation": 140.0
   },
   "useDefaultConstraints": true
 }

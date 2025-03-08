@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.9276131827402136,
-        "y": 1.6667418990645502
+        "x": 3.5603483606575965,
+        "y": 2.176
       },
       "prevControl": {
-        "x": 3.770286084443106,
-        "y": 1.9128216643591343
+        "x": 5.403021262360489,
+        "y": 2.4220797652945842
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.98900000000002
+    "rotation": 140.0
   },
   "reversed": false,
   "folder": "CD coral station",

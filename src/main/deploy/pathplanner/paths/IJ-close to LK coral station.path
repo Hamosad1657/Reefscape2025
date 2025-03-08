@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.416057540983606,
-        "y": 6.556941803278687
+        "x": 3.2113139454933908,
+        "y": 6.397551347311128
       },
       "isLocked": true,
       "linkedName": "IJ-close"
     },
     {
       "anchor": {
-        "x": 1.8520240127008154,
-        "y": 6.659863414590209
+        "x": 3.556,
+        "y": 5.8758
       },
       "prevControl": {
-        "x": 3.0493115984302652,
-        "y": 6.064937985284184
+        "x": 4.56145972650509,
+        "y": 5.562580033193218
       },
       "nextControl": null,
       "isLocked": true,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.98900000000002
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "LK coral station",

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8520240127008154,
-        "y": 6.659863414590209
+        "x": 3.556,
+        "y": 5.8758
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6906074772725526,
-        "y": 6.351134487563826
+        "x": 3.7598945120060794,
+        "y": 6.0204617709479695
       },
       "isLocked": true,
       "linkedName": "LK-coralStationClose"
@@ -20,8 +20,8 @@
         "y": 6.14118
       },
       "prevControl": {
-        "x": 4.775730208966232,
-        "y": 6.200427648543712
+        "x": 4.274315014059381,
+        "y": 6.585636397798185
       },
       "nextControl": null,
       "isLocked": true,
@@ -48,7 +48,7 @@
   "folder": "LK coral station",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.98900000000002
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }
