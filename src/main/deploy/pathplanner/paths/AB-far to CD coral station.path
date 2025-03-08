@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.328572774783674,
-        "y": 3.8763456660541262
+        "x": 1.9799763007183344,
+        "y": 2.6332039948457844
       },
       "isLocked": true,
       "linkedName": "AB-far"
     },
     {
       "anchor": {
-        "x": 1.9276131827402136,
-        "y": 1.6667418990645502
+        "x": 3.5603483606575965,
+        "y": 2.176
       },
       "prevControl": {
-        "x": 2.082325265718197,
-        "y": 1.8631195235043359
+        "x": 3.625248677343103,
+        "y": 2.492178099168691
       },
       "nextControl": null,
       "isLocked": true,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.98900000000002
+    "rotation": 140.0
   },
   "reversed": false,
   "folder": "CD coral station",
