@@ -111,6 +111,6 @@ object JointedElevatorConstants {
 	val PROCESSOR_ANGLE = Rotation2d.fromDegrees(0.0)
 	val NET_ANGLE = Rotation2d.fromDegrees(0.0)
 
-	val INTAKE_ANGLE = Rotation2d.fromDegrees(5.0)
+	val INTAKE_ANGLE = Rotation2d.fromDegrees(6.0)
 	val CORAL_STATION_ANGLE = Rotation2d.fromDegrees(44.2)
 }
