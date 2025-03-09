@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.ScoringMode.*
 import frc.robot.autonomous.AutonomousRoutine
 import frc.robot.autonomous.goForwardRoutine
@@ -186,6 +187,7 @@ object RobotContainer
             )
             square().toggleOnTrue(intakeCoralFromCoralStationCommand())
             circle().toggleOnTrue(IntakeSubsystem.ejectToL1Command(true))
+            cross().whileTrue(Commands.defer({ autoIntakeCoralFromGroundCommand() }, setOf(IntakeSubsystem, SwerveSubsystem)))
 
             PS().whileTrue(IntakeSubsystem.ejectFromIntake())
         }
@@ -225,6 +227,12 @@ object RobotContainer
 
             R1().onTrue {
                 shouldAlignToRightPipe = true
+            }
+
+            share().whileTrue(JointedElevatorSubsystem.test_elevatorMotorsSetVoltageCommand { -1.5 })
+
+            options().onTrue {
+                JointedElevatorSubsystem.elevatorRotationEncoder.setPosition(0.0)
             }
 
             L1().onTrue {
