@@ -36,6 +36,6 @@ class CoralStationSegment(
 		) andThen (SwerveSubsystem.followPathCommand(
 			PathPlannerPath.fromPathFile("${coralStation.name} coral station to ${startingSide.name}-far"),
 			alliance == Alliance.Red,
-		))
+		) alongWith loadCoralFromIntake())
 	}
 }

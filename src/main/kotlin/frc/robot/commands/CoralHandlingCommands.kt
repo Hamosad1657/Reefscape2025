@@ -19,11 +19,8 @@ import frc.robot.subsystems.intake.IntakeSubsystem
 import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.leds.LEDsConstants.LEDsMode.*
 import frc.robot.subsystems.leds.LEDsSubsystem
-import frc.robot.subsystems.swerve.SwerveConstants
 import frc.robot.subsystems.swerve.SwerveSubsystem
-import frc.robot.subsystems.swerve.displaceByRelativeTranslation
 import frc.robot.vision.CoralVision
-import kotlin.math.absoluteValue
 
 fun loadCoralFromIntake() = withName("Load coral from intake") {
 	((IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE } until { IntakeSubsystem.isWithinAngleTolerance }) andThen
@@ -64,13 +61,14 @@ fun autoIntakeCoralFromGroundCommand() = withName("Auto intake coral from ground
 		((SwerveSubsystem.rotateToCoralUntilLockedCommand()) andThen
 			((
 				IntakeSubsystem.intakeCommand(true)
-				) alongWith (wait(0.25) andThen Commands.runOnce(
+				) alongWith (wait(0.4) andThen Commands.runOnce(
 				{ swerveDriveTime = CoralVision.calculateXToCoral().asMeters / autoIntakeFromGroundVelocity }) andThen (SwerveSubsystem.run {
 					timer.start()
 					SwerveSubsystem.setChassisSpeeds(
 						ChassisSpeeds(0.0, autoIntakeFromGroundVelocity, 0.0)
 					)
-			} until { timer.hasElapsed((swerveDriveTime - 2.4).absoluteValue) })
+			} until { timer.hasElapsed((swerveDriveTime / 1.3)) } andThen
+				SwerveSubsystem.runOnce { SwerveSubsystem.setChassisSpeeds(ChassisSpeeds()) })
 			)))
 }
 
