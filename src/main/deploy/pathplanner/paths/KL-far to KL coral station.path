@@ -12,20 +12,20 @@
         "y": 5.997453110213223
       },
       "isLocked": true,
-      "linkedName": "LK-far"
+      "linkedName": "KL-far"
     },
     {
       "anchor": {
-        "x": 3.556,
-        "y": 5.8758
+        "x": 2.058518835616438,
+        "y": 5.970826198630136
       },
       "prevControl": {
-        "x": 3.661300903418084,
-        "y": 5.649058473720989
+        "x": 2.163819739034522,
+        "y": 5.744084672351125
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "LK-coralStationClose"
+      "linkedName": "KL-coralStationClose"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 18.004161605913502
   },
   "reversed": false,
   "folder": "KL coral station",
