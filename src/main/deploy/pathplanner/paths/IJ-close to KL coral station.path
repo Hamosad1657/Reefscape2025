@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.556,
-        "y": 5.8758
+        "x": 2.058518835616438,
+        "y": 5.970826198630136
       },
       "prevControl": {
-        "x": 4.56145972650509,
-        "y": 5.562580033193218
+        "x": 3.063978562121528,
+        "y": 5.657606231823354
       },
       "nextControl": null,
       "isLocked": true,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 18.004161605913502
   },
   "reversed": false,
   "folder": "KL coral station",

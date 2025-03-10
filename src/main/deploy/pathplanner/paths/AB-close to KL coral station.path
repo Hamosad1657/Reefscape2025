@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.02627476725271,
-        "y": 4.614140712070695
+        "x": 2.8963086791892265,
+        "y": 4.26683063998623
       },
       "isLocked": true,
       "linkedName": "AB-close"
     },
     {
       "anchor": {
-        "x": 3.556,
-        "y": 5.8758
+        "x": 2.058518835616438,
+        "y": 5.970826198630136
       },
       "prevControl": {
-        "x": 3.565645856221487,
-        "y": 5.625986154391406
+        "x": 1.821801944817858,
+        "y": 5.890420268434329
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "LK-coralStationClose"
     }
   ],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 18.004161605913502
   },
   "reversed": false,
   "folder": "KL coral station",
