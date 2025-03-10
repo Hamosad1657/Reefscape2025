@@ -53,7 +53,7 @@ object JointedElevatorConstants {
 	const val UP_ELEVATOR_KG: Volts = 1.3
 	const val DOWN_ELEVATOR_KG: Volts = 0.4
 
-	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.09.rotations
+	val ELEVATOR_ROTATION_TOLERANCE: Rotation2d = 0.03.rotations
 
 	val MAX_ELEVATOR_ROTATION = 2.7.rotations
 	val MIN_ELEVATOR_ROTATION = 0.0.rotations
