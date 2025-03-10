@@ -1,6 +1,7 @@
 package frc.robot.autonomous
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.hamosad1657.lib.commands.*
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.Filesystem
@@ -11,8 +12,10 @@ import frc.robot.autonomous.segments.AutonomousSegment
 import frc.robot.autonomous.segments.CoralScoreSegment
 import frc.robot.autonomous.segments.models.AutonomousRoutineModel
 import frc.robot.commands.*
+import frc.robot.commands.JointedElevatorState.*
 import frc.robot.field.Branch
 import frc.robot.field.ReefSide
+import frc.robot.subsystems.jointedElevator.JointedElevatorSubsystem
 import frc.robot.subsystems.swerve.SwerveSubsystem
 import java.io.File
 
@@ -55,7 +58,7 @@ class AutonomousRoutine(
 								isClockwise = currentSegment.isClockwise,
 							),
 							Robot.alliance == Alliance.Red,
-						)
+						) raceWith JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
 					)
 				}
 			} else {
@@ -72,7 +75,7 @@ class AutonomousRoutine(
 								isClockwise = currentSegment.isClockwise,
 							),
 							Robot.alliance == Alliance.Red,
-						)
+						) raceWith JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING)
 					)
 				}
 			}

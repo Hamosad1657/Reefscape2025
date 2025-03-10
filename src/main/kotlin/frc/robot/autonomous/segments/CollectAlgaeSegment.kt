@@ -38,11 +38,11 @@ class CollectAlgaeSegment(
 			)
 			) andThen
 			// Get back to the pose around the reef
-			SwerveSubsystem.driveToPoseCommand(
+			(SwerveSubsystem.driveToPoseCommand(
 				if (alliance == Red)
 					FieldConstants.Poses.mirrorPose(FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2])
 				else
 					FieldConstants.Poses.FAR_POSES[algaeToCollect.side.number * 2]
-			)
+			) raceWith JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false, JointedElevatorState.RESTING))
 	}
 }

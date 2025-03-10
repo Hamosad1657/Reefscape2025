@@ -1,0 +1,29 @@
+{
+  "StartingPosition": 4,
+  "StartingReefSide": 4,
+  "Segments": [
+    {
+      "Type": "CoralScoreSegment",
+      "PipeToScoreOn": 8,
+      "LevelToScoreOn": 1,
+      "IsClockwise": false,
+      "StartingSide": 4,
+      "EndingSide": 4
+    },
+    {
+      "Type": "CoralStationSegment",
+      "CoralStation": 0,
+      "IsClockwise": false,
+      "StartingSide": 4,
+      "EndingSide": 5
+    },
+    {
+      "Type": "CoralScoreSegment",
+      "PipeToScoreOn": 10,
+      "LevelToScoreOn": 1,
+      "IsClockwise": false,
+      "StartingSide": 5,
+      "EndingSide": 5
+    }
+  ]
+}
