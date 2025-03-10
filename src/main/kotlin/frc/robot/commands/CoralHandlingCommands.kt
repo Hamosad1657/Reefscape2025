@@ -23,7 +23,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem
 import frc.robot.vision.CoralVision
 
 fun loadCoralFromIntake() = withName("Load coral from intake") {
-	((IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE } until { IntakeSubsystem.isWithinAngleTolerance }) andThen
+	((JointedElevatorSubsystem.test_elevatorMotorsSetVoltageCommand { -1.5 }.withTimeout(0.2)) alongWith (IntakeSubsystem.maintainAngleCommand { IntakeConstants.FEEDING_ANGLE } until { IntakeSubsystem.isWithinAngleTolerance }) andThen
 	  (JointedElevatorSubsystem.maintainJointedElevatorStateCommand(false) { JointedElevatorState.INTAKE } raceWith (
 	waitUntil { JointedElevatorSubsystem.isWithinTolerance } andThen (
 		IntakeSubsystem.feedToGrabberCommand() raceWith GrabberSubsystem.loadFromIntakeCommand() finallyDo {
